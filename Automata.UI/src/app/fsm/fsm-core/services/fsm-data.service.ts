@@ -8,8 +8,6 @@ export class FsmState {
   public stateIndex: number;
   public name: string;
   public stateType: StateTypes = StateTypes.NORMAL;
-
-  constructor() { }
 }
 
 export class FsmTransition {
