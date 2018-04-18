@@ -1,3 +1,5 @@
+import { FsmCoreModule } from './fsm/fsm-core/fsm-core.module';
+import { FsmDrawModule } from './fsm/fsm-draw/fsm-draw.module';
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 
@@ -12,7 +14,9 @@ import { AppComponent } from './app.component';
   ],
   imports: [
     BrowserModule,
-    AppRoutingModule
+    AppRoutingModule,
+    FsmCoreModule,
+    FsmDrawModule
   ],
   providers: [],
   bootstrap: [AppComponent]
