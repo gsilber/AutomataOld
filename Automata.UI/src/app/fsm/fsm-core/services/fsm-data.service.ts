@@ -10,6 +10,25 @@ export class FsmState {
   public stateType: StateTypes = StateTypes.NORMAL;
 
   constructor() { }
+}
+
+export class FsmTransition {
+  public sourceState: FsmState;
+  public destState: FsmState;
+  // this can be a comma seperated list of characters or a RegEx character classes (i.e. a,b or [a..z] or [abc])
+  public charactersAccepted = '';
+  public rotation ?= 0;
+}
+
+
+@Injectable()
+export class FsmDataService {
+  // public fsmStates: FsmState[] = [{ x: 50, y: 50, stateIndex: 0, name: 'q0', stateType: StateTypes.NORMAL }];
+  public fsmStates: FsmState[] = [];
+  public fsmTransitions: FsmTransition[] = [];
+  public defaultStateLabel = 'q';
+  constructor() { }
+
   public static toggleState(item: FsmState) {
     switch (item.stateType) {
       case StateTypes.NORMAL: {
@@ -30,23 +49,6 @@ export class FsmState {
       }
     }
   }
-}
-
-export class FsmTransition {
-  public sourceState: FsmState;
-  public destState: FsmState;
-  // this can be a comma seperated list of characters or a RegEx character classes (i.e. a,b or [a..z] or [abc])
-  public charactersAccepted = '';
-}
-
-
-@Injectable()
-export class FsmDataService {
-  // public fsmStates: FsmState[] = [{ x: 50, y: 50, stateIndex: 0, name: 'q0', stateType: StateTypes.NORMAL }];
-  public fsmStates: FsmState[] = [];
-  public fsmTransitions: FsmTransition[] = [];
-  public defaultStateLabel = 'q';
-  constructor() { }
 
   public addState = (state: FsmState) => {
     this.fsmStates.push(state);
