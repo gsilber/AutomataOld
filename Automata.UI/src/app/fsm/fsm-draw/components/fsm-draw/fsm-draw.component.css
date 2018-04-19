@@ -1,0 +1,9 @@
+.draw-container{
+    width:2000px;
+    height:2000px;
+}
+
+.scroll-container{
+    width:100%;
+    overflow:scroll; 
+}

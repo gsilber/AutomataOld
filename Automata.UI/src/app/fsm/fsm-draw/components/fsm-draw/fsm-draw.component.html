@@ -1,5 +1,8 @@
-<div style='width:100%;overflow:scroll' [style.height]='height' oncontextmenu='return false'>
-  <div class='bg-drawing' style='width:2000px;height:2000px;'>
+<div class='scroll-container' [style.height]='height' oncontextmenu='return false'>
+  <div class='draw-container bg-drawing'>
+    <svg:svg #surfaceSVG svgContainer width='2000' height='2000' viewbox='0 0 2000 2000'
+      (surfaceClick)='onSurfaceClick($event)'
+    />
   </div>
 </div>
 <app-fsm-draw-controlbar (clear)='onCtrlbarClear()' (help)='onCtrlbarHelp()' (mode)='onCtrlbarMode($event)' (validate)='onCtrlbarValidate()' (zoom)='onCtrlbarZoom($event)'>

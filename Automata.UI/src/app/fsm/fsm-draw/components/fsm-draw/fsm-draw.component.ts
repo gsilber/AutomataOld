@@ -1,5 +1,6 @@
 import { Modes } from './../fsm-draw-controlbar/fsm-draw-controlbar.component';
-import { Component, Input } from '@angular/core';
+import { Component, Input, ContentChild, ViewChild, ElementRef } from '@angular/core';
+import { FsmDataService } from '../../../fsm-core/services/fsm-data.service';
 
 @Component({
   selector: 'app-fsm-draw',
@@ -8,10 +9,34 @@ import { Component, Input } from '@angular/core';
 })
 export class FsmDrawComponent {
   @Input() height = '500px';
-  constructor() { }
+
+  private mode: Modes = Modes.POINTER;
+  constructor(private _fsmSvc: FsmDataService) { }
+
+
+  // Local surface event handlers
+  onSurfaceClick = (clientCoord) => {
+    console.log(clientCoord);
+    switch (this.mode) {
+      case Modes.POINTER:
+        break;
+      case Modes.STATE:
+        break;
+      case Modes.TRANSITION:
+        break;
+    }
+  }
+  // FsmDrawState event handlers
+
+  // FsmDrawTransition event handlers
+
+  // FsmDrawControlbar event handlers
+  onCtrlbarMode = (mode: Modes) => {
+    this.mode = mode;
+  }
+
   onCtrlbarClear = () => console.log('clear');
   onCtrlbarHelp = () => console.log('help');
-  onCtrlbarMode = (mode: Modes) => console.log('switch to ' + mode);
   onCtrlbarValidate = () => console.log('validate');
   onCtrlbarZoom = (direction) => console.log('zoom direction: ' + direction);
 }
