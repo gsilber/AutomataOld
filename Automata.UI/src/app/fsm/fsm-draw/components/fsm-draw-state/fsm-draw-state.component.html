@@ -14,6 +14,13 @@
 </svg:text>
 
 <!-- Event Target on top to catch mouse events -->
-<svg:circle [attr.cx]='state.x' [attr.cy]='state.y' [attr.r]='radius' stroke='none' stroke-width='2' fill='none' 
-  
+<svg:circle [attr.cx]='state.x' [attr.cy]='state.y' [attr.r]='radius' stroke='none' fill='transparent' 
+  (click)='onClick($event)'
+  (mousedown)='onMouseDown($event)'
+  (mouseenter)='onMouseEnter($event)'
+  (mouseleave)='onMouseLeave($event)'
+  (mousemove)='onMouseMove($event)'
+  (mouseout)='onMouseOut($event)'
+  (mouseover)='onMouseOver($event)'
+  (mouseup)='onMouseUp($event)'
 />
