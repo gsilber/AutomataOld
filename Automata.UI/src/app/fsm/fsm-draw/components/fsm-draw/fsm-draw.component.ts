@@ -15,8 +15,8 @@ export class FsmDrawComponent {
 
 
   // Local surface event handlers
-  onSurfaceClick = (clientCoord) => {
-    console.log(clientCoord);
+  onSurfaceClick = (evt) => {
+    console.log(evt);
     switch (this.mode) {
       case Modes.POINTER:
         break;
