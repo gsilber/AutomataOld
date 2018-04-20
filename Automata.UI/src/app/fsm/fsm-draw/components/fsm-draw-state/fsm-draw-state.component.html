@@ -1,3 +1,19 @@
-<p>
-  fsm-draw-state works!
-</p>
+<!-- Outer Circle for all state types 
+<svg:rect *ngIf='selected!==null' class='fsm-state-select' stroke='black' stroke-width='1' [attr.width]='radius*2+2' [attr.height]='radius*2+2' [attr.x]='state.x-radius-1' [attr.y]='state.y-radius-1'  fill='none' stroke-dasharray="5 2"/>
+-->
+<svg:circle class='fsm-state' 
+  [ngClass]='{"fsm-state-start": isStart(),"fsm-state-normal": isNormal(),"fsm-state-final": isFinal()}'
+   [attr.cx]='state.x' [attr.cy]='state.y' [attr.r]='radius' stroke='black' stroke-width='2' [attr.fill]='getFill()' />
+
+<!-- Inner circle for final states -->
+<svg:circle *ngIf='isFinal()' class='fsm-state fsm-state-final' [attr.cx]='state.x' [attr.cy]='state.y' [attr.r]='radius-5' stroke='black' stroke-width='2' fill='none' />
+
+<!-- State Label -->
+<svg:text class='svg-text fsm-state-label' [attr.x]='state.x-10' [attr.y]='state.y+5' fill='blue' font-weight='bold' >
+  {{state.name}}
+</svg:text>
+
+<!-- Event Target on top to catch mouse events -->
+<svg:circle [attr.cx]='state.x' [attr.cy]='state.y' [attr.r]='radius' stroke='none' stroke-width='2' fill='none' 
+  
+/>

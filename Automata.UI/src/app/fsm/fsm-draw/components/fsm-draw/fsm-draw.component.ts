@@ -11,7 +11,7 @@ export class FsmDrawComponent {
   @Input() height = '500px';
 
   private mode: Modes = Modes.POINTER;
-  constructor(private _fsmSvc: FsmDataService) { }
+  constructor(public fsmSvc: FsmDataService) { }
 
 
   // Local surface event handlers
@@ -19,10 +19,15 @@ export class FsmDrawComponent {
     console.log(evt);
     switch (this.mode) {
       case Modes.POINTER:
+        // select if an object is present
         break;
       case Modes.STATE:
+        // create a new state if not on a state
+        this.fsmSvc.addDefaultState(evt.surfaceX, evt.surfaceY);
+        console.log(evt);
         break;
       case Modes.TRANSITION:
+        // create a new transition if on a state
         break;
     }
   }

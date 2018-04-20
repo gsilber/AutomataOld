@@ -1,0 +1,29 @@
+@import "node_modules/bootstrap/scss/bootstrap";
+
+.fsm-state{
+    stroke-width:2;
+    fill:none;
+    stroke:black;
+}
+.fsm-state-normal{
+    stroke:black;
+    fill:none;
+}
+.fsm-state-start{
+    fill: yellow;
+}
+
+.fsm-state-final{
+    stroke:blue;
+}
+
+.fsm-state-label{
+    fill:blue;
+    font-weight: bold;
+}
+.fsm-state-select{
+    stroke: black;
+    stroke-width: 1;
+    fill: none;
+    stroke-dasharray: 5 2;
+}

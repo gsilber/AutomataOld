@@ -1,8 +1,10 @@
 <div class='scroll-container' [style.height]='height' oncontextmenu='return false'>
   <div class='draw-container bg-drawing'>
-    <app-fsm-draw-surface (surfaceclick)='onSurfaceClick($event)'>
-        
-    </app-fsm-draw-surface>
+    <app-fsm-draw-surface (surfaceclick)='onSurfaceClick($event)'>       
+        <ng-template ngFor let-item [ngForOf]='fsmSvc.fsmStates'>
+            <svg:g app-fsm-draw-state [state]='item'  />
+          </ng-template>
+        </app-fsm-draw-surface>
     
   </div>
 </div>

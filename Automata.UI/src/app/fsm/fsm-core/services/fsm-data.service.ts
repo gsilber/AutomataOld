@@ -77,7 +77,7 @@ export class FsmDataService {
       stateIndex: calcIndex,
       x: x,
       y: y,
-      stateType: StateTypes.NORMAL
+      stateType: StateTypes.START
     });
   }
 
