@@ -1,18 +1,18 @@
 <nav class="navbar bg-light">
   <div class='border'>
-    <div class='ctrlBarGroupHeader border-bottom fas'>Mode</div>
+    <div class='ctrlBarGroupHeader border-bottom fas'>Mode<span *ngIf='readonly' class='text-danger'> (Read Only)</span></div>
     <ul class="nav nav-pills">
       <li class="nav-item" ngbTooltip='Mouse Pointer' (click)='onModeChange("pointer")'>
         <a href='' class="nav-link active" data-toggle='pill'>
           <span class="fas fa-mouse-pointer" placement='top'></span>
         </a>
       </li>
-      <li class="nav-item" ngbTooltip='Add States' placement='top' (click)='onModeChange("state")'>
+      <li *ngIf='!readonly' class="nav-item" ngbTooltip='Add States' placement='top' (click)='onModeChange("state")'>
         <a href='' class="nav-link" data-toggle='pill'>
           <span class="fas fa-cogs"></span>
         </a>
       </li>
-      <li class="nav-item" (click)='onModeChange("transition")' ngbTooltip='Add Transitions' placement='top'>
+      <li *ngIf='!readonly' class="nav-item" (click)='onModeChange("transition")' ngbTooltip='Add Transitions' placement='top'>
         <a href='' class="nav-link" data-toggle='pill'>
           <span class="fas fa-recycle"></span>
         </a>
@@ -20,7 +20,7 @@
     </ul>
   </div>
   <div class='border'>
-    <div class='fas ctrlBarGroupHeader border-bottom'>Zoom</div>
+    <div class='fas ctrlBarGroupHeader border-bottom'>Zoom </div>
 
     <ul class="nav nav-pills">
       <li class="nav-item" (click)='onZoom(1)' ngbTooltip='Zoom In' placement='top'>
@@ -44,7 +44,7 @@
     <div class='fas ctrlBarGroupHeader border-bottom'>Tools</div>
     <ul class="nav nav-pills">
 
-      <li class="nav-item" (click)='onClear()' ngbTooltip='Clear Canvas' placement='top'>
+      <li *ngIf='!readonly' class="nav-item" (click)='onClear()' ngbTooltip='Clear Canvas' placement='top'>
         <a href='' class="nav-link">
           <span class="fas fa-cut"></span>
         </a>

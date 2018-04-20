@@ -17,6 +17,7 @@
 <svg:circle [attr.cx]='state.x' [attr.cy]='state.y' [attr.r]='radius' stroke='none' fill='transparent' 
   (click)='onClick($event)'
   (dblclick)='onDblClick($event)'
+  (contextmenu)='onContextMenu($event)'
   (mousedown)='onMouseDown($event)'
   (mouseenter)='onMouseEnter($event)'
   (mouseleave)='onMouseLeave($event)'

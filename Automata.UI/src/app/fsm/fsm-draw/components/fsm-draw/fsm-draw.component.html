@@ -5,6 +5,7 @@
       (surfacedblclick)='onSurfaceDblClick($event)'
       (surfacemousedown)='onSurfaceMouseDown($event)'
       (surfacemousemove)='onSurfaceMouseMove($event)'
+      (surfacecontextmenu)='onSurfaceContextMenu($event)'
     > 
         <ng-template ngFor let-item [ngForOf]='fsmSvc.fsmStates'>
             <svg:g app-fsm-draw-state [state]='item' [selected]='selected && selected.state===item'  />
@@ -13,7 +14,7 @@
     
   </div>
 </div>
-<app-fsm-draw-controlbar (clear)='onCtrlbarClear()' (help)='onCtrlbarHelp()' (mode)='onCtrlbarMode($event)' (validate)='onCtrlbarValidate()' (zoom)='onCtrlbarZoom($event)'>
+<app-fsm-draw-controlbar [readonly]='readonly' (clear)='onCtrlbarClear()' (help)='onCtrlbarHelp()' (mode)='onCtrlbarMode($event)' (validate)='onCtrlbarValidate()' (zoom)='onCtrlbarZoom($event)'>
 </app-fsm-draw-controlbar>
 
 <!--State context menu

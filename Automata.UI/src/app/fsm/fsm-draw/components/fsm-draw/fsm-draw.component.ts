@@ -11,6 +11,8 @@ import { FsmDrawStateComponent } from '../fsm-draw-state/fsm-draw-state.componen
 })
 export class FsmDrawComponent {
   @Input() height = '500px';
+  @Input() readonly = false;
+
   selected: any = null;
 
   private mode: Modes = Modes.POINTER;
@@ -18,17 +20,26 @@ export class FsmDrawComponent {
 
   // Local surface event handlers
   onSurfaceClick = (evt: SurfaceMouseEvent) => {
+    console.log('foo');
+    if (this.readonly) { return false; }
     if (this.mode === Modes.STATE && evt.type === 'surface') {
       this.fsmSvc.addDefaultState(evt.surfaceX, evt.surfaceY);
     }
   }
 
   onSurfaceDblClick = (evt: SurfaceMouseEvent) => {
+    if (this.readonly) { return false; }
     if (this.mode === Modes.POINTER && evt.child instanceof FsmDrawStateComponent) {
       FsmDataService.toggleState(evt.child.state);
     }
   }
+  onSurfaceContextMenu = (evt: SurfaceMouseEvent) => {
+    // popup an appropriate context menu
+    console.log('contextmenu');
+  }
+
   onSurfaceMouseMove = (evt: SurfaceMouseEvent) => {
+    if (this.readonly || evt.srcEvent.which !== 1) { return false; }
     if (this.mode === Modes.POINTER &&
       evt.srcEvent.buttons === 1 &&
       this.selected &&
@@ -39,6 +50,7 @@ export class FsmDrawComponent {
   }
 
   onSurfaceMouseDown = (evt: SurfaceMouseEvent) => {
+    if (this.readonly || evt.srcEvent.which !== 1) { return false; }
     if (this.mode === Modes.POINTER) {
       if (evt.type === 'state') { this.selected = evt.child; }
       if (evt.type === 'surface') { this.selected = null; }
@@ -47,10 +59,7 @@ export class FsmDrawComponent {
   }
 
   // FsmDrawControlbar event handlers
-  onCtrlbarMode = (mode: Modes) => {
-    this.mode = mode;
-  }
-
+  onCtrlbarMode = (mode: Modes) => this.mode = mode;
   onCtrlbarClear = () => this.fsmSvc.clear();
   onCtrlbarHelp = () => console.log('help');
   onCtrlbarValidate = () => console.log('validate');

@@ -12,6 +12,7 @@ export class FsmDrawStateComponent {
   @Input() selected: boolean;
   @Output() stateclick: EventEmitter<any> = new EventEmitter<any>();
   @Output() statedblclick: EventEmitter<any> = new EventEmitter<any>();
+  @Output() statecontextmenu: EventEmitter<any> = new EventEmitter<any>();
   @Output() statemousedown: EventEmitter<any> = new EventEmitter<any>();
   @Output() statemouseenter: EventEmitter<any> = new EventEmitter<any>();
   @Output() statemouseleave: EventEmitter<any> = new EventEmitter<any>();
@@ -34,6 +35,9 @@ export class FsmDrawStateComponent {
   }
   onDblClick = (evt: MouseEvent) => {
     this.statedblclick.emit({ evt: evt, child: this, type: 'state' }); evt.stopPropagation(); return false;
+  }
+  onContextMenu = (evt: MouseEvent) => {
+    this.statecontextmenu.emit({ evt: evt, child: this, type: 'state' }); evt.stopPropagation(); return false;
   }
   onMouseDown = (evt: MouseEvent) => {
     this.statemousedown.emit({ evt: evt, child: this, type: 'state' }); evt.stopPropagation(); return false;

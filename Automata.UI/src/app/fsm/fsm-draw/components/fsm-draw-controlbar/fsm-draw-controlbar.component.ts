@@ -1,4 +1,4 @@
-import { Component, Output, EventEmitter, OnInit } from '@angular/core';
+import { Component, Output, EventEmitter, OnInit, Input } from '@angular/core';
 
 
 export enum Modes { POINTER = 'pointer', STATE = 'state', TRANSITION = 'transition' }
@@ -16,6 +16,7 @@ export class FsmDrawControlbarComponent implements OnInit {
   @Output() validate: EventEmitter<boolean> = new EventEmitter<boolean>();
   @Output() help: EventEmitter<boolean> = new EventEmitter<boolean>();
 
+  @Input() readonly = false;
   constructor() { }
 
   // Lifecycle hooks
