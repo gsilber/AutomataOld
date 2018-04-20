@@ -26,6 +26,7 @@ export class SurfaceMouseEvent {
 export class FsmDrawSurfaceComponent implements AfterViewInit {
 
   @Output() surfaceclick: EventEmitter<SurfaceMouseEvent> = new EventEmitter<SurfaceMouseEvent>();
+  @Output() surfacedblclick: EventEmitter<SurfaceMouseEvent> = new EventEmitter<SurfaceMouseEvent>();
   @Output() surfacemousedown: EventEmitter<SurfaceMouseEvent> = new EventEmitter<SurfaceMouseEvent>();
   @Output() surfacemouseenter: EventEmitter<SurfaceMouseEvent> = new EventEmitter<SurfaceMouseEvent>();
   @Output() surfacemouseleave: EventEmitter<SurfaceMouseEvent> = new EventEmitter<SurfaceMouseEvent>();
@@ -54,6 +55,7 @@ export class FsmDrawSurfaceComponent implements AfterViewInit {
     this.prevHooks = [];
     this.states.forEach((element: FsmDrawStateComponent) => {
       this.prevHooks.push(element.stateclick.subscribe(obj => this.onChildClick(obj)));
+      this.prevHooks.push(element.statedblclick.subscribe(obj => this.onChildDblClick(obj)));
       this.prevHooks.push(element.statemousedown.subscribe(obj => this.onChildMouseDown(obj)));
       this.prevHooks.push(element.statemouseleave.subscribe(obj => this.onChildMouseLeave(obj)));
       this.prevHooks.push(element.statemousemove.subscribe(obj => this.onChildMouseMove(obj)));
@@ -65,6 +67,7 @@ export class FsmDrawSurfaceComponent implements AfterViewInit {
 
   // override all mouse events, attach old event and calculate svg coordinates
   onClick = (evt: MouseEvent) => this.fireAugmentedMouseEvent(evt, this.surfaceclick);
+  onDblClick = (evt: MouseEvent) => this.fireAugmentedMouseEvent(evt, this.surfacedblclick);
   onMouseDown = (evt: MouseEvent) => this.fireAugmentedMouseEvent(evt, this.surfacemousedown);
   onMouseEnter = (evt: MouseEvent) => this.fireAugmentedMouseEvent(evt, this.surfacemouseenter);
   onMouseLeave = (evt: MouseEvent) => this.fireAugmentedMouseEvent(evt, this.surfacemouseleave);
@@ -74,6 +77,7 @@ export class FsmDrawSurfaceComponent implements AfterViewInit {
   onMouseUp = (evt: MouseEvent) => this.fireAugmentedMouseEvent(evt, this.surfacemouseup);
 
   onChildClick = (obj: any) => this.fireAugmentedMouseEvent(obj.evt, this.surfaceclick, obj.child, obj.type);
+  onChildDblClick = (obj: any) => this.fireAugmentedMouseEvent(obj.evt, this.surfacedblclick, obj.child, obj.type);
   onChildMouseDown = (obj: any) => this.fireAugmentedMouseEvent(obj.evt, this.surfacemousedown, obj.child, obj.type);
   onChildMouseEnter = (obj: any) => this.fireAugmentedMouseEvent(obj.evt, this.surfacemouseenter, obj.child, obj.type);
   onChildMouseLeave = (obj: any) => this.fireAugmentedMouseEvent(obj.evt, this.surfacemouseleave, obj.child, obj.type);

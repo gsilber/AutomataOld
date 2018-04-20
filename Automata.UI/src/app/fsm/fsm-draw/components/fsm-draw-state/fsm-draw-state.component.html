@@ -1,6 +1,6 @@
-<!-- Outer Circle for all state types 
-<svg:rect *ngIf='selected!==null' class='fsm-state-select' stroke='black' stroke-width='1' [attr.width]='radius*2+2' [attr.height]='radius*2+2' [attr.x]='state.x-radius-1' [attr.y]='state.y-radius-1'  fill='none' stroke-dasharray="5 2"/>
--->
+<!-- Outer Circle for all state types -->
+<svg:rect *ngIf='selected' class='fsm-state-select' stroke='black' stroke-width='1' [attr.width]='radius*2+2' [attr.height]='radius*2+2' [attr.x]='state.x-radius-1' [attr.y]='state.y-radius-1'  fill='none' stroke-dasharray="5 2"/>
+
 <svg:circle class='fsm-state' 
   [ngClass]='{"fsm-state-start": isStart(),"fsm-state-normal": isNormal(),"fsm-state-final": isFinal()}'
    [attr.cx]='state.x' [attr.cy]='state.y' [attr.r]='radius' stroke='black' stroke-width='2' [attr.fill]='getFill()' />
@@ -16,6 +16,7 @@
 <!-- Event Target on top to catch mouse events -->
 <svg:circle [attr.cx]='state.x' [attr.cy]='state.y' [attr.r]='radius' stroke='none' fill='transparent' 
   (click)='onClick($event)'
+  (dblclick)='onDblClick($event)'
   (mousedown)='onMouseDown($event)'
   (mouseenter)='onMouseEnter($event)'
   (mouseleave)='onMouseLeave($event)'

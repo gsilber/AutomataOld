@@ -9,7 +9,9 @@ import { Component, Input, EventEmitter, Output, Renderer } from '@angular/core'
 })
 export class FsmDrawStateComponent {
   @Input() state: FsmState;
+  @Input() selected: boolean;
   @Output() stateclick: EventEmitter<any> = new EventEmitter<any>();
+  @Output() statedblclick: EventEmitter<any> = new EventEmitter<any>();
   @Output() statemousedown: EventEmitter<any> = new EventEmitter<any>();
   @Output() statemouseenter: EventEmitter<any> = new EventEmitter<any>();
   @Output() statemouseleave: EventEmitter<any> = new EventEmitter<any>();
@@ -29,6 +31,9 @@ export class FsmDrawStateComponent {
 
   onClick = (evt: MouseEvent) => {
     this.stateclick.emit({ evt: evt, child: this, type: 'state' }); evt.stopPropagation(); return false;
+  }
+  onDblClick = (evt:MouseEvent) => {
+    this.statedblclick.emit({ evt: evt, child: this, type: 'state' }); evt.stopPropagation(); return false;
   }
   onMouseDown = (evt: MouseEvent) => {
     this.statemousedown.emit({ evt: evt, child: this, type: 'state' }); evt.stopPropagation(); return false;

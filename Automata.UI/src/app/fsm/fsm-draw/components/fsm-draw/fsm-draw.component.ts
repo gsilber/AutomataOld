@@ -2,6 +2,7 @@ import { SurfaceMouseEvent } from './../fsm-draw-surface/fsm-draw-surface.compon
 import { Modes } from './../fsm-draw-controlbar/fsm-draw-controlbar.component';
 import { Component, Input, ContentChild, ViewChild, ElementRef } from '@angular/core';
 import { FsmDataService } from '../../../fsm-core/services/fsm-data.service';
+import { FsmDrawStateComponent } from '../fsm-draw-state/fsm-draw-state.component';
 
 @Component({
   selector: 'app-fsm-draw',
@@ -10,79 +11,47 @@ import { FsmDataService } from '../../../fsm-core/services/fsm-data.service';
 })
 export class FsmDrawComponent {
   @Input() height = '500px';
+  selected: any = null;
 
   private mode: Modes = Modes.POINTER;
   constructor(public fsmSvc: FsmDataService) { }
 
   // Local surface event handlers
   onSurfaceClick = (evt: SurfaceMouseEvent) => {
-    switch (this.mode) {
-      case Modes.POINTER:
-        this.onSurfaceClickWithPointer(evt);
-        break;
-      case Modes.STATE:
-        this.onSurfaceClickWithState(evt);
-        break;
-      case Modes.TRANSITION:
-        this.onSurfaceClickWithTransition(evt);
-        break;
+    if (this.mode === Modes.STATE && evt.type === 'surface') {
+      this.fsmSvc.addDefaultState(evt.surfaceX, evt.surfaceY);
     }
   }
 
-  onSurfaceClickWithPointer = (evt: SurfaceMouseEvent) => {
-    switch (evt.type) {
-      case 'surface':
-        console.log('mode: pointer, eventtarget: surface');
-        break;
-      case 'state':
-        console.log('mode: pointer, eventtarget: state label: ' + evt.child.state.name);
-        break;
-      case 'transition':
-        console.log('mode: pointer, eventtarget: transition');
-        break;
+  onSurfaceDblClick = (evt: SurfaceMouseEvent) => {
+    if (this.mode === Modes.POINTER && evt.child instanceof FsmDrawStateComponent) {
+      FsmDataService.toggleState(evt.child.state);
     }
-
   }
-
-  onSurfaceClickWithState = (evt: SurfaceMouseEvent) => {
-    switch (evt.type) {
-      case 'surface':
-        console.log('mode: state, eventtarget: surface');
-        this.fsmSvc.addDefaultState(evt.surfaceX, evt.surfaceY);
-        break;
-      case 'state':
-        console.log('mode: state, eventtarget: state label: ' + evt.child.state.name);
-        break;
-      case 'transition':
-        console.log('mode: state, eventtarget: transition');
-        break;
+  onSurfaceMouseMove = (evt: SurfaceMouseEvent) => {
+    if (this.mode === Modes.POINTER &&
+      evt.srcEvent.buttons === 1 &&
+      this.selected &&
+      this.selected instanceof FsmDrawStateComponent) {
+      this.selected.state.x = evt.surfaceX;
+      this.selected.state.y = evt.surfaceY;
     }
   }
 
-  onSurfaceClickWithTransition = (evt: SurfaceMouseEvent) => {
-    switch (evt.type) {
-      case 'surface':
-        console.log('mode: transition, eventtarget: surface');
-        break;
-      case 'state':
-        console.log('mode: transition, eventtarget: state label: ' + evt.child.state.name);
-        break;
-      case 'transition':
-        console.log('mode: transition, eventtarget: transition');
-        break;
+  onSurfaceMouseDown = (evt: SurfaceMouseEvent) => {
+    if (this.mode === Modes.POINTER) {
+      if (evt.type === 'state') { this.selected = evt.child; }
+      if (evt.type === 'surface') { this.selected = null; }
+
     }
   }
-
-  // FsmDrawState event handlers
-
-  // FsmDrawTransition event handlers
 
   // FsmDrawControlbar event handlers
   onCtrlbarMode = (mode: Modes) => {
     this.mode = mode;
   }
 
-  onCtrlbarClear = () => console.log('clear');
+  onCtrlbarClear = () => this.fsmSvc.clear();
   onCtrlbarHelp = () => console.log('help');
   onCtrlbarValidate = () => console.log('validate');
   onCtrlbarZoom = (direction) => console.log('zoom direction: ' + direction);

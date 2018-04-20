@@ -15,7 +15,7 @@ export class FsmTransition {
   public destState: FsmState;
   // this can be a comma seperated list of characters or a RegEx character classes (i.e. a,b or [a..z] or [abc])
   public charactersAccepted = '';
-  public rotation ?= 0;
+  public rotation?= 0;
 }
 
 
@@ -48,6 +48,10 @@ export class FsmDataService {
     }
   }
 
+  public clear = () => {
+    this.fsmStates = [];
+    this.fsmTransitions = [];
+  }
   public addState = (state: FsmState) => {
     this.fsmStates.push(state);
   }
@@ -77,7 +81,7 @@ export class FsmDataService {
       stateIndex: calcIndex,
       x: x,
       y: y,
-      stateType: StateTypes.START
+      stateType: StateTypes.NORMAL
     });
   }
 
