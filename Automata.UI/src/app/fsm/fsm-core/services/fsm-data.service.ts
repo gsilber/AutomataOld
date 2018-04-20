@@ -15,7 +15,7 @@ export class FsmTransition {
   public destState: FsmState;
   // this can be a comma seperated list of characters or a RegEx character classes (i.e. a,b or [a..z] or [abc])
   public charactersAccepted = '';
-  public rotation?= 0;
+  public rotation ?= 0;
 }
 
 

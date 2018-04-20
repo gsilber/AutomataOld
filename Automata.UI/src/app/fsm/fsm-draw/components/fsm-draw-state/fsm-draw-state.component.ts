@@ -32,7 +32,7 @@ export class FsmDrawStateComponent {
   onClick = (evt: MouseEvent) => {
     this.stateclick.emit({ evt: evt, child: this, type: 'state' }); evt.stopPropagation(); return false;
   }
-  onDblClick = (evt:MouseEvent) => {
+  onDblClick = (evt: MouseEvent) => {
     this.statedblclick.emit({ evt: evt, child: this, type: 'state' }); evt.stopPropagation(); return false;
   }
   onMouseDown = (evt: MouseEvent) => {
