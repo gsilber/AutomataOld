@@ -18,33 +18,33 @@ export class FsmDrawComponent {
   onSurfaceClick = (evt: SurfaceMouseEvent) => {
     switch (this.mode) {
       case Modes.POINTER:
-        this.onSurfaceClickPointer(evt);
+        this.onSurfaceClickWithPointer(evt);
         break;
       case Modes.STATE:
-        this.onSurfaceClickState(evt);
+        this.onSurfaceClickWithState(evt);
         break;
       case Modes.TRANSITION:
-        this.onSurfaceClickTransition(evt);
+        this.onSurfaceClickWithTransition(evt);
         break;
     }
   }
 
-  onSurfaceClickPointer = (evt: SurfaceMouseEvent) {
+  onSurfaceClickWithPointer = (evt: SurfaceMouseEvent) => {
     switch (evt.type) {
       case 'surface':
-      console.log('mode: pointer, eventtarget: surface');
+        console.log('mode: pointer, eventtarget: surface');
         break;
       case 'state':
         console.log('mode: pointer, eventtarget: state label: ' + evt.child.state.name);
         break;
       case 'transition':
         console.log('mode: pointer, eventtarget: transition');
-      break;
+        break;
     }
 
   }
 
-  onSurfaceClickState = (evt: SurfaceMouseEvent) {
+  onSurfaceClickWithState = (evt: SurfaceMouseEvent) => {
     switch (evt.type) {
       case 'surface':
         console.log('mode: state, eventtarget: surface');
@@ -55,21 +55,21 @@ export class FsmDrawComponent {
         break;
       case 'transition':
         console.log('mode: state, eventtarget: transition');
-      break;
+        break;
     }
   }
 
-  onSurfaceClickTransition = (evt: SurfaceMouseEvent) {
+  onSurfaceClickWithTransition = (evt: SurfaceMouseEvent) => {
     switch (evt.type) {
       case 'surface':
-      console.log('mode: transition, eventtarget: surface');
+        console.log('mode: transition, eventtarget: surface');
         break;
       case 'state':
         console.log('mode: transition, eventtarget: state label: ' + evt.child.state.name);
         break;
       case 'transition':
         console.log('mode: transition, eventtarget: transition');
-      break;
+        break;
     }
   }
 

@@ -27,7 +27,7 @@ export class FsmDrawStateComponent {
   isNormal = () => this.state.stateType === 'normal';
   getFill = () => (this.isStart() ? 'yellow' : 'none');
 
-  onClick = (evt: MouseEvent) => { 
+  onClick = (evt: MouseEvent) => {
     this.stateclick.emit({ evt: evt, child: this, type: 'state' }); evt.stopPropagation(); return false;
   }
   onMouseDown = (evt: MouseEvent) => {
