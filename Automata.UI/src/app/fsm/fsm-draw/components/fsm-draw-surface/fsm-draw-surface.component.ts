@@ -1,12 +1,18 @@
+import { FsmObject } from './../../../fsm-core/services/fsm-data.service';
 import { FsmDrawTransitionComponent } from './../fsm-draw-transition/fsm-draw-transition.component';
 import { FsmDrawStateComponent } from './../fsm-draw-state/fsm-draw-state.component';
 import { Output, Component, QueryList, EventEmitter, ElementRef, ContentChildren, AfterViewInit, Renderer } from '@angular/core';
 
+export class ChildMouseEvent {
+  child: any;
+  type: String;
+  srcEvent: MouseEvent;
+}
 
 export class SurfaceMouseEvent {
   surfaceX: number;
   surfaceY: number;
-  child: any;
+  child: FsmObject;
   type: String;
   srcEvent: MouseEvent;
   constructor(srcEvent: MouseEvent, x: number, y: number, child: any, type: String) {
@@ -79,16 +85,16 @@ export class FsmDrawSurfaceComponent implements AfterViewInit {
   onMouseOver = (evt: MouseEvent) => this.fireAugmentedMouseEvent(evt, this.surfacemouseover);
   onMouseUp = (evt: MouseEvent) => this.fireAugmentedMouseEvent(evt, this.surfacemouseup);
 
-  onChildClick = (obj: any) => this.fireAugmentedMouseEvent(obj.evt, this.surfaceclick, obj.child, obj.type);
-  onChildDblClick = (obj: any) => this.fireAugmentedMouseEvent(obj.evt, this.surfacedblclick, obj.child, obj.type);
-  onChildContextMenu = (obj: any) => this.fireAugmentedMouseEvent(obj.evt, this.surfacecontextmenu, obj.child, obj.type);
-  onChildMouseDown = (obj: any) => this.fireAugmentedMouseEvent(obj.evt, this.surfacemousedown, obj.child, obj.type);
-  onChildMouseEnter = (obj: any) => this.fireAugmentedMouseEvent(obj.evt, this.surfacemouseenter, obj.child, obj.type);
-  onChildMouseLeave = (obj: any) => this.fireAugmentedMouseEvent(obj.evt, this.surfacemouseleave, obj.child, obj.type);
-  onChildMouseMove = (obj: any) => this.fireAugmentedMouseEvent(obj.evt, this.surfacemousemove, obj.child, obj.type);
-  onChildMouseOut = (obj: any) => this.fireAugmentedMouseEvent(obj.evt, this.surfacemouseout, obj.child, obj.type);
-  onChildMouseOver = (obj: any) => this.fireAugmentedMouseEvent(obj.evt, this.surfacemouseover, obj.child, obj.type);
-  onChildMouseUp = (obj: any) => this.fireAugmentedMouseEvent(obj.evt, this.surfacemouseup, obj.child, obj.type);
+  onChildClick = (obj: ChildMouseEvent) => this.fireAugmentedMouseEvent(obj.srcEvent, this.surfaceclick, obj.child, obj.type);
+  onChildDblClick = (obj: ChildMouseEvent) => this.fireAugmentedMouseEvent(obj.srcEvent, this.surfacedblclick, obj.child, obj.type);
+  onChildContextMenu = (obj: ChildMouseEvent) => this.fireAugmentedMouseEvent(obj.srcEvent, this.surfacecontextmenu, obj.child, obj.type);
+  onChildMouseDown = (obj: ChildMouseEvent) => this.fireAugmentedMouseEvent(obj.srcEvent, this.surfacemousedown, obj.child, obj.type);
+  onChildMouseEnter = (obj: ChildMouseEvent) => this.fireAugmentedMouseEvent(obj.srcEvent, this.surfacemouseenter, obj.child, obj.type);
+  onChildMouseLeave = (obj: ChildMouseEvent) => this.fireAugmentedMouseEvent(obj.srcEvent, this.surfacemouseleave, obj.child, obj.type);
+  onChildMouseMove = (obj: ChildMouseEvent) => this.fireAugmentedMouseEvent(obj.srcEvent, this.surfacemousemove, obj.child, obj.type);
+  onChildMouseOut = (obj: ChildMouseEvent) => this.fireAugmentedMouseEvent(obj.srcEvent, this.surfacemouseout, obj.child, obj.type);
+  onChildMouseOver = (obj: ChildMouseEvent) => this.fireAugmentedMouseEvent(obj.srcEvent, this.surfacemouseover, obj.child, obj.type);
+  onChildMouseUp = (obj: ChildMouseEvent) => this.fireAugmentedMouseEvent(obj.srcEvent, this.surfacemouseup, obj.child, obj.type);
 
   private fireAugmentedMouseEvent(
     evt: MouseEvent, emitter: EventEmitter<SurfaceMouseEvent>, child: any = null, type: String = 'surface'): boolean {

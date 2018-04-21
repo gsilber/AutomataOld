@@ -1,7 +1,7 @@
 import { SurfaceMouseEvent } from './../fsm-draw-surface/fsm-draw-surface.component';
 import { Modes } from './../fsm-draw-controlbar/fsm-draw-controlbar.component';
 import { Component, Input, ContentChild, ViewChild, ElementRef } from '@angular/core';
-import { FsmDataService, StateTypes, FsmState } from '../../../fsm-core/services/fsm-data.service';
+import { FsmDataService, StateTypes, FsmState, FsmObject } from '../../../fsm-core/services/fsm-data.service';
 
 @Component({
   selector: 'app-fsm-draw',
@@ -12,7 +12,7 @@ export class FsmDrawComponent {
   @Input() height = '500px';
   @Input() readonly = false;
 
-  selected: any = null;
+  selected: FsmObject = null;
 
   private mode: Modes = Modes.POINTER;
   stateContextOpen = null;
@@ -31,7 +31,7 @@ export class FsmDrawComponent {
   onSurfaceDblClick = (evt: SurfaceMouseEvent) => {
     if (this.readonly) { return false; }
     if (this.mode === Modes.POINTER && evt.type === 'state') {
-      FsmDataService.toggleState(evt.child);
+      FsmDataService.toggleState(evt.child as FsmState);
     }
   }
   onSurfaceContextMenu = (evt: SurfaceMouseEvent) => {
@@ -46,9 +46,9 @@ export class FsmDrawComponent {
     if (this.mode === Modes.POINTER &&
       evt.srcEvent.buttons === 1 &&
       this.selected &&
-      this.selected.x) {
-        this.selected.x = evt.surfaceX;
-        this.selected.y = evt.surfaceY;
+      this.selected.type === 'state') {
+        (this.selected as FsmState).x = evt.surfaceX;
+        (this.selected as FsmState).y = evt.surfaceY;
     }
   }
 

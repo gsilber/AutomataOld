@@ -2,7 +2,10 @@ import { Injectable } from '@angular/core';
 
 export enum StateTypes { START = 'start', FINAL = 'final', NORMAL = 'normal', STARTFINAL = 'startfinal' }
 
-export class FsmState {
+export class FsmObject {
+  public type: string;
+}
+export class FsmState extends FsmObject {
   public x: number;
   public y: number;
   public stateIndex: number;
@@ -10,7 +13,7 @@ export class FsmState {
   public stateType: StateTypes = StateTypes.NORMAL;
 }
 
-export class FsmTransition {
+export class FsmTransition extends FsmObject {
   public sourceState: FsmState;
   public destState: FsmState;
   // this can be a comma seperated list of characters or a RegEx character classes (i.e. a,b or [a..z] or [abc])
@@ -103,7 +106,7 @@ export class FsmDataService {
   }
 
   public addTransition = (source: FsmState, dest: FsmState) => {
-    this.fsmTransitions.push({ sourceState: source, destState: dest, charactersAccepted: '' });
+    this.fsmTransitions.push({ sourceState: source, destState: dest, charactersAccepted: '' , type: 'transition'});
   }
 
   public addDefaultState = (x: number, y: number): FsmState => {
@@ -127,7 +130,8 @@ export class FsmDataService {
       stateIndex: calcIndex,
       x: x,
       y: y,
-      stateType: StateTypes.NORMAL
+      stateType: StateTypes.NORMAL,
+      type: 'state'
     });
   }
 

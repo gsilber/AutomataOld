@@ -1,5 +1,7 @@
 import { FsmState, StateTypes } from './../../../fsm-core/services/fsm-data.service';
 import { Component, Input, EventEmitter, Output, Renderer } from '@angular/core';
+import { ChildMouseEvent } from '../fsm-draw-surface/fsm-draw-surface.component';
+
 
 @Component({
   // tslint:disable-next-line:component-selector
@@ -10,16 +12,16 @@ import { Component, Input, EventEmitter, Output, Renderer } from '@angular/core'
 export class FsmDrawStateComponent {
   @Input() state: FsmState;
   @Input() selected: boolean;
-  @Output() stateclick: EventEmitter<any> = new EventEmitter<any>();
-  @Output() statedblclick: EventEmitter<any> = new EventEmitter<any>();
-  @Output() statecontextmenu: EventEmitter<any> = new EventEmitter<any>();
-  @Output() statemousedown: EventEmitter<any> = new EventEmitter<any>();
-  @Output() statemouseenter: EventEmitter<any> = new EventEmitter<any>();
-  @Output() statemouseleave: EventEmitter<any> = new EventEmitter<any>();
-  @Output() statemousemove: EventEmitter<any> = new EventEmitter<any>();
-  @Output() statemouseout: EventEmitter<any> = new EventEmitter<any>();
-  @Output() statemouseover: EventEmitter<any> = new EventEmitter<any>();
-  @Output() statemouseup: EventEmitter<any> = new EventEmitter<any>();
+  @Output() stateclick: EventEmitter<ChildMouseEvent> = new EventEmitter<ChildMouseEvent>();
+  @Output() statedblclick: EventEmitter<ChildMouseEvent> = new EventEmitter<ChildMouseEvent>();
+  @Output() statecontextmenu: EventEmitter<ChildMouseEvent> = new EventEmitter<ChildMouseEvent>();
+  @Output() statemousedown: EventEmitter<ChildMouseEvent> = new EventEmitter<ChildMouseEvent>();
+  @Output() statemouseenter: EventEmitter<ChildMouseEvent> = new EventEmitter<ChildMouseEvent>();
+  @Output() statemouseleave: EventEmitter<ChildMouseEvent> = new EventEmitter<ChildMouseEvent>();
+  @Output() statemousemove: EventEmitter<ChildMouseEvent> = new EventEmitter<ChildMouseEvent>();
+  @Output() statemouseout: EventEmitter<ChildMouseEvent> = new EventEmitter<ChildMouseEvent>();
+  @Output() statemouseover: EventEmitter<ChildMouseEvent> = new EventEmitter<ChildMouseEvent>();
+  @Output() statemouseup: EventEmitter<ChildMouseEvent> = new EventEmitter<ChildMouseEvent>();
 
   radius = 30;
 
@@ -31,34 +33,34 @@ export class FsmDrawStateComponent {
   getFill = () => (this.isStart() ? 'yellow' : 'none');
 
   onClick = (evt: MouseEvent) => {
-    this.stateclick.emit({ evt: evt, child: this.state, type: 'state' }); evt.stopPropagation(); return false;
+    this.stateclick.emit({ srcEvent: evt, child: this.state, type: 'state' }); evt.stopPropagation(); return false;
   }
   onDblClick = (evt: MouseEvent) => {
-    this.statedblclick.emit({ evt: evt, child: this.state, type: 'state' }); evt.stopPropagation(); return false;
+    this.statedblclick.emit({ srcEvent: evt, child: this.state, type: 'state' }); evt.stopPropagation(); return false;
   }
   onContextMenu = (evt: MouseEvent) => {
-    this.statecontextmenu.emit({ evt: evt, child: this.state, type: 'state' }); evt.stopPropagation(); return false;
+    this.statecontextmenu.emit({ srcEvent: evt, child: this.state, type: 'state' }); evt.stopPropagation(); return false;
   }
   onMouseDown = (evt: MouseEvent) => {
-    this.statemousedown.emit({ evt: evt, child: this.state, type: 'state' }); evt.stopPropagation(); return false;
+    this.statemousedown.emit({ srcEvent: evt, child: this.state, type: 'state' }); evt.stopPropagation(); return false;
   }
   onMouseEnter = (evt: MouseEvent) => {
-    this.statemouseenter.emit({ evt: evt, child: this.state, type: 'state' }); evt.stopPropagation(); return false;
+    this.statemouseenter.emit({ srcEvent: evt, child: this.state, type: 'state' }); evt.stopPropagation(); return false;
   }
   onMouseLeave = (evt: MouseEvent) => {
-    this.statemouseleave.emit({ evt: evt, child: this.state, type: 'state' }); evt.stopPropagation(); return false;
+    this.statemouseleave.emit({ srcEvent: evt, child: this.state, type: 'state' }); evt.stopPropagation(); return false;
   }
   onMouseMove = (evt: MouseEvent) => {
-    this.statemousemove.emit({ evt: evt, child: this.state, type: 'state' }); evt.stopPropagation(); return false;
+    this.statemousemove.emit({ srcEvent: evt, child: this.state, type: 'state' }); evt.stopPropagation(); return false;
   }
   onMouseOut = (evt: MouseEvent) => {
-    this.statemouseout.emit({ evt: evt, child: this.state, type: 'state' }); evt.stopPropagation(); return false;
+    this.statemouseout.emit({ srcEvent: evt, child: this.state, type: 'state' }); evt.stopPropagation(); return false;
   }
   onMouseOver = (evt: MouseEvent) => {
-    this.statemouseover.emit({ evt: evt, child: this.state, type: 'state' }); evt.stopPropagation(); return false;
+    this.statemouseover.emit({ srcEvent: evt, child: this.state, type: 'state' }); evt.stopPropagation(); return false;
   }
   onMouseUp = (evt: MouseEvent) => {
-    this.statemouseup.emit({ evt: evt, child: this.state, type: 'state' }); evt.stopPropagation(); return false;
+    this.statemouseup.emit({ srcEvent: evt, child: this.state, type: 'state' }); evt.stopPropagation(); return false;
   }
 
 }
