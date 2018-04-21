@@ -6,4 +6,5 @@
 .scroll-container{
     width:100%;
     overflow:scroll; 
+    position: relative;
 }

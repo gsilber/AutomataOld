@@ -17,14 +17,16 @@
 <app-fsm-draw-controlbar [readonly]='readonly' (clear)='onCtrlbarClear()' (help)='onCtrlbarHelp()' (mode)='onCtrlbarMode($event)' (validate)='onCtrlbarValidate()' (zoom)='onCtrlbarZoom($event)'>
 </app-fsm-draw-controlbar>
 
-<!--State context menu
-<div class="context-menu dropdown-menu" [ngStyle]="stateContextStyle">
-  <a href='' class='dropdown-item' (click)='onStateContextDelete($event)'>Delete</a>
-  <div class='dropdown-divider'>&nbsp;</div>
-  <a href='' class='dropdown-item' (click)='onStateContextToggleStart($event)'>
-    <span class='fas' [ngClass]='{"fa-check":_stateContextItem!=null && _stateContextItem.stateType==="start" || _stateContextItem.stateType==="startfinal" }'></span> Start State</a>
-  <a href='' (click)='onStateContextToggleFinal($event)' class='dropdown-item '>
-    <span class='fas' [ngClass]='{"fa-check":_stateContextItem!=null && _stateContextItem.stateType==="final" || _stateContextItem.stateType==="startfinal" }'></span>
-    Final State</a>
-</div>
--->
+<!--State context menu -->
+<app-context-menu [open]='stateContextOpen'>
+  <app-context-menu-item (itemclick)='onStateContextClickDelete($event)' >
+    Delete
+  </app-context-menu-item>
+  <app-context-menu-item divider='true'></app-context-menu-item>
+  <app-context-menu-item (itemclick)='onStateContextClickStart($event)' [checked]='stateContextOpen && stateContextOpen.obj.isStart()'>
+    Start State
+  </app-context-menu-item>
+  <app-context-menu-item (itemclick)='onStateContextClickFinal($event)' [checked]='stateContextOpen && stateContextOpen.obj.isFinal()'>
+      Final State
+  </app-context-menu-item>
+</app-context-menu>          

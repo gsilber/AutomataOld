@@ -48,6 +48,51 @@ export class FsmDataService {
     }
   }
 
+  public static toggleStateValue(item: FsmState, valueType: StateTypes) {
+    switch (item.stateType) {
+      case StateTypes.NORMAL:
+        switch (valueType) {
+          case StateTypes.START:
+            item.stateType = StateTypes.START;
+            break;
+          case StateTypes.FINAL:
+            item.stateType = StateTypes.FINAL;
+            break;
+        }
+        break;
+      case StateTypes.START:
+        switch (valueType) {
+          case StateTypes.START:
+            item.stateType = StateTypes.NORMAL;
+            break;
+          case StateTypes.FINAL:
+            item.stateType = StateTypes.STARTFINAL;
+        }
+        break;
+      case StateTypes.FINAL:
+        switch (valueType) {
+          case StateTypes.START:
+            item.stateType = StateTypes.STARTFINAL;
+            break;
+          case StateTypes.FINAL:
+            item.stateType = StateTypes.NORMAL;
+        }
+        break;
+      case StateTypes.STARTFINAL:
+        switch (valueType) {
+          case StateTypes.START:
+            item.stateType = StateTypes.FINAL;
+            break;
+          case StateTypes.FINAL:
+            item.stateType = StateTypes.START;
+        }
+        break;
+    }
+    if (item.stateType === StateTypes.NORMAL) {
+
+    }
+  }
+
   public clear = () => {
     this.fsmStates = [];
     this.fsmTransitions = [];

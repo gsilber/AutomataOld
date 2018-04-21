@@ -1,0 +1,6 @@
+
+<div *ngIf='divider' class='dropdown-divider'>&nbsp;</div>
+<a *ngIf='!divider' href='' class='dropdown-item' (click)='itemClicked($event)'>
+    <span class='fas' [ngClass]='{"fa-check": checked }'></span>
+<ng-content></ng-content>
+</a>
