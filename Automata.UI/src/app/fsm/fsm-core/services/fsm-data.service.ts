@@ -126,12 +126,15 @@ export class FsmDataService {
     }
   }
 
-  public validateLabel(state: FsmState): boolean {
-    if (state.name.length === 0) { return false; }
-    for (const item of this.fsmStates) {
-      if (item !== state && item.name === state.name) { return false; }
+  public validateLabel(state: FsmState): string {
+    if (state.name.length === 0 || state.name.length > 3) { return 'Not a valid label name'; }
+    if (state.name.startsWith(this.defaultStateLabel) && state.name !== this.defaultStateLabel + state.stateIndex) {
+      return 'Names beginning with ' + this.defaultStateLabel + ' are reserved';
     }
-    return true;
+    for (const item of this.fsmStates) {
+      if (item !== state && item.name === state.name) { return 'Duplicate state name'; }
+    }
+    return '';
   }
   public clear = () => {
     this.fsmStates = [];

@@ -18,7 +18,8 @@ export class FsmDrawPropsComponent implements OnInit {
   get object(): FsmObject { return this._object; }
   get validState(): boolean {
     if (!this.state) { return false; }
-    return this._fsmSvc.validateLabel(this.state);
+    this.stateErrMsg = this._fsmSvc.validateLabel(this.state);
+    return this.stateErrMsg === '';
   }
 
   get start(): boolean { return this.state && (this.state.stateType === 'start' || this.state.stateType === 'startfinal'); }
@@ -42,25 +43,24 @@ export class FsmDrawPropsComponent implements OnInit {
   // state properties
   iname: string;
   itype: StateTypes;
-
+  stateErrMsg = '';
   constructor(private _fsmSvc: FsmDataService) { }
 
   ngOnInit() {
   }
 
   updateStateEdit = () => {
-    // this.state.name = this.name;
-    // this.state.stateType = StateTypes.NORMAL;
-    // if (this.start) {
-    //   FsmDataService.toggleStateValue(this.state, StateTypes.START);
-    // }
-    // if (this.final) {
-    //   FsmDataService.toggleStateValue(this.state, StateTypes.FINAL);
-    // }
+    this.iname = this.state.name;
+    this.itype = this.state.stateType;
   }
   cancelStateEdit = () => {
     this.state.name = this.iname;
     this.state.stateType = this.itype;
+  }
+  deleteState = () => {
+    this.cancel();
+    this._fsmSvc.removeState(this.state);
+    this.object = null;
   }
   public refresh = () => this.object = this.object;
 

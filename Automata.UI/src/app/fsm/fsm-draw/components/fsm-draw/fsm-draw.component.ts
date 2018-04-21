@@ -30,13 +30,6 @@ export class FsmDrawComponent {
     }
   }
 
-  onSurfaceDblClick = (evt: SurfaceMouseEvent) => {
-    if (this.readonly) { return false; }
-    if (this.mode === Modes.POINTER && evt.type === 'state') {
-      FsmDataService.toggleState(evt.child as FsmState);
-      this.refreshProps();
-    }
-  }
   onSurfaceContextMenu = (evt: SurfaceMouseEvent) => {
     // popup an appropriate context menu
     if (evt.type === 'state' && this.mode === Modes.POINTER) {
