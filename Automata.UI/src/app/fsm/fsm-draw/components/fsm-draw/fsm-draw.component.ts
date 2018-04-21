@@ -1,6 +1,10 @@
+import { FsmTransition } from './../../../fsm-core/services/fsm-data.service';
 import { SurfaceMouseEvent } from './../fsm-draw-surface/fsm-draw-surface.component';
 import { Modes, FsmDrawControlbarComponent } from './../fsm-draw-controlbar/fsm-draw-controlbar.component';
-import { Component, Input, ContentChild, ViewChild, ElementRef } from '@angular/core';
+import {
+  Component, Input, ContentChild, ViewChild, ElementRef,
+  EventEmitter, Output, AfterViewInit, ChangeDetectorRef
+} from '@angular/core';
 import { FsmDataService, StateTypes, FsmState, FsmObject } from '../../../fsm-core/services/fsm-data.service';
 import { FsmDrawPropsComponent } from '../fsm-draw-props/fsm-draw-props.component';
 
@@ -9,9 +13,10 @@ import { FsmDrawPropsComponent } from '../fsm-draw-props/fsm-draw-props.componen
   templateUrl: './fsm-draw.component.html',
   styleUrls: ['./fsm-draw.component.css']
 })
-export class FsmDrawComponent {
+export class FsmDrawComponent implements AfterViewInit {
   @Input() height = '500px';
   @Input() readonly = false;
+  @Output() json: EventEmitter<string> = new EventEmitter<string>();
 
   @ViewChild(FsmDrawPropsComponent) props: FsmDrawPropsComponent;
   @ViewChild(FsmDrawControlbarComponent) ctrlBar: FsmDrawControlbarComponent;
@@ -23,8 +28,18 @@ export class FsmDrawComponent {
   mouseX: number;
   mouseY: number;
 
-  constructor(public fsmSvc: FsmDataService) { }
+  constructor(public fsmSvc: FsmDataService, private _detect: ChangeDetectorRef) { }
 
+  ngAfterViewInit() {
+    this.fsmSvc.fromJson('{"states":[' +
+      '{"name":"q0","stateIndex":0,"x":481.0078125,"y":316.0078125,"stateType":"normal","type":"state"},' +
+      '{"name":"q1","stateIndex":1,"x":261.0078125,"y":160.0078125,"stateType":"normal","type":"state"}],' +
+      '"transitions":[' +
+      '{"sourceState":{"name":"q0","stateIndex":0,"x":481.0078125,"y":316.0078125,"stateType":"normal","type":"state"},' +
+      '"destState":{"name":"q1","stateIndex":1,"x":261.0078125,"y":160.0078125,"stateType":"normal","type":"state"},' +
+      '"charactersAccepted":"a","type":"transition"}]}');
+    this._detect.detectChanges();
+  }
   // Local surface event handlers
   onSurfaceClick = (evt: SurfaceMouseEvent) => {
     this.closeAllContextMenus();
@@ -45,6 +60,7 @@ export class FsmDrawComponent {
         } else { if (this.mode === 'transition' && evt.type !== 'state') { this.transitonSelectedState = null; } }
       }
     }
+    this.json.emit(this.fsmSvc.toJson());
   }
 
   onSurfaceContextMenu = (evt: SurfaceMouseEvent) => {
@@ -65,6 +81,7 @@ export class FsmDrawComponent {
       (this.selected as FsmState).x = evt.surfaceX;
       (this.selected as FsmState).y = evt.surfaceY;
     }
+    this.json.emit(this.fsmSvc.toJson());
   }
 
   onSurfaceMouseDown = (evt: SurfaceMouseEvent) => {
@@ -74,6 +91,7 @@ export class FsmDrawComponent {
       if (evt.type === 'surface') { this.selected = null; } else { this.selectObject(evt.child); }
 
     }
+    this.json.emit(this.fsmSvc.toJson());
   }
 
   // FsmDrawControlbar event handlers
@@ -91,19 +109,31 @@ export class FsmDrawComponent {
     this.selected = null;
     this.props.cancel();
     this.refreshProps();
+    this.json.emit(this.fsmSvc.toJson());
   }
   onStateContextClickStart = (evt) => {
     FsmDataService.toggleStateValue(this.stateContextOpen.obj, StateTypes.START);
     this.stateContextOpen = null;
     this.refreshProps();
+    this.json.emit(this.fsmSvc.toJson());
   }
   onStateContextClickFinal = (evt) => {
     FsmDataService.toggleStateValue(this.stateContextOpen.obj, StateTypes.FINAL);
     this.stateContextOpen = null;
     this.refreshProps();
+    this.json.emit(this.fsmSvc.toJson());
   }
 
   // Helper Methods
+  startTransition(x: number, y: number): FsmTransition {
+    return {
+      sourceState: this.transitonSelectedState,
+      destState: { x: x, y: y, stateIndex: 99, name: 'temp', stateType: StateTypes.NORMAL, type: 'state' },
+      charactersAccepted: '',
+      type: 'transition'
+    };
+  }
+
   closeAllContextMenus() {
     this.stateContextOpen = null;
   }

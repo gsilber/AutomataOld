@@ -4,24 +4,23 @@
       <div class='draw-container bg-drawing'>
         <app-fsm-draw-surface (surfaceclick)='onSurfaceClick($event)' (surfacemousedown)='onSurfaceMouseDown($event)' (surfacemousemove)='onSurfaceMouseMove($event)'
           (surfacecontextmenu)='onSurfaceContextMenu($event)'>
-          <svg:defs>
-            <svg:marker id="arrowlong" markerWidth="9" markerHeight="9" refX="9" refY="3" orient="auto" markerUnits="strokeWidth" viewBox="0 0 9 9">
-              <svg:path d="M0,0 L0,6 L9,3 z" fill="#f00" />
-            </svg:marker>
-            </defs>
 
             <ng-template ngFor let-item [ngForOf]='fsmSvc.fsmTransitions'>
               <svg:g app-fsm-draw-transition [transition]='item' [selected]='selected && selected===item' />
             </ng-template>
 
+            <!-- <svg:line *ngIf='transitonSelectedState' class='fsm-transition' [attr.x1]='transitonSelectedState.x' [attr.y1]='transitonSelectedState.y'
+              [attr.x2]='mouseX' [attr.y2]='mouseY' stroke-width='2' stroke='black' marker-end='url(#arrowlong)' /> -->
 
 
             <ng-template ngFor let-item [ngForOf]='fsmSvc.fsmStates'>
               <svg:g app-fsm-draw-state [state]='item' [selected]='selected && selected===item' />
             </ng-template>
+            <ng-template [ngIf]='transitonSelectedState'>
+              <svg:g app-fsm-draw-transition [transition]='startTransition(mouseX,mouseY)' />
+            </ng-template>
 
-            <svg:line *ngIf='transitonSelectedState' class='fsm-transition' [attr.x1]='transitonSelectedState.x' [attr.y1]='transitonSelectedState.y'
-              [attr.x2]='mouseX' [attr.y2]='mouseY' stroke-width='2' stroke='black' marker-end='url(#arrowlong)' />
+
         </app-fsm-draw-surface>
 
       </div>

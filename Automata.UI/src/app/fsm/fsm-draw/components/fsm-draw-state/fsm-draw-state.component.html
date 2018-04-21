@@ -14,7 +14,7 @@
 </svg:text>
 
 <!-- Event Target on top to catch mouse events -->
-<svg:circle [attr.cx]='state.x' [attr.cy]='state.y' [attr.r]='radius' stroke='none' fill='transparent' 
+<svg:circle [attr.cx]='state.x' [attr.cy]='state.y' [attr.r]='radius' stroke='transparent' fill='transparent' 
   (click)='onClick($event)'
   (dblclick)='onDblClick($event)'
   (contextmenu)='onContextMenu($event)'

@@ -1,3 +1,4 @@
+import { FsmDrawTransitionComponent } from './../../fsm-draw/components/fsm-draw-transition/fsm-draw-transition.component';
 import { Injectable } from '@angular/core';
 
 export enum StateTypes { START = 'start', FINAL = 'final', NORMAL = 'normal', STARTFINAL = 'startfinal' }
@@ -28,7 +29,8 @@ export class FsmDataService {
   public fsmStates: FsmState[] = [];
   public fsmTransitions: FsmTransition[] = [];
   public defaultStateLabel = 'q';
-  constructor() { }
+  constructor() {
+  }
 
   public static toggleState(item: FsmState) {
     switch (item.stateType) {
@@ -195,5 +197,14 @@ export class FsmDataService {
     if (index > -1) {
       this.fsmStates.splice(index, 1);
     }
+  }
+
+  public toJson() {
+    return JSON.stringify({ states: this.fsmStates, transitions: this.fsmTransitions });
+  }
+  public fromJson(data: string) {
+    const obj = JSON.parse(data);
+    this.fsmStates = obj.states;
+    this.fsmTransitions = obj.transitions;
   }
 }

@@ -1,10 +1,20 @@
 <svg:defs>
-    <svg:marker id="arrow" markerWidth="9" markerHeight="9" refX="22" refY="3" orient="auto" markerUnits="strokeWidth" viewBox="0 0 9 9">
+    <svg:marker id="arrow" markerWidth="9" markerHeight="9" refX="9" refY="3" orient="auto" markerUnits="strokeWidth" viewBox="0 0 9 9">
+        <svg:path d="M0,0 L0,6 L9,3 z" fill="#f00" />
+    </svg:marker>
+    <svg:marker id="arrowlong" markerWidth="9" markerHeight="9" refX="0" refY="3" orient="auto" markerUnits="strokeWidth" viewBox="0 0 9 9">
         <svg:path d="M0,0 L0,6 L9,3 z" fill="#f00" />
     </svg:marker>
 </defs>
 
-<svg:line class='fsm-transition' [ngClass]='{"fsm-transition-selected":selected}' [attr.x1]='transition.sourceState.x' [attr.y1]='transition.sourceState.y' [attr.x2]='transition.destState.x' [attr.y2]='transition.destState.y' stroke-width='2' stroke='black' marker-end='url(#arrow)' 
+<svg:line class='fsm-transition' [ngClass]='{"fsm-transition-selected":selected}'
+    [attr.x1]='transition.sourceState.x+stateRadius' 
+    [attr.y1]='transition.sourceState.y' 
+    [attr.x2]='projection.x' 
+    [attr.y2]='projection.y' 
+    [attr.transform]='"rotate("+theta+","+transition.sourceState.x+","+transition.sourceState.y+")"'
+    stroke-width='2' stroke='black' 
+    [attr.marker-end]='(transition.destState.name==="temp"?"url(#arrowlong)":"url(#arrow)")'
     (click)='onClick($event)'
     (dblclick)='onDblClick($event)'
     (contextmenu)='onContextMenu($event)'
@@ -16,3 +26,4 @@
     (mouseover)='onMouseOver($event)'
     (mouseup)='onMouseUp($event)'
 />
+

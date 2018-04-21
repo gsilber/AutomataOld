@@ -10,6 +10,7 @@ import { ChildMouseEvent } from '../fsm-draw-surface/fsm-draw-surface.component'
   styleUrls: ['./fsm-draw-state.component.css']
 })
 export class FsmDrawStateComponent {
+  public static stateRadius = 30;
   @Input() state: FsmState;
   @Input() selected: boolean;
   @Output() stateclick: EventEmitter<ChildMouseEvent> = new EventEmitter<ChildMouseEvent>();
@@ -23,8 +24,7 @@ export class FsmDrawStateComponent {
   @Output() statemouseover: EventEmitter<ChildMouseEvent> = new EventEmitter<ChildMouseEvent>();
   @Output() statemouseup: EventEmitter<ChildMouseEvent> = new EventEmitter<ChildMouseEvent>();
 
-  radius = 30;
-
+  get radius() { return FsmDrawStateComponent.stateRadius; }
   constructor() { }
 
   isStart = () => this.state.stateType === 'start' || this.state.stateType === 'startfinal';

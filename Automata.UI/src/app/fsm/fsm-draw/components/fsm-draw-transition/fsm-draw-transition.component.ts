@@ -1,3 +1,4 @@
+import { FsmDrawStateComponent } from './../fsm-draw-state/fsm-draw-state.component';
 import { ChildMouseEvent } from './../fsm-draw-surface/fsm-draw-surface.component';
 import { FsmTransition } from './../../../fsm-core/services/fsm-data.service';
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
@@ -23,13 +24,36 @@ export class FsmDrawTransitionComponent implements OnInit {
   @Output() transitionmouseover: EventEmitter<ChildMouseEvent> = new EventEmitter<ChildMouseEvent>();
   @Output() transitionmouseup: EventEmitter<ChildMouseEvent> = new EventEmitter<ChildMouseEvent>();
 
+  private get deltaX() {
+    return this.transition.sourceState.x - this.transition.destState.x;
+  }
+  private get deltaY() {
+    return this.transition.sourceState.y - this.transition.destState.y;
+  }
+  get length() {
+    return Math.sqrt(Math.pow(this.deltaX, 2) + Math.pow(this.deltaY, 2)) - this.stateRadius;
+  }
+
+  get projection() {
+    return { x: this.transition.sourceState.x + this.length, y: this.transition.sourceState.y };
+  }
+
+  get theta() {
+    return Math.atan2(this.transition.destState.y - this.transition.sourceState.y,
+      this.transition.destState.x - this.transition.sourceState.x)
+      * (180.0 / Math.PI);
+  }
+
+  get stateRadius() { return FsmDrawStateComponent.stateRadius; }
+
   constructor() { }
 
   ngOnInit() {
   }
 
   onClick = (evt: MouseEvent) => {
-    this.transitionclick.emit({ srcEvent: evt, child: this.transition, type: 'transition' }); evt.stopPropagation(); return false;
+    this.transitionclick.emit({ srcEvent: evt, child: this.transition, type: 'transition' });
+    if (this.transition.destState.name !== 'temp') { evt.stopPropagation(); return false; }
   }
   onDblClick = (evt: MouseEvent) => {
     this.transitiondblclick.emit({ srcEvent: evt, child: this.transition, type: 'transition' }); evt.stopPropagation(); return false;

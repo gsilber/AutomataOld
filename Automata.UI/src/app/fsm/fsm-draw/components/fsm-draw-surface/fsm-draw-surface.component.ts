@@ -75,7 +75,6 @@ export class FsmDrawSurfaceComponent implements AfterViewInit {
       this.prevHooks.push(element.statemouseup.subscribe(obj => this.onChildMouseUp(obj)));
     });
     this.transitions.forEach((element: FsmDrawTransitionComponent) => {
-      console.log(element)
       this.prevHooks.push(element.transitionclick.subscribe(obj => this.onChildClick(obj)));
       this.prevHooks.push(element.transitiondblclick.subscribe(obj => this.onChildDblClick(obj)));
       this.prevHooks.push(element.transitioncontextmenu.subscribe(obj => this.onChildContextMenu(obj)));
@@ -114,7 +113,6 @@ export class FsmDrawSurfaceComponent implements AfterViewInit {
   private fireAugmentedMouseEvent(
     evt: MouseEvent, emitter: EventEmitter<SurfaceMouseEvent>, child: any = null, type: String = 'surface'): boolean {
     const pt = this.clientToSurface(evt.clientX, evt.clientY);
-    console.log(child)
     emitter.emit(new SurfaceMouseEvent(evt, pt.x, pt.y, child, type));
     evt.stopPropagation();
     return false;
