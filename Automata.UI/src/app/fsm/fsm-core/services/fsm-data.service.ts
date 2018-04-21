@@ -51,6 +51,39 @@ export class FsmDataService {
     }
   }
 
+  public static setStateValue(item: FsmState, valueType: StateTypes, remove: boolean = false) {
+    switch (item.stateType) {
+      case StateTypes.NORMAL:
+        if (!remove) {
+          item.stateType = valueType;
+        }
+        break;
+      case StateTypes.START:
+        if (valueType === StateTypes.FINAL && !remove) {
+          item.stateType = StateTypes.STARTFINAL;
+        }
+        if (valueType === StateTypes.START && remove) {
+          item.stateType = StateTypes.NORMAL;
+        }
+        break;
+      case StateTypes.FINAL:
+        if (valueType === StateTypes.START && !remove) {
+          item.stateType = StateTypes.STARTFINAL;
+        }
+        if (valueType === StateTypes.FINAL && remove) {
+          item.stateType = StateTypes.NORMAL;
+        }
+        break;
+      case StateTypes.STARTFINAL:
+        if (valueType === StateTypes.START && remove) {
+          item.stateType = StateTypes.FINAL;
+        }
+        if (valueType === StateTypes.FINAL && remove) {
+          item.stateType = StateTypes.START;
+        }
+    }
+  }
+
   public static toggleStateValue(item: FsmState, valueType: StateTypes) {
     switch (item.stateType) {
       case StateTypes.NORMAL:
@@ -91,11 +124,15 @@ export class FsmDataService {
         }
         break;
     }
-    if (item.stateType === StateTypes.NORMAL) {
-
-    }
   }
 
+  public validateLabel(state: FsmState): boolean {
+    if (state.name.length === 0) { return false; }
+    for (const item of this.fsmStates) {
+      if (item !== state && item.name === state.name) { return false; }
+    }
+    return true;
+  }
   public clear = () => {
     this.fsmStates = [];
     this.fsmTransitions = [];
@@ -106,7 +143,7 @@ export class FsmDataService {
   }
 
   public addTransition = (source: FsmState, dest: FsmState) => {
-    this.fsmTransitions.push({ sourceState: source, destState: dest, charactersAccepted: '' , type: 'transition'});
+    this.fsmTransitions.push({ sourceState: source, destState: dest, charactersAccepted: '', type: 'transition' });
   }
 
   public addDefaultState = (x: number, y: number): FsmState => {

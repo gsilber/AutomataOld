@@ -1,5 +1,22 @@
 <div class='prop-page border-bottom'>
     <div *ngIf='object===null' class='h5 text-center'>Select an object</div>
     <div *ngIf='object!==null' class='h5 text-center'>Object Properties</div>
-    <div class='bg-light prop-item'></div> 
-</div>
+    <div class='bg-light prop-item'>
+        <div *ngIf='state' class='prop-card rounded border'>
+        State Name:<br/>
+        <input type='text' [(ngModel)]="state.name" /><br/>&nbsp;<br/>
+        State Modes:<br/>
+        <input type='checkbox' [(ngModel)]='start'/> Start<br/> 
+        <input type='checkbox' [(ngModel)]='final'/> Final
+        <p>&nbsp;</p>
+        <div class='text-center align-bottom'>
+                <button class=' btn btn-primary' [disabled]='!validState' (click)='updateStateEdit()'>Update</button>
+                <button class='btn btn-secondary' (click)='cancelStateEdit()'>Cancel</button>
+        </div>
+    
+        </div> 
+        <div *ngIf='transition' class='prop-card'>
+            I am a transition
+        </div> 
+    </div>
+</div>  

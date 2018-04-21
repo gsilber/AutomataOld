@@ -8,12 +8,14 @@ import { FsmDrawTransitionComponent } from './components/fsm-draw-transition/fsm
 import { FsmDrawSurfaceComponent } from './components/fsm-draw-surface/fsm-draw-surface.component';
 import { ContextMenuModule } from '../../reusable/context-menu/context-menu.module';
 import { FsmDrawPropsComponent } from './components/fsm-draw-props/fsm-draw-props.component';
+import { FormsModule } from '@angular/forms';
 
 @NgModule({
   imports: [
     CommonModule,
     NgbModule,
-    ContextMenuModule
+    ContextMenuModule,
+    FormsModule
   ],
   exports: [FsmDrawComponent],
   declarations: [FsmDrawComponent, FsmDrawControlbarComponent, FsmDrawStateComponent, FsmDrawTransitionComponent, FsmDrawSurfaceComponent, FsmDrawPropsComponent]
