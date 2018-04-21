@@ -17,16 +17,22 @@ export class FsmDrawControlbarComponent implements OnInit {
   @Output() help: EventEmitter<boolean> = new EventEmitter<boolean>();
 
   @Input() readonly = false;
+  imode: Modes = Modes.POINTER;
   constructor() { }
 
   // Lifecycle hooks
   ngOnInit() {
+    this.imode = Modes.POINTER;
     this.mode.emit(Modes.POINTER);
     this.clear.emit(true);
   }
 
+  public setMode = (mode: Modes) => {
+    this.imode=mode;
+    this.mode.emit(mode);
+  }
   // Event Handlers
-  onModeChange = (mode) => { this.mode.emit(mode); return false; };
+  onModeChange = (mode) => { this.imode=mode; this.mode.emit(mode); return false; };
   onZoom = (direction) => { this.zoom.emit(direction); return false; };
   onClear = () => { this.clear.emit(true); return false; };
   onValidate = () => { this.validate.emit(true); return false; };

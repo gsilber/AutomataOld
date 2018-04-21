@@ -1,5 +1,5 @@
 import { SurfaceMouseEvent } from './../fsm-draw-surface/fsm-draw-surface.component';
-import { Modes } from './../fsm-draw-controlbar/fsm-draw-controlbar.component';
+import { Modes, FsmDrawControlbarComponent } from './../fsm-draw-controlbar/fsm-draw-controlbar.component';
 import { Component, Input, ContentChild, ViewChild, ElementRef } from '@angular/core';
 import { FsmDataService, StateTypes, FsmState, FsmObject } from '../../../fsm-core/services/fsm-data.service';
 import { FsmDrawPropsComponent } from '../fsm-draw-props/fsm-draw-props.component';
@@ -14,6 +14,7 @@ export class FsmDrawComponent {
   @Input() readonly = false;
 
   @ViewChild(FsmDrawPropsComponent) props: FsmDrawPropsComponent;
+  @ViewChild(FsmDrawControlbarComponent) ctrlBar: FsmDrawControlbarComponent;
   selected: FsmObject = null;
 
   private mode: Modes = Modes.POINTER;
@@ -29,6 +30,7 @@ export class FsmDrawComponent {
     this.closeAllContextMenus();
     if (this.readonly) { return false; }
     if (this.mode === Modes.STATE && evt.type === 'surface') {
+      this.ctrlBar.setMode(Modes.POINTER);
       this.selectObject(this.fsmSvc.addDefaultState(evt.surfaceX, evt.surfaceY));
     } else {
       if (this.mode === Modes.TRANSITION && evt.type === 'state' && !this.transitonSelectedState) {
@@ -37,7 +39,8 @@ export class FsmDrawComponent {
       } else {
         if (this.mode === Modes.TRANSITION && evt.type === 'state' && this.transitonSelectedState) {
           // end transition
-          this.fsmSvc.addTransition(this.transitonSelectedState, evt.child as FsmState);
+          this.selectObject(this.fsmSvc.addTransition(this.transitonSelectedState, evt.child as FsmState));
+          this.ctrlBar.setMode(Modes.POINTER);
           this.transitonSelectedState = null;
         } else { if (this.mode === 'transition' && evt.type !== 'state') { this.transitonSelectedState = null; } }
       }
@@ -75,7 +78,7 @@ export class FsmDrawComponent {
   }
 
   // FsmDrawControlbar event handlers
-  onCtrlbarMode = (mode: Modes) => this.mode = mode;
+  onCtrlbarMode = (mode: Modes) => { this.mode = mode; if (mode !== Modes.POINTER) { this.selected = null; } }
   onCtrlbarClear = () => this.fsmSvc.clear();
   onCtrlbarHelp = () => console.log('help');
   onCtrlbarValidate = () => console.log('validate');

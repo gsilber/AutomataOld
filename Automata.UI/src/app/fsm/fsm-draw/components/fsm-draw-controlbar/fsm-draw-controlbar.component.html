@@ -3,17 +3,17 @@
     <div class='ctrlBarGroupHeader border-bottom fas'>Mode<span *ngIf='readonly' class='text-danger'> (Read Only)</span></div>
     <ul class="nav nav-pills">
       <li class="nav-item" ngbTooltip='Mouse Pointer' (click)='onModeChange("pointer")'>
-        <a href='' class="nav-link active" data-toggle='pill'>
+        <a href='' class="nav-link" [ngClass]='{"active": imode==="pointer"}'>
           <span class="fas fa-mouse-pointer" placement='top'></span>
         </a>
       </li>
       <li *ngIf='!readonly' class="nav-item" ngbTooltip='Add States' placement='top' (click)='onModeChange("state")'>
-        <a href='' class="nav-link" data-toggle='pill'>
+        <a href='' class="nav-link" [ngClass]='{"active": imode==="state"}'>
           <span class="fas fa-cogs"></span>
         </a>
       </li>
       <li *ngIf='!readonly' class="nav-item" (click)='onModeChange("transition")' ngbTooltip='Add Transitions' placement='top'>
-        <a href='' class="nav-link" data-toggle='pill'>
+        <a href='' class="nav-link" [ngClass]='{"active": imode==="transition"}'>
           <span class="fas fa-recycle"></span>
         </a>
       </li>

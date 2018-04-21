@@ -188,6 +188,7 @@ export class FsmDataService {
   }
 
   public removeState(state: FsmState) {
+    this.removeTransitionsForState(state);
     const index = this.fsmStates.indexOf(state);
     if (index > -1) {
       this.fsmStates.splice(index, 1);
