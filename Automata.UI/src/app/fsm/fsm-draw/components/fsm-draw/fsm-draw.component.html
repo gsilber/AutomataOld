@@ -11,7 +11,7 @@
             </defs>
 
             <ng-template ngFor let-item [ngForOf]='fsmSvc.fsmTransitions'>
-              <svg:g app-fsm-draw-transition [transition]='item' />
+              <svg:g app-fsm-draw-transition [transition]='item' [selected]='selected && selected===item' />
             </ng-template>
 
 

@@ -71,14 +71,13 @@ export class FsmDrawComponent {
     this.props.cancel();
     if (this.readonly || evt.srcEvent.which !== 1) { return false; }
     if (this.mode === Modes.POINTER) {
-      if (evt.type === 'state') { this.selectObject(evt.child); }
-      if (evt.type === 'surface') { this.selected = null; }
+      if (evt.type === 'surface') { this.selected = null; } else { this.selectObject(evt.child); }
 
     }
   }
 
   // FsmDrawControlbar event handlers
-  onCtrlbarMode = (mode: Modes) => { this.mode = mode; if (mode !== Modes.POINTER) { this.selected = null; } }
+  onCtrlbarMode = (mode: Modes) => { this.mode = mode; if (mode !== Modes.POINTER) { this.selected = null; } };
   onCtrlbarClear = () => this.fsmSvc.clear();
   onCtrlbarHelp = () => console.log('help');
   onCtrlbarValidate = () => console.log('validate');

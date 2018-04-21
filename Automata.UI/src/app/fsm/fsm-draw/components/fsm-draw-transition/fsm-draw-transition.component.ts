@@ -12,20 +12,51 @@ export class FsmDrawTransitionComponent implements OnInit {
 
   @Input() transition: FsmTransition = null;
   @Input() selected: boolean;
-  @Output() stateclick: EventEmitter<ChildMouseEvent> = new EventEmitter<ChildMouseEvent>();
-  @Output() statedblclick: EventEmitter<ChildMouseEvent> = new EventEmitter<ChildMouseEvent>();
-  @Output() statecontextmenu: EventEmitter<ChildMouseEvent> = new EventEmitter<ChildMouseEvent>();
-  @Output() statemousedown: EventEmitter<ChildMouseEvent> = new EventEmitter<ChildMouseEvent>();
-  @Output() statemouseenter: EventEmitter<ChildMouseEvent> = new EventEmitter<ChildMouseEvent>();
-  @Output() statemouseleave: EventEmitter<ChildMouseEvent> = new EventEmitter<ChildMouseEvent>();
-  @Output() statemousemove: EventEmitter<ChildMouseEvent> = new EventEmitter<ChildMouseEvent>();
-  @Output() statemouseout: EventEmitter<ChildMouseEvent> = new EventEmitter<ChildMouseEvent>();
-  @Output() statemouseover: EventEmitter<ChildMouseEvent> = new EventEmitter<ChildMouseEvent>();
-  @Output() statemouseup: EventEmitter<ChildMouseEvent> = new EventEmitter<ChildMouseEvent>();
+  @Output() transitionclick: EventEmitter<ChildMouseEvent> = new EventEmitter<ChildMouseEvent>();
+  @Output() transitiondblclick: EventEmitter<ChildMouseEvent> = new EventEmitter<ChildMouseEvent>();
+  @Output() transitioncontextmenu: EventEmitter<ChildMouseEvent> = new EventEmitter<ChildMouseEvent>();
+  @Output() transitionmousedown: EventEmitter<ChildMouseEvent> = new EventEmitter<ChildMouseEvent>();
+  @Output() transitionmouseenter: EventEmitter<ChildMouseEvent> = new EventEmitter<ChildMouseEvent>();
+  @Output() transitionmouseleave: EventEmitter<ChildMouseEvent> = new EventEmitter<ChildMouseEvent>();
+  @Output() transitionmousemove: EventEmitter<ChildMouseEvent> = new EventEmitter<ChildMouseEvent>();
+  @Output() transitionmouseout: EventEmitter<ChildMouseEvent> = new EventEmitter<ChildMouseEvent>();
+  @Output() transitionmouseover: EventEmitter<ChildMouseEvent> = new EventEmitter<ChildMouseEvent>();
+  @Output() transitionmouseup: EventEmitter<ChildMouseEvent> = new EventEmitter<ChildMouseEvent>();
 
   constructor() { }
 
   ngOnInit() {
+  }
+
+  onClick = (evt: MouseEvent) => {
+    this.transitionclick.emit({ srcEvent: evt, child: this.transition, type: 'transition' }); evt.stopPropagation(); return false;
+  }
+  onDblClick = (evt: MouseEvent) => {
+    this.transitiondblclick.emit({ srcEvent: evt, child: this.transition, type: 'transition' }); evt.stopPropagation(); return false;
+  }
+  onContextMenu = (evt: MouseEvent) => {
+    this.transitioncontextmenu.emit({ srcEvent: evt, child: this.transition, type: 'transition' }); evt.stopPropagation(); return false;
+  }
+  onMouseDown = (evt: MouseEvent) => {
+    this.transitionmousedown.emit({ srcEvent: evt, child: this.transition, type: 'transition' }); evt.stopPropagation(); return false;
+  }
+  onMouseEnter = (evt: MouseEvent) => {
+    this.transitionmouseenter.emit({ srcEvent: evt, child: this.transition, type: 'transition' }); evt.stopPropagation(); return false;
+  }
+  onMouseLeave = (evt: MouseEvent) => {
+    this.transitionmouseleave.emit({ srcEvent: evt, child: this.transition, type: 'transition' }); evt.stopPropagation(); return false;
+  }
+  onMouseMove = (evt: MouseEvent) => {
+    this.transitionmousemove.emit({ srcEvent: evt, child: this.transition, type: 'transition' }); evt.stopPropagation(); return false;
+  }
+  onMouseOut = (evt: MouseEvent) => {
+    this.transitionmouseout.emit({ srcEvent: evt, child: this.transition, type: 'transition' }); evt.stopPropagation(); return false;
+  }
+  onMouseOver = (evt: MouseEvent) => {
+    this.transitionmouseover.emit({ srcEvent: evt, child: this.transition, type: 'transition' }); evt.stopPropagation(); return false;
+  }
+  onMouseUp = (evt: MouseEvent) => {
+    this.transitionmouseup.emit({ srcEvent: evt, child: this.transition, type: 'transition' }); evt.stopPropagation(); return false;
   }
 
 }

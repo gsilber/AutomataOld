@@ -4,4 +4,15 @@
     </svg:marker>
 </defs>
 
-<svg:line class='fsm-transition' [attr.x1]='transition.sourceState.x' [attr.y1]='transition.sourceState.y' [attr.x2]='transition.destState.x' [attr.y2]='transition.destState.y' stroke-width='2' stroke='black' marker-end='url(#arrow)' />
+<svg:line class='fsm-transition' [ngClass]='{"fsm-transition-selected":selected}' [attr.x1]='transition.sourceState.x' [attr.y1]='transition.sourceState.y' [attr.x2]='transition.destState.x' [attr.y2]='transition.destState.y' stroke-width='2' stroke='black' marker-end='url(#arrow)' 
+    (click)='onClick($event)'
+    (dblclick)='onDblClick($event)'
+    (contextmenu)='onContextMenu($event)'
+    (mousedown)='onMouseDown($event)'
+    (mouseenter)='onMouseEnter($event)'
+    (mouseleave)='onMouseLeave($event)'
+    (mousemove)='onMouseMove($event)'
+    (mouseout)='onMouseOut($event)'
+    (mouseover)='onMouseOver($event)'
+    (mouseup)='onMouseUp($event)'
+/>

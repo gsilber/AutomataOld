@@ -50,13 +50,16 @@ export class FsmDrawSurfaceComponent implements AfterViewInit {
   constructor(private _elementRef: ElementRef) { }
 
   ngAfterViewInit() {
-    this.initStateEvents();
+    this.initEvents();
     this.states.changes.subscribe(_ => {
-      this.initStateEvents();
+      this.initEvents();
+    });
+    this.transitions.changes.subscribe(_ => {
+      this.initEvents();
     });
   }
 
-  private initStateEvents = () => {
+  private initEvents = () => {
     this.prevHooks.forEach((subscription) => subscription.unsubscribe());
 
     this.prevHooks = [];
@@ -70,6 +73,18 @@ export class FsmDrawSurfaceComponent implements AfterViewInit {
       this.prevHooks.push(element.statemouseout.subscribe(obj => this.onChildMouseOut(obj)));
       this.prevHooks.push(element.statemouseover.subscribe(obj => this.onChildMouseOver(obj)));
       this.prevHooks.push(element.statemouseup.subscribe(obj => this.onChildMouseUp(obj)));
+    });
+    this.transitions.forEach((element: FsmDrawTransitionComponent) => {
+      console.log(element)
+      this.prevHooks.push(element.transitionclick.subscribe(obj => this.onChildClick(obj)));
+      this.prevHooks.push(element.transitiondblclick.subscribe(obj => this.onChildDblClick(obj)));
+      this.prevHooks.push(element.transitioncontextmenu.subscribe(obj => this.onChildContextMenu(obj)));
+      this.prevHooks.push(element.transitionmousedown.subscribe(obj => this.onChildMouseDown(obj)));
+      this.prevHooks.push(element.transitionmouseleave.subscribe(obj => this.onChildMouseLeave(obj)));
+      this.prevHooks.push(element.transitionmousemove.subscribe(obj => this.onChildMouseMove(obj)));
+      this.prevHooks.push(element.transitionmouseout.subscribe(obj => this.onChildMouseOut(obj)));
+      this.prevHooks.push(element.transitionmouseover.subscribe(obj => this.onChildMouseOver(obj)));
+      this.prevHooks.push(element.transitionmouseup.subscribe(obj => this.onChildMouseUp(obj)));
     });
   }
 
@@ -99,6 +114,7 @@ export class FsmDrawSurfaceComponent implements AfterViewInit {
   private fireAugmentedMouseEvent(
     evt: MouseEvent, emitter: EventEmitter<SurfaceMouseEvent>, child: any = null, type: String = 'surface'): boolean {
     const pt = this.clientToSurface(evt.clientX, evt.clientY);
+    console.log(child)
     emitter.emit(new SurfaceMouseEvent(evt, pt.x, pt.y, child, type));
     evt.stopPropagation();
     return false;

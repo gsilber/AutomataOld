@@ -145,8 +145,10 @@ export class FsmDataService {
     return state;
   }
 
-  public addTransition = (source: FsmState, dest: FsmState) => {
-    this.fsmTransitions.push({ sourceState: source, destState: dest, charactersAccepted: '', type: 'transition' });
+  public addTransition = (source: FsmState, dest: FsmState): FsmTransition => {
+    const trans = { sourceState: source, destState: dest, charactersAccepted: 'a', type: 'transition' };
+    this.fsmTransitions.push(trans);
+    return trans;
   }
 
   public addDefaultState = (x: number, y: number): FsmState => {

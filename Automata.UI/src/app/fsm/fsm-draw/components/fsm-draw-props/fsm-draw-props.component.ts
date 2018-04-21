@@ -44,6 +44,7 @@ export class FsmDrawPropsComponent implements OnInit {
   iname: string;
   itype: StateTypes;
   stateErrMsg = '';
+  transitionErrMsg = '';
   constructor(private _fsmSvc: FsmDataService) { }
 
   ngOnInit() {
