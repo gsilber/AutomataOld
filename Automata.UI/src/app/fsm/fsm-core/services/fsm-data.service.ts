@@ -138,6 +138,11 @@ export class FsmDataService {
     }
     return '';
   }
+  public validateAcceptChars(transition: FsmTransition) {
+    if (transition.charactersAccepted.length === 0) { return 'Invalid accept set'; }
+    // do more validation here to make sure it adheres to our rules
+    return '';
+  }
   public clear = () => {
     this.fsmStates = [];
     this.fsmTransitions = [];

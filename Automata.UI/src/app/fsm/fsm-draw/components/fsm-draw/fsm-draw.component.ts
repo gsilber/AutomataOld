@@ -24,6 +24,7 @@ export class FsmDrawComponent implements AfterViewInit {
 
   private mode: Modes = Modes.POINTER;
   stateContextOpen = null;
+  transContextOpen = null;
   transitonSelectedState = null;
   mouseX: number;
   mouseY: number;
@@ -64,6 +65,9 @@ export class FsmDrawComponent implements AfterViewInit {
     // popup an appropriate context menu
     if (evt.type === 'state' && this.mode === Modes.POINTER) {
       this.stateContextOpen = { x: evt.surfaceX, y: evt.surfaceY, obj: evt.child };
+    }
+    if (evt.type === 'transition' && this.mode === Modes.POINTER) {
+      this.transContextOpen = { x: evt.surfaceX, y: evt.surfaceY, obj: evt.child };
     }
   }
 
@@ -121,6 +125,16 @@ export class FsmDrawComponent implements AfterViewInit {
     this.json.emit(this.fsmSvc.toJson());
   }
 
+  onTransContextClickDelete = (evt) => {
+    this.props.cancel();
+    this.fsmSvc.removeTransition(this.transContextOpen.obj);
+    this.transContextOpen = null;
+    this.selected = null;
+    this.props.cancel();
+    this.refreshProps();
+    this.json.emit(this.fsmSvc.toJson());
+  }
+
   // Helper Methods
   startTransition(x: number, y: number): FsmTransition {
     return {
@@ -133,6 +147,7 @@ export class FsmDrawComponent implements AfterViewInit {
 
   closeAllContextMenus() {
     this.stateContextOpen = null;
+    this.transContextOpen = null;
   }
   selectObject(obj) {
     this.selected = obj;

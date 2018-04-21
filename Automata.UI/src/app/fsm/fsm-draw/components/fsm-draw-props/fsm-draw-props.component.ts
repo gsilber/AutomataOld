@@ -14,6 +14,9 @@ export class FsmDrawPropsComponent implements OnInit {
       this.iname = this.state.name;
       this.itype = this.state.stateType;
     }
+    if (this.transition) {
+      this.iCharAccepted = this.transition.charactersAccepted;
+    }
   }
   get object(): FsmObject { return this._object; }
   get validState(): boolean {
@@ -21,11 +24,28 @@ export class FsmDrawPropsComponent implements OnInit {
     this.stateErrMsg = this._fsmSvc.validateLabel(this.state);
     return this.stateErrMsg === '';
   }
+  get validTransition(): boolean {
+    if (!this.transition) { return false; }
+    this.transitionErrMsg = this._fsmSvc.validateAcceptChars(this.transition);
+    return this.transitionErrMsg === '';
+  }
 
+  get dirty(): boolean {
+    if (this.state) {
+      return this.state.name !== this.iname || this.state.stateType !== this.itype;
+    }
+    if (this.transition) {
+      return this.transition.charactersAccepted !== this.iCharAccepted;
+    }
+    return false;
+  }
   get start(): boolean { return this.state && (this.state.stateType === 'start' || this.state.stateType === 'startfinal'); }
   set start(val: boolean) { FsmDataService.setStateValue(this.state, StateTypes.START, !val); }
   get final() { return this.state && (this.state.stateType === 'final' || this.state.stateType === 'startfinal'); }
   set final(val: boolean) { FsmDataService.setStateValue(this.state, StateTypes.FINAL, !val); }
+
+
+
   private _object: FsmObject = null;
 
   get state(): FsmState {
@@ -43,8 +63,10 @@ export class FsmDrawPropsComponent implements OnInit {
   // state properties
   iname: string;
   itype: StateTypes;
+  iCharAccepted: string;
   stateErrMsg = '';
   transitionErrMsg = '';
+
   constructor(private _fsmSvc: FsmDataService) { }
 
   ngOnInit() {
@@ -63,6 +85,20 @@ export class FsmDrawPropsComponent implements OnInit {
     this._fsmSvc.removeState(this.state);
     this.object = null;
   }
+
+  updateTransitionEdit = () => {
+    this.iCharAccepted = this.transition.charactersAccepted;
+    this.itype = this.state.stateType;
+  }
+  cancelTransitionEdit = () => {
+    this.transition.charactersAccepted = this.iCharAccepted;
+  }
+  deleteTransition = () => {
+    this.cancel();
+    this._fsmSvc.removeTransition(this.transition);
+    this.object = null;
+  }
+
   public refresh = () => this.object = this.object;
 
   public cancel = () => {
@@ -70,6 +106,7 @@ export class FsmDrawPropsComponent implements OnInit {
       this.cancelStateEdit();
     }
     if (this.object && this.object.type === 'transition') {
+      this.cancelTransitionEdit();
     }
   }
 }

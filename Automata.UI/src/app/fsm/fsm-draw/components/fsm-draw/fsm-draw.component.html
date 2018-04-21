@@ -5,19 +5,17 @@
         <app-fsm-draw-surface (surfaceclick)='onSurfaceClick($event)' (surfacemousedown)='onSurfaceMouseDown($event)' (surfacemousemove)='onSurfaceMouseMove($event)'
           (surfacecontextmenu)='onSurfaceContextMenu($event)'>
 
-            <ng-template ngFor let-item [ngForOf]='fsmSvc.fsmTransitions'>
+          <ng-template [ngIf]='transitonSelectedState'>
+            <svg:g app-fsm-draw-transition [transition]='startTransition(mouseX,mouseY)' />
+          </ng-template>
+
+          <ng-template ngFor let-item [ngForOf]='fsmSvc.fsmTransitions'>
               <svg:g app-fsm-draw-transition [transition]='item' [selected]='selected && selected===item' />
             </ng-template>
-
-            <!-- <svg:line *ngIf='transitonSelectedState' class='fsm-transition' [attr.x1]='transitonSelectedState.x' [attr.y1]='transitonSelectedState.y'
-              [attr.x2]='mouseX' [attr.y2]='mouseY' stroke-width='2' stroke='black' marker-end='url(#arrowlong)' /> -->
 
 
             <ng-template ngFor let-item [ngForOf]='fsmSvc.fsmStates'>
               <svg:g app-fsm-draw-state [state]='item' [selected]='selected && selected===item' />
-            </ng-template>
-            <ng-template [ngIf]='transitonSelectedState'>
-              <svg:g app-fsm-draw-transition [transition]='startTransition(mouseX,mouseY)' />
             </ng-template>
 
 
@@ -47,5 +45,12 @@
   </app-context-menu-item>
   <app-context-menu-item (itemclick)='onStateContextClickFinal($event)' [checked]='stateContextOpen && (stateContextOpen.obj.stateType==="final"|| stateContextOpen.obj.stateType==="startfinal")'>
     Final State
+  </app-context-menu-item>
+</app-context-menu>
+
+<!--Transition context menu-->
+<app-context-menu [open]='transContextOpen'>
+  <app-context-menu-item (itemclick)='onTransContextClickDelete($event)'>
+    Delete
   </app-context-menu-item>
 </app-context-menu>
