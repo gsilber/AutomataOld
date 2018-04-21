@@ -1,7 +1,7 @@
 import { FsmDrawStateComponent } from './../fsm-draw-state/fsm-draw-state.component';
 import { ChildMouseEvent } from './../fsm-draw-surface/fsm-draw-surface.component';
 import { FsmTransition } from './../../../fsm-core/services/fsm-data.service';
-import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter, AfterViewInit, ViewChild, ElementRef, ChangeDetectorRef } from '@angular/core';
 
 @Component({
   // tslint:disable-next-line:component-selector
@@ -9,7 +9,7 @@ import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
   templateUrl: './fsm-draw-transition.component.html',
   styleUrls: ['./fsm-draw-transition.component.css']
 })
-export class FsmDrawTransitionComponent implements OnInit {
+export class FsmDrawTransitionComponent implements AfterViewInit {
 
   @Input() transition: FsmTransition = null;
   @Input() selected: boolean;
@@ -23,6 +23,9 @@ export class FsmDrawTransitionComponent implements OnInit {
   @Output() transitionmouseout: EventEmitter<ChildMouseEvent> = new EventEmitter<ChildMouseEvent>();
   @Output() transitionmouseover: EventEmitter<ChildMouseEvent> = new EventEmitter<ChildMouseEvent>();
   @Output() transitionmouseup: EventEmitter<ChildMouseEvent> = new EventEmitter<ChildMouseEvent>();
+  @ViewChild('textEl') textElement: ElementRef;
+
+  textheight = 0;
 
   private get deltaX() {
     return this.transition.sourceState.x - this.transition.destState.x;
@@ -44,12 +47,24 @@ export class FsmDrawTransitionComponent implements OnInit {
       * (180.0 / Math.PI);
   }
 
+  get thetai() { return Math.floor(this.theta); }
   get stateRadius() { return FsmDrawStateComponent.stateRadius; }
 
-  constructor() { }
-
-  ngOnInit() {
+  get textRotate() {
+    const angle = Math.abs(this.theta);
+    if (angle > 90 && angle < 180) {
+      return 180;
+    }
   }
+
+
+  constructor(private _detect: ChangeDetectorRef) { }
+
+  ngAfterViewInit() {
+    this.textheight = (this.textElement.nativeElement.getBBox().height + 10);
+    this._detect.detectChanges();
+  }
+
 
   onClick = (evt: MouseEvent) => {
     this.transitionclick.emit({ srcEvent: evt, child: this.transition, type: 'transition' });
