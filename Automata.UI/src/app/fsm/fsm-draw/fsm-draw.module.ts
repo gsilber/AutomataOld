@@ -7,6 +7,7 @@ import { FsmDrawStateComponent } from './components/fsm-draw-state/fsm-draw-stat
 import { FsmDrawTransitionComponent } from './components/fsm-draw-transition/fsm-draw-transition.component';
 import { FsmDrawSurfaceComponent } from './components/fsm-draw-surface/fsm-draw-surface.component';
 import { ContextMenuModule } from '../../reusable/context-menu/context-menu.module';
+import { FsmDrawPropsComponent } from './components/fsm-draw-props/fsm-draw-props.component';
 
 @NgModule({
   imports: [
@@ -15,6 +16,6 @@ import { ContextMenuModule } from '../../reusable/context-menu/context-menu.modu
     ContextMenuModule
   ],
   exports: [FsmDrawComponent],
-  declarations: [FsmDrawComponent, FsmDrawControlbarComponent, FsmDrawStateComponent, FsmDrawTransitionComponent, FsmDrawSurfaceComponent]
+  declarations: [FsmDrawComponent, FsmDrawControlbarComponent, FsmDrawStateComponent, FsmDrawTransitionComponent, FsmDrawSurfaceComponent, FsmDrawPropsComponent]
 })
 export class FsmDrawModule { }

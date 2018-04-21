@@ -24,7 +24,7 @@ export class FsmDrawComponent {
     this.closeAllContextMenus();
     if (this.readonly) { return false; }
     if (this.mode === Modes.STATE && evt.type === 'surface') {
-      this.selected = this.fsmSvc.addDefaultState(evt.surfaceX, evt.surfaceY);
+      this.selectObject(this.fsmSvc.addDefaultState(evt.surfaceX, evt.surfaceY));
     }
   }
 
@@ -55,7 +55,7 @@ export class FsmDrawComponent {
   onSurfaceMouseDown = (evt: SurfaceMouseEvent) => {
     if (this.readonly || evt.srcEvent.which !== 1) { return false; }
     if (this.mode === Modes.POINTER) {
-      if (evt.type === 'state') { this.selected = evt.child; }
+      if (evt.type === 'state') { this.selectObject(evt.child); }
       if (evt.type === 'surface') { this.selected = null; }
 
     }
@@ -85,5 +85,8 @@ export class FsmDrawComponent {
   // Helper Methods
   closeAllContextMenus() {
     this.stateContextOpen = null;
+  }
+  selectObject(obj) {
+    this.selected = obj;
   }
 }
