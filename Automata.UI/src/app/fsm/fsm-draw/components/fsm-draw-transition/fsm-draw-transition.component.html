@@ -1,3 +1,7 @@
-<p>
-  fsm-draw-transition works!
-</p>
+<svg:defs>
+    <svg:marker id="arrow" markerWidth="9" markerHeight="9" refX="22" refY="3" orient="auto" markerUnits="strokeWidth" viewBox="0 0 9 9">
+        <svg:path d="M0,0 L0,6 L9,3 z" fill="#f00" />
+    </svg:marker>
+</defs>
+
+<svg:line class='fsm-transition' [attr.x1]='transition.sourceState.x' [attr.y1]='transition.sourceState.y' [attr.x2]='transition.destState.x' [attr.y2]='transition.destState.y' stroke-width='2' stroke='black' marker-end='url(#arrow)' />

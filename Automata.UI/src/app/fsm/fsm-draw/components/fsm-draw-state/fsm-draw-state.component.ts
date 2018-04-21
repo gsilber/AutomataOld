@@ -30,7 +30,7 @@ export class FsmDrawStateComponent {
   isStart = () => this.state.stateType === 'start' || this.state.stateType === 'startfinal';
   isFinal = () => this.state.stateType === 'final' || this.state.stateType === 'startfinal';
   isNormal = () => this.state.stateType === 'normal';
-  getFill = () => (this.isStart() ? 'yellow' : 'none');
+  getFill = () => (this.isStart() ? 'yellow' : 'white');
 
   onClick = (evt: MouseEvent) => {
     this.stateclick.emit({ srcEvent: evt, child: this.state, type: 'state' }); evt.stopPropagation(); return false;

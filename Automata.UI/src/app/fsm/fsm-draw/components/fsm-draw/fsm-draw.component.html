@@ -1,33 +1,45 @@
 <div class='row' style='margin:0;'>
-<div [ngClass]='{"col-md-9":!readonly,"col-md-12": readonly}' style='padding:0;'>
-<div class='scroll-container' [style.height]='height' oncontextmenu='return false'>
-  <div class='draw-container bg-drawing'>
-    <app-fsm-draw-surface 
-      (surfaceclick)='onSurfaceClick($event)'
-      (surfacemousedown)='onSurfaceMouseDown($event)'
-      (surfacemousemove)='onSurfaceMouseMove($event)'
-      (surfacecontextmenu)='onSurfaceContextMenu($event)'
-    > 
-        <ng-template ngFor let-item [ngForOf]='fsmSvc.fsmStates'>
-            <svg:g app-fsm-draw-state [state]='item' [selected]='selected && selected===item'  />
-          </ng-template>
+  <div [ngClass]='{"col-md-9":!readonly,"col-md-12": readonly}' style='padding:0;'>
+    <div class='scroll-container' [style.height]='height' oncontextmenu='return false'>
+      <div class='draw-container bg-drawing'>
+        <app-fsm-draw-surface (surfaceclick)='onSurfaceClick($event)' (surfacemousedown)='onSurfaceMouseDown($event)' (surfacemousemove)='onSurfaceMouseMove($event)'
+          (surfacecontextmenu)='onSurfaceContextMenu($event)'>
+          <svg:defs>
+            <svg:marker id="arrowlong" markerWidth="9" markerHeight="9" refX="9" refY="3" orient="auto" markerUnits="strokeWidth" viewBox="0 0 9 9">
+              <svg:path d="M0,0 L0,6 L9,3 z" fill="#f00" />
+            </svg:marker>
+            </defs>
+
+            <ng-template ngFor let-item [ngForOf]='fsmSvc.fsmTransitions'>
+              <svg:g app-fsm-draw-transition [transition]='item' />
+            </ng-template>
+
+
+
+            <ng-template ngFor let-item [ngForOf]='fsmSvc.fsmStates'>
+              <svg:g app-fsm-draw-state [state]='item' [selected]='selected && selected===item' />
+            </ng-template>
+
+            <svg:line *ngIf='transitonSelectedState' class='fsm-transition' [attr.x1]='transitonSelectedState.x' [attr.y1]='transitonSelectedState.y'
+              [attr.x2]='mouseX' [attr.y2]='mouseY' stroke-width='2' stroke='black' marker-end='url(#arrowlong)' />
         </app-fsm-draw-surface>
-    
+
+      </div>
+    </div>
+  </div>
+
+  <div *ngIf='!readonly' class='col-md-3' style='overflow:hidden;width:100%;padding:0'>
+    <app-fsm-draw-props [object]='selected'></app-fsm-draw-props>
   </div>
 </div>
-</div>
 
-<div *ngIf='!readonly' class='col-md-3' style='overflow:hidden;width:100%;padding:0'>
-  <app-fsm-draw-props [object]='selected'></app-fsm-draw-props>
-  </div>
-</div>
-
-<app-fsm-draw-controlbar [readonly]='readonly' (clear)='onCtrlbarClear()' (help)='onCtrlbarHelp()' (mode)='onCtrlbarMode($event)' (validate)='onCtrlbarValidate()' (zoom)='onCtrlbarZoom($event)'>
+<app-fsm-draw-controlbar [readonly]='readonly' (clear)='onCtrlbarClear()' (help)='onCtrlbarHelp()' (mode)='onCtrlbarMode($event)'
+  (validate)='onCtrlbarValidate()' (zoom)='onCtrlbarZoom($event)'>
 </app-fsm-draw-controlbar>
 
 <!--State context menu -->
 <app-context-menu [open]='stateContextOpen'>
-  <app-context-menu-item (itemclick)='onStateContextClickDelete($event)' >
+  <app-context-menu-item (itemclick)='onStateContextClickDelete($event)'>
     Delete
   </app-context-menu-item>
   <app-context-menu-item divider='true'></app-context-menu-item>
@@ -35,6 +47,6 @@
     Start State
   </app-context-menu-item>
   <app-context-menu-item (itemclick)='onStateContextClickFinal($event)' [checked]='stateContextOpen && (stateContextOpen.obj.stateType==="final"|| stateContextOpen.obj.stateType==="startfinal")'>
-      Final State
+    Final State
   </app-context-menu-item>
-</app-context-menu>          
+</app-context-menu>

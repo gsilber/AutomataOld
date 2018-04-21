@@ -18,6 +18,9 @@ export class FsmDrawComponent {
 
   private mode: Modes = Modes.POINTER;
   stateContextOpen = null;
+  transitonSelectedState = null;
+  mouseX: number;
+  mouseY: number;
 
   constructor(public fsmSvc: FsmDataService) { }
 
@@ -27,6 +30,17 @@ export class FsmDrawComponent {
     if (this.readonly) { return false; }
     if (this.mode === Modes.STATE && evt.type === 'surface') {
       this.selectObject(this.fsmSvc.addDefaultState(evt.surfaceX, evt.surfaceY));
+    } else {
+      if (this.mode === Modes.TRANSITION && evt.type === 'state' && !this.transitonSelectedState) {
+        // start a transition
+        this.transitonSelectedState = evt.child;
+      } else {
+        if (this.mode === Modes.TRANSITION && evt.type === 'state' && this.transitonSelectedState) {
+          // end transition
+          this.fsmSvc.addTransition(this.transitonSelectedState, evt.child as FsmState);
+          this.transitonSelectedState = null;
+        } else { if (this.mode === 'transition' && evt.type !== 'state') { this.transitonSelectedState = null; } }
+      }
     }
   }
 
@@ -38,13 +52,15 @@ export class FsmDrawComponent {
   }
 
   onSurfaceMouseMove = (evt: SurfaceMouseEvent) => {
+    this.mouseX = evt.surfaceX;
+    this.mouseY = evt.surfaceY;
     if (this.readonly || evt.srcEvent.which !== 1) { return false; }
     if (this.mode === Modes.POINTER &&
       evt.srcEvent.buttons === 1 &&
       this.selected &&
       this.selected.type === 'state') {
-        (this.selected as FsmState).x = evt.surfaceX;
-        (this.selected as FsmState).y = evt.surfaceY;
+      (this.selected as FsmState).x = evt.surfaceX;
+      (this.selected as FsmState).y = evt.surfaceY;
     }
   }
 
