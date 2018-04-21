@@ -200,11 +200,19 @@ export class FsmDataService {
   }
 
   public toJson() {
-    return JSON.stringify({ states: this.fsmStates, transitions: this.fsmTransitions });
+    return JSON.stringify(this.fsmTransitions);
   }
   public fromJson(data: string) {
-    const obj = JSON.parse(data);
-    this.fsmStates = obj.states;
-    this.fsmTransitions = obj.transitions;
+    this.fsmStates = [];
+    this.fsmTransitions = [];
+    this.fsmTransitions = JSON.parse(data);
+    for (const trans of this.fsmTransitions) {
+      if (!this.fsmStates.find(item => item.name === trans.sourceState.name)) {
+        this.fsmStates.push(trans.sourceState);
+      }
+      if (!this.fsmStates.find(item => item.name === trans.destState.name)) {
+        this.fsmStates.push(trans.destState);
+      }
+    }
   }
 }

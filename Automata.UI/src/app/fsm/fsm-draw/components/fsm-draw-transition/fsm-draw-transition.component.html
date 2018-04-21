@@ -7,14 +7,32 @@
     </svg:marker>
 </defs>
 
-<svg:line class='fsm-transition' [ngClass]='{"fsm-transition-selected":selected}'
+<!--Container for rotations-->
+<svg:g [attr.transform]='"rotate("+theta+","+transition.sourceState.x+","+transition.sourceState.y+")"'>
+<!--The line segment-->
+<svg:line class='fsm-transition' 
     [attr.x1]='transition.sourceState.x+stateRadius' 
     [attr.y1]='transition.sourceState.y' 
     [attr.x2]='projection.x' 
     [attr.y2]='projection.y' 
-    [attr.transform]='"rotate("+theta+","+transition.sourceState.x+","+transition.sourceState.y+")"'
     stroke-width='2' stroke='black' 
     [attr.marker-end]='(transition.destState.name==="temp"?"url(#arrowlong)":"url(#arrow)")'
+/>
+<!--The selection box-->
+<ng-template [ngIf]='selected'>
+<svg:rect class='fsm-transition-selected' stroke-width='1' stroke='black' stroke-dasharray='5 2' fill='transparent'
+    [attr.x]='transition.sourceState.x+stateRadius'
+    [attr.y]='transition.sourceState.y-5'
+    [attr.width]='length'
+    [attr.height]='10'
+    />
+</ng-template>
+<!--hidden event target for transition events-->
+<svg:rect stroke='transparent' fill='transparent'
+    [attr.x]='transition.sourceState.x+stateRadius'
+    [attr.y]='transition.sourceState.y-5'
+    [attr.width]='length'
+    [attr.height]='10'
     (click)='onClick($event)'
     (dblclick)='onDblClick($event)'
     (contextmenu)='onContextMenu($event)'
@@ -25,5 +43,5 @@
     (mouseout)='onMouseOut($event)'
     (mouseover)='onMouseOver($event)'
     (mouseup)='onMouseUp($event)'
-/>
-
+    />
+</svg:g>

@@ -31,13 +31,10 @@ export class FsmDrawComponent implements AfterViewInit {
   constructor(public fsmSvc: FsmDataService, private _detect: ChangeDetectorRef) { }
 
   ngAfterViewInit() {
-    this.fsmSvc.fromJson('{"states":[' +
-      '{"name":"q0","stateIndex":0,"x":481.0078125,"y":316.0078125,"stateType":"normal","type":"state"},' +
-      '{"name":"q1","stateIndex":1,"x":261.0078125,"y":160.0078125,"stateType":"normal","type":"state"}],' +
-      '"transitions":[' +
+    this.fsmSvc.fromJson('[' +
       '{"sourceState":{"name":"q0","stateIndex":0,"x":481.0078125,"y":316.0078125,"stateType":"normal","type":"state"},' +
       '"destState":{"name":"q1","stateIndex":1,"x":261.0078125,"y":160.0078125,"stateType":"normal","type":"state"},' +
-      '"charactersAccepted":"a","type":"transition"}]}');
+      '"charactersAccepted":"a","type":"transition"}]');
     this._detect.detectChanges();
   }
   // Local surface event handlers
