@@ -31,34 +31,34 @@ export class FsmDrawStateComponent {
   getFill = () => (this.isStart() ? 'yellow' : 'none');
 
   onClick = (evt: MouseEvent) => {
-    this.stateclick.emit({ evt: evt, child: this, type: 'state' }); evt.stopPropagation(); return false;
+    this.stateclick.emit({ evt: evt, child: this.state, type: 'state' }); evt.stopPropagation(); return false;
   }
   onDblClick = (evt: MouseEvent) => {
-    this.statedblclick.emit({ evt: evt, child: this, type: 'state' }); evt.stopPropagation(); return false;
+    this.statedblclick.emit({ evt: evt, child: this.state, type: 'state' }); evt.stopPropagation(); return false;
   }
   onContextMenu = (evt: MouseEvent) => {
-    this.statecontextmenu.emit({ evt: evt, child: this, type: 'state' }); evt.stopPropagation(); return false;
+    this.statecontextmenu.emit({ evt: evt, child: this.state, type: 'state' }); evt.stopPropagation(); return false;
   }
   onMouseDown = (evt: MouseEvent) => {
-    this.statemousedown.emit({ evt: evt, child: this, type: 'state' }); evt.stopPropagation(); return false;
+    this.statemousedown.emit({ evt: evt, child: this.state, type: 'state' }); evt.stopPropagation(); return false;
   }
   onMouseEnter = (evt: MouseEvent) => {
-    this.statemouseenter.emit({ evt: evt, child: this, type: 'state' }); evt.stopPropagation(); return false;
+    this.statemouseenter.emit({ evt: evt, child: this.state, type: 'state' }); evt.stopPropagation(); return false;
   }
   onMouseLeave = (evt: MouseEvent) => {
-    this.statemouseleave.emit({ evt: evt, child: this, type: 'state' }); evt.stopPropagation(); return false;
+    this.statemouseleave.emit({ evt: evt, child: this.state, type: 'state' }); evt.stopPropagation(); return false;
   }
   onMouseMove = (evt: MouseEvent) => {
-    this.statemousemove.emit({ evt: evt, child: this, type: 'state' }); evt.stopPropagation(); return false;
+    this.statemousemove.emit({ evt: evt, child: this.state, type: 'state' }); evt.stopPropagation(); return false;
   }
   onMouseOut = (evt: MouseEvent) => {
-    this.statemouseout.emit({ evt: evt, child: this, type: 'state' }); evt.stopPropagation(); return false;
+    this.statemouseout.emit({ evt: evt, child: this.state, type: 'state' }); evt.stopPropagation(); return false;
   }
   onMouseOver = (evt: MouseEvent) => {
-    this.statemouseover.emit({ evt: evt, child: this, type: 'state' }); evt.stopPropagation(); return false;
+    this.statemouseover.emit({ evt: evt, child: this.state, type: 'state' }); evt.stopPropagation(); return false;
   }
   onMouseUp = (evt: MouseEvent) => {
-    this.statemouseup.emit({ evt: evt, child: this, type: 'state' }); evt.stopPropagation(); return false;
+    this.statemouseup.emit({ evt: evt, child: this.state, type: 'state' }); evt.stopPropagation(); return false;
   }
 
 }

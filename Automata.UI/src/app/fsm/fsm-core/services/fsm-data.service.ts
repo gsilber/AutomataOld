@@ -97,15 +97,16 @@ export class FsmDataService {
     this.fsmStates = [];
     this.fsmTransitions = [];
   }
-  public addState = (state: FsmState) => {
+  public addState = (state: FsmState): FsmState => {
     this.fsmStates.push(state);
+    return state;
   }
 
   public addTransition = (source: FsmState, dest: FsmState) => {
     this.fsmTransitions.push({ sourceState: source, destState: dest, charactersAccepted: '' });
   }
 
-  public addDefaultState = (x: number, y: number) => {
+  public addDefaultState = (x: number, y: number): FsmState => {
     let count = 0;
     const objCheck = {};
     for (const state of this.fsmStates) {
@@ -121,7 +122,7 @@ export class FsmDataService {
     }
     const calcName = this.defaultStateLabel + calcIndex;
 
-    this.addState({
+    return this.addState({
       name: calcName,
       stateIndex: calcIndex,
       x: x,

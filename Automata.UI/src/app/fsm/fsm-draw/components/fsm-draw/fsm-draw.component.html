@@ -8,7 +8,7 @@
       (surfacecontextmenu)='onSurfaceContextMenu($event)'
     > 
         <ng-template ngFor let-item [ngForOf]='fsmSvc.fsmStates'>
-            <svg:g app-fsm-draw-state [state]='item' [selected]='selected && selected.state===item'  />
+            <svg:g app-fsm-draw-state [state]='item' [selected]='selected && selected===item'  />
           </ng-template>
         </app-fsm-draw-surface>
     
@@ -23,10 +23,10 @@
     Delete
   </app-context-menu-item>
   <app-context-menu-item divider='true'></app-context-menu-item>
-  <app-context-menu-item (itemclick)='onStateContextClickStart($event)' [checked]='stateContextOpen && stateContextOpen.obj.isStart()'>
+  <app-context-menu-item (itemclick)='onStateContextClickStart($event)' [checked]='stateContextOpen && (stateContextOpen.obj.stateType==="start"|| stateContextOpen.obj.stateType==="startfinal") '>
     Start State
   </app-context-menu-item>
-  <app-context-menu-item (itemclick)='onStateContextClickFinal($event)' [checked]='stateContextOpen && stateContextOpen.obj.isFinal()'>
+  <app-context-menu-item (itemclick)='onStateContextClickFinal($event)' [checked]='stateContextOpen && (stateContextOpen.obj.stateType==="final"|| stateContextOpen.obj.stateType==="startfinal")'>
       Final State
   </app-context-menu-item>
 </app-context-menu>          

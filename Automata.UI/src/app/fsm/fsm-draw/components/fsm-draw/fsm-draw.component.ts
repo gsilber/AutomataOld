@@ -1,8 +1,7 @@
 import { SurfaceMouseEvent } from './../fsm-draw-surface/fsm-draw-surface.component';
 import { Modes } from './../fsm-draw-controlbar/fsm-draw-controlbar.component';
 import { Component, Input, ContentChild, ViewChild, ElementRef } from '@angular/core';
-import { FsmDataService, StateTypes } from '../../../fsm-core/services/fsm-data.service';
-import { FsmDrawStateComponent } from '../fsm-draw-state/fsm-draw-state.component';
+import { FsmDataService, StateTypes, FsmState } from '../../../fsm-core/services/fsm-data.service';
 
 @Component({
   selector: 'app-fsm-draw',
@@ -25,14 +24,14 @@ export class FsmDrawComponent {
     this.closeAllContextMenus();
     if (this.readonly) { return false; }
     if (this.mode === Modes.STATE && evt.type === 'surface') {
-      this.fsmSvc.addDefaultState(evt.surfaceX, evt.surfaceY);
+      this.selected = this.fsmSvc.addDefaultState(evt.surfaceX, evt.surfaceY);
     }
   }
 
   onSurfaceDblClick = (evt: SurfaceMouseEvent) => {
     if (this.readonly) { return false; }
-    if (this.mode === Modes.POINTER && evt.child instanceof FsmDrawStateComponent) {
-      FsmDataService.toggleState(evt.child.state);
+    if (this.mode === Modes.POINTER && evt.type === 'state') {
+      FsmDataService.toggleState(evt.child);
     }
   }
   onSurfaceContextMenu = (evt: SurfaceMouseEvent) => {
@@ -47,9 +46,9 @@ export class FsmDrawComponent {
     if (this.mode === Modes.POINTER &&
       evt.srcEvent.buttons === 1 &&
       this.selected &&
-      this.selected instanceof FsmDrawStateComponent) {
-      this.selected.state.x = evt.surfaceX;
-      this.selected.state.y = evt.surfaceY;
+      this.selected.x) {
+        this.selected.x = evt.surfaceX;
+        this.selected.y = evt.surfaceY;
     }
   }
 
@@ -71,15 +70,15 @@ export class FsmDrawComponent {
 
   // Context menus handlers
   onStateContextClickDelete = (evt) => {
-    this.fsmSvc.removeState(this.stateContextOpen.obj.state);
+    this.fsmSvc.removeState(this.stateContextOpen.obj);
     this.stateContextOpen = null;
   }
   onStateContextClickStart = (evt) => {
-    FsmDataService.toggleStateValue(this.stateContextOpen.obj.state, StateTypes.START);
+    FsmDataService.toggleStateValue(this.stateContextOpen.obj, StateTypes.START);
     this.stateContextOpen = null;
   }
   onStateContextClickFinal = (evt) => {
-    FsmDataService.toggleStateValue(this.stateContextOpen.obj.state, StateTypes.FINAL);
+    FsmDataService.toggleStateValue(this.stateContextOpen.obj, StateTypes.FINAL);
     this.stateContextOpen = null;
   }
 
