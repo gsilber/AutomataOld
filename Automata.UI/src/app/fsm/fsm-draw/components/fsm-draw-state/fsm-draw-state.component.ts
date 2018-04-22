@@ -27,9 +27,9 @@ export class FsmDrawStateComponent {
   get radius() { return FsmDrawStateComponent.stateRadius; }
   constructor() { }
 
-  isStart = () => this.state.stateType === 'start' || this.state.stateType === 'startfinal';
-  isFinal = () => this.state.stateType === 'final' || this.state.stateType === 'startfinal';
-  isNormal = () => this.state.stateType === 'normal';
+  isStart = () => this.state.stateType === StateTypes.START || this.state.stateType === StateTypes.STARTFINAL;
+  isFinal = () => this.state.stateType === StateTypes.FINAL || this.state.stateType === StateTypes.STARTFINAL;
+  isNormal = () => this.state.stateType === StateTypes.NORMAL;
   getFill = () => (this.isStart() ? 'yellow' : 'white');
 
   onClick = (evt: MouseEvent) => {
