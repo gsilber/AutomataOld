@@ -25,15 +25,18 @@ export class FsmDrawComponent implements AfterViewInit {
   private mode: Modes = Modes.POINTER;
   stateContextOpen = null;
   transContextOpen = null;
-  transitonSelectedState = null;
+  transitionSelectedState = null;
   mouseX: number;
   mouseY: number;
+  mouseHover: FsmObject;
 
   constructor(public fsmSvc: FsmDataService, private _detect: ChangeDetectorRef) { }
 
   ngAfterViewInit() {
     // tslint:disable-next-line:max-line-length
-    this.fsmSvc.fromJson('[{"sourceState":{"name":"q0","stateIndex":0,"x":278.0078125,"y":241.0078125,"stateType":"normal","type":"state"},"destState":{"name":"q3","stateIndex":3,"x":245.00782775878906,"y":450.0078125,"stateType":"normal","type":"state"},"charactersAccepted":"a","type":"transition"},{"sourceState":{"name":"q0","stateIndex":0,"x":278.0078125,"y":241.0078125,"stateType":"normal","type":"state"},"destState":{"name":"q5","stateIndex":5,"x":494.0078125,"y":276.0078125,"stateType":"normal","type":"state"},"charactersAccepted":"a","type":"transition"},{"sourceState":{"name":"q0","stateIndex":0,"x":278.0078125,"y":241.0078125,"stateType":"normal","type":"state"},"destState":{"name":"q8","stateIndex":8,"x":335.0078125,"y":23.0078125,"stateType":"normal","type":"state"},"charactersAccepted":"a","type":"transition"},{"sourceState":{"name":"q0","stateIndex":0,"x":278.0078125,"y":241.0078125,"stateType":"normal","type":"state"},"destState":{"name":"q2","stateIndex":2,"x":60.00782012939453,"y":271.0078125,"stateType":"normal","type":"state"},"charactersAccepted":"a","type":"transition"},{"sourceState":{"name":"q0","stateIndex":0,"x":278.0078125,"y":241.0078125,"stateType":"normal","type":"state"},"destState":{"name":"q1","stateIndex":1,"x":59.00782012939453,"y":203.0078125,"stateType":"normal","type":"state"},"charactersAccepted":"a","type":"transition"},{"sourceState":{"name":"q0","stateIndex":0,"x":278.0078125,"y":241.0078125,"stateType":"normal","type":"state"},"destState":{"name":"q7","stateIndex":7,"x":208.00782775878906,"y":24.0078125,"stateType":"normal","type":"state"},"charactersAccepted":"a","type":"transition"},{"sourceState":{"name":"q0","stateIndex":0,"x":278.0078125,"y":241.0078125,"stateType":"normal","type":"state"},"destState":{"name":"q6","stateIndex":6,"x":493.0078125,"y":215.0078125,"stateType":"normal","type":"state"},"charactersAccepted":"a","type":"transition"},{"sourceState":{"name":"q0","stateIndex":0,"x":278.0078125,"y":241.0078125,"stateType":"normal","type":"state"},"destState":{"name":"q4","stateIndex":4,"x":313.0078125,"y":451.0078125,"stateType":"normal","type":"state"},"charactersAccepted":"a","type":"transition"},{"sourceState":{"name":"q0","stateIndex":0,"x":278.0078125,"y":241.0078125,"stateType":"normal","type":"state"},"destState":{"name":"q9","stateIndex":9,"x":104.00782012939453,"y":388.0078125,"stateType":"normal","type":"state"},"charactersAccepted":"a","type":"transition"},{"sourceState":{"name":"q0","stateIndex":0,"x":278.0078125,"y":241.0078125,"stateType":"normal","type":"state"},"destState":{"name":"q12","stateIndex":12,"x":409.0078125,"y":366.0078125,"stateType":"normal","type":"state"},"charactersAccepted":"a","type":"transition"},{"sourceState":{"name":"q0","stateIndex":0,"x":278.0078125,"y":241.0078125,"stateType":"normal","type":"state"},"destState":{"name":"q11","stateIndex":11,"x":429.0078125,"y":81.0078125,"stateType":"normal","type":"state"},"charactersAccepted":"a","type":"transition"},{"sourceState":{"name":"q0","stateIndex":0,"x":278.0078125,"y":241.0078125,"stateType":"normal","type":"state"},"destState":{"name":"q10","stateIndex":10,"x":80.00782012939453,"y":88.0078125,"stateType":"normal","type":"state"},"charactersAccepted":"a","type":"transition"}]');
+    //  this.fsmSvc.fromJson('[{"sourceState":{"name":"q0","stateIndex":0,"x":278.0078125,"y":241.0078125,"stateType":"normal","type":"state"},"destState":{"name":"q3","stateIndex":3,"x":245.00782775878906,"y":450.0078125,"stateType":"normal","type":"state"},"charactersAccepted":"a","type":"transition"},{"sourceState":{"name":"q0","stateIndex":0,"x":278.0078125,"y":241.0078125,"stateType":"normal","type":"state"},"destState":{"name":"q5","stateIndex":5,"x":494.0078125,"y":276.0078125,"stateType":"normal","type":"state"},"charactersAccepted":"a","type":"transition"},{"sourceState":{"name":"q0","stateIndex":0,"x":278.0078125,"y":241.0078125,"stateType":"normal","type":"state"},"destState":{"name":"q8","stateIndex":8,"x":335.0078125,"y":23.0078125,"stateType":"normal","type":"state"},"charactersAccepted":"a","type":"transition"},{"sourceState":{"name":"q0","stateIndex":0,"x":278.0078125,"y":241.0078125,"stateType":"normal","type":"state"},"destState":{"name":"q2","stateIndex":2,"x":60.00782012939453,"y":271.0078125,"stateType":"normal","type":"state"},"charactersAccepted":"a","type":"transition"},{"sourceState":{"name":"q0","stateIndex":0,"x":278.0078125,"y":241.0078125,"stateType":"normal","type":"state"},"destState":{"name":"q1","stateIndex":1,"x":59.00782012939453,"y":203.0078125,"stateType":"normal","type":"state"},"charactersAccepted":"a","type":"transition"},{"sourceState":{"name":"q0","stateIndex":0,"x":278.0078125,"y":241.0078125,"stateType":"normal","type":"state"},"destState":{"name":"q7","stateIndex":7,"x":208.00782775878906,"y":24.0078125,"stateType":"normal","type":"state"},"charactersAccepted":"a","type":"transition"},{"sourceState":{"name":"q0","stateIndex":0,"x":278.0078125,"y":241.0078125,"stateType":"normal","type":"state"},"destState":{"name":"q6","stateIndex":6,"x":493.0078125,"y":215.0078125,"stateType":"normal","type":"state"},"charactersAccepted":"a","type":"transition"},{"sourceState":{"name":"q0","stateIndex":0,"x":278.0078125,"y":241.0078125,"stateType":"normal","type":"state"},"destState":{"name":"q4","stateIndex":4,"x":313.0078125,"y":451.0078125,"stateType":"normal","type":"state"},"charactersAccepted":"a","type":"transition"},{"sourceState":{"name":"q0","stateIndex":0,"x":278.0078125,"y":241.0078125,"stateType":"normal","type":"state"},"destState":{"name":"q9","stateIndex":9,"x":104.00782012939453,"y":388.0078125,"stateType":"normal","type":"state"},"charactersAccepted":"a","type":"transition"},{"sourceState":{"name":"q0","stateIndex":0,"x":278.0078125,"y":241.0078125,"stateType":"normal","type":"state"},"destState":{"name":"q12","stateIndex":12,"x":409.0078125,"y":366.0078125,"stateType":"normal","type":"state"},"charactersAccepted":"a","type":"transition"},{"sourceState":{"name":"q0","stateIndex":0,"x":278.0078125,"y":241.0078125,"stateType":"normal","type":"state"},"destState":{"name":"q11","stateIndex":11,"x":429.0078125,"y":81.0078125,"stateType":"normal","type":"state"},"charactersAccepted":"a","type":"transition"},{"sourceState":{"name":"q0","stateIndex":0,"x":278.0078125,"y":241.0078125,"stateType":"normal","type":"state"},"destState":{"name":"q10","stateIndex":10,"x":80.00782012939453,"y":88.0078125,"stateType":"normal","type":"state"},"charactersAccepted":"a","type":"transition"}]');
+    // tslint:disable-next-line:max-line-length
+    this.fsmSvc.fromJson('[{"sourceState":{"name":"q0","stateIndex":0,"x":278.0078125,"y":241.0078125,"stateType":"normal","type":"state"},"destState":{"name":"q3","stateIndex":3,"x":245.00782775878906,"y":450.0078125,"stateType":"normal","type":"state"},"charactersAccepted":"a","type":"transition","rotation":100}]');
     this._detect.detectChanges();
   }
   // Local surface event handlers
@@ -44,16 +47,16 @@ export class FsmDrawComponent implements AfterViewInit {
       this.ctrlBar.setMode(Modes.POINTER);
       this.selectObject(this.fsmSvc.addDefaultState(evt.surfaceX, evt.surfaceY));
     } else {
-      if (this.mode === Modes.TRANSITION && evt.type === 'state' && !this.transitonSelectedState) {
+      if (this.mode === Modes.TRANSITION && evt.type === 'state' && !this.transitionSelectedState) {
         // start a transition
-        this.transitonSelectedState = evt.child;
+        this.transitionSelectedState = evt.child;
       } else {
-        if (this.mode === Modes.TRANSITION && evt.type === 'state' && this.transitonSelectedState) {
+        if (this.mode === Modes.TRANSITION && evt.type === 'state' && this.transitionSelectedState) {
           // end transition
-          this.selectObject(this.fsmSvc.addTransition(this.transitonSelectedState, evt.child as FsmState));
+          this.selectObject(this.fsmSvc.addTransition(this.transitionSelectedState, evt.child as FsmState));
           this.ctrlBar.setMode(Modes.POINTER);
-          this.transitonSelectedState = null;
-        } else { if (this.mode === 'transition' && evt.type !== 'state') { this.transitonSelectedState = null; } }
+          this.transitionSelectedState = null;
+        } else { if (this.mode === 'transition' && evt.type !== 'state') { this.transitionSelectedState = null; } }
       }
     }
     this.json.emit(this.fsmSvc.toJson());
@@ -72,6 +75,7 @@ export class FsmDrawComponent implements AfterViewInit {
   onSurfaceMouseMove = (evt: SurfaceMouseEvent) => {
     this.mouseX = evt.surfaceX;
     this.mouseY = evt.surfaceY;
+    this.mouseHover = evt.child;
     if (this.readonly || evt.srcEvent.which !== 1) { return false; }
     if (this.mode === Modes.POINTER &&
       evt.srcEvent.buttons === 1 &&
@@ -79,6 +83,23 @@ export class FsmDrawComponent implements AfterViewInit {
       this.selected.type === 'state') {
       (this.selected as FsmState).x = evt.surfaceX;
       (this.selected as FsmState).y = evt.surfaceY;
+    }
+    if (this.mode === Modes.POINTER &&
+      evt.srcEvent.buttons === 1 &&
+      this.selected &&
+      this.selected.type === 'transition') {
+      const s = this.selected as FsmTransition;
+      const deltaX = s.sourceState.x - this.mouseX;
+      const deltaY = s.sourceState.y - this.mouseY;
+      const theta = Math.atan2(deltaY , deltaX);
+      const thetad = theta * (180.0 / Math.PI);
+      if (s.sourceState === s.destState) {
+        // rotation is angle to move around compute the angle of the mouse from the horizontal, and that becomes rotation.
+        s.rotation = thetad + 180;
+      } else {
+        // rotation is an offset in the x or y direction based on tangential motion.  Need to figure out
+      }
+
     }
     this.json.emit(this.fsmSvc.toJson());
   }
@@ -135,11 +156,16 @@ export class FsmDrawComponent implements AfterViewInit {
 
   // Helper Methods
   startTransition(x: number, y: number): FsmTransition {
+    let dest = { x: x, y: y, stateIndex: 99, name: 'temp', stateType: StateTypes.NORMAL, type: 'state' };
+    if (this.mouseHover && this.mouseHover.type === 'state' && this.mouseHover === this.transitionSelectedState) {
+      dest = this.transitionSelectedState;
+    }
     return {
-      sourceState: this.transitonSelectedState,
-      destState: { x: x, y: y, stateIndex: 99, name: 'temp', stateType: StateTypes.NORMAL, type: 'state' },
+      sourceState: this.transitionSelectedState,
+      destState: dest,
       charactersAccepted: '',
-      type: 'transition'
+      type: 'transition',
+      rotation: 0
     };
   }
 

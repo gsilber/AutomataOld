@@ -5,52 +5,48 @@
     <svg:marker id="arrowlong" markerWidth="9" markerHeight="9" refX="0" refY="3" orient="auto" markerUnits="strokeWidth" viewBox="0 0 9 9">
         <svg:path class='fsm-transition-arrow fsm-transition-arrow-creating' d="M0,0 L0,6 L9,3 z" fill="#f00" />
     </svg:marker>
-</defs>
+    <svg:marker id="arrowarc" markerWidth="9" markerHeight="9" [attr.refX]='9' refY="2" orient="auto" markerUnits="strokeWidth"
+        viewBox="0 0 9 9">
+        <svg:path class='fsm-transition-arrow fsm-transition-arrow-creating' d="M0,0 L0,6 L9,3 z" fill="#f00" />
+    </svg:marker>
+    </defs>
 
-<!--Container for rotations-->
-<svg:g [attr.transform]='"rotate("+theta+","+transition.sourceState.x+","+transition.sourceState.y+")"'>
-<!--The line segment-->
-<svg:line class='fsm-transition' 
-    [attr.x1]='transition.sourceState.x+stateRadius' 
-    [attr.y1]='transition.sourceState.y' 
-    [attr.x2]='projection.x' 
-    [attr.y2]='projection.y' 
-    stroke-width='2' stroke='black' 
-    [attr.marker-end]='(transition.destState.name==="temp"?"url(#arrowlong)":"url(#arrow)")'
-/>
-<!--The character class[attr.rotate]='textRotate'-->
-<svg:svg [attr.x]='transition.sourceState.x' [attr.y]='transition.sourceState.y-(textRotate===180? 0 :textheight)' [attr.width]='length' [attr.height]='textheight' >
-    <svg:g [attr.transform]='"translate(" + length + "," + textheight +") rotate("+textRotate+")"'>
-<svg:text class='fsm-transition-text-element' #textEl [attr.x]='length / 2' [attr.y]='textheight/2' text-anchor='middle' alignment-baseline='central'>
-            {{transition.charactersAccepted}}
-        </svg:text>
-    </svg:g>
-</svg:svg>
-<!--The selection box-->
-<ng-template [ngIf]='selected'>
+    <!--Container for rotations-->
+    <svg:g [attr.transform]='"rotate("+theta+","+transition.sourceState.x+","+transition.sourceState.y+")"'>
+
+        <!--The line segment quadratic curve-->
+        <ng-template [ngIf]='transition.sourceState!==transition.destState'>
+            <svg:path [ngClass]='{"i-fsm-transition-selected": selected }' class='fsm-transition' stroke-width='2' stroke='blue' fill='none' [attr.d]='curvy' marker-end='url(#arrow)' />
+        </ng-template>
+        <ng-template [ngIf]='transition.sourceState===transition.destState'>
+            <svg:path [ngClass]='{"i-fsm-transition-selected": selected }' class='fsm-transition fsm-transition-self' [attr.d]='linkToSelfPath' stroke='blue' fill='none' stroke-width='2' marker-end='url(#arrowlong)' [attr.transform]='"rotate("+transition.rotation+","+transition.sourceState.x+","+transition.sourceState.y+")"'></svg:path>
+        </ng-template>
+
+        <!--This is now painfully broken.  Need to fix.-->
+        <svg:svg [attr.x]='transition.sourceState.x' [attr.y]='transition.sourceState.y-(textRotate===180? 0 :textheight)' [attr.width]='length'
+            [attr.height]='textheight'>
+            <svg:g [attr.transform]='"translate(" + length + "," + textheight +") rotate("+textRotate+")"'>
+                <svg:textPath [attr.path]='curvy' class='fsm-transition-text-element' #textEl [attr.x]='length / 2' [attr.y]='textheight/2' text-anchor='middle'
+                    alignment-baseline='central'>
+                    {{transition.charactersAccepted}}
+                </svg:textPath>
+            </svg:g>
+        </svg:svg>
+
+        <!--hidden event targets: one for each transition type, enlarged to 10 pixels wide to make selection easier-->
+            <ng-template [ngIf]='transition.sourceState!==transition.destState'>
+                <svg:path stroke-width='10' stroke='transparent' fill='none' [attr.d]='curvy' 
+                (click)='onClick($event)' (dblclick)='onDblClick($event)' (contextmenu)='onContextMenu($event)'
+                (mousedown)='onMouseDown($event)' (mouseenter)='onMouseEnter($event)' (mouseleave)='onMouseLeave($event)' (mousemove)='onMouseMove($event)'
+                (mouseout)='onMouseOut($event)' (mouseover)='onMouseOver($event)' (mouseup)='onMouseUp($event)'
+                />
+            </ng-template>
+            <ng-template [ngIf]='transition.sourceState===transition.destState'>
+                <svg:path [attr.d]='linkToSelfPath' stroke='transparent' fill='none' stroke-width=10 [attr.transform]='"rotate("+transition.rotation+","+transition.sourceState.x+","+transition.sourceState.y+")"'
+                (click)='onClick($event)' (dblclick)='onDblClick($event)' (contextmenu)='onContextMenu($event)'
+                (mousedown)='onMouseDown($event)' (mouseenter)='onMouseEnter($event)' (mouseleave)='onMouseLeave($event)' (mousemove)='onMouseMove($event)'
+                (mouseout)='onMouseOut($event)' (mouseover)='onMouseOver($event)' (mouseup)='onMouseUp($event)'
+                ></svg:path>
+            </ng-template>
     
-<svg:rect class='fsm-transition-selected' stroke-width='1' stroke='black' stroke-dasharray='5 2' fill='transparent'
-    [attr.x]='transition.sourceState.x+stateRadius'
-    [attr.y]='transition.sourceState.y-5'
-    [attr.width]='length'
-    [attr.height]='10'
-    />
-</ng-template>
-<!--hidden event target for transition events-->
-<svg:rect stroke='transparent' fill='transparent'
-    [attr.x]='transition.sourceState.x+stateRadius'
-    [attr.y]='transition.sourceState.y-5'
-    [attr.width]='length'
-    [attr.height]='10'
-    (click)='onClick($event)'
-    (dblclick)='onDblClick($event)'
-    (contextmenu)='onContextMenu($event)'
-    (mousedown)='onMouseDown($event)'
-    (mouseenter)='onMouseEnter($event)'
-    (mouseleave)='onMouseLeave($event)'
-    (mousemove)='onMouseMove($event)'
-    (mouseout)='onMouseOut($event)'
-    (mouseover)='onMouseOver($event)'
-    (mouseup)='onMouseUp($event)'
-    />
-</svg:g>
+    </svg:g>

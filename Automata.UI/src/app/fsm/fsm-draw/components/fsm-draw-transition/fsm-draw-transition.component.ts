@@ -27,6 +27,7 @@ export class FsmDrawTransitionComponent implements AfterViewInit {
 
   textheight = 0;
 
+
   private get deltaX() {
     return this.transition.sourceState.x - this.transition.destState.x;
   }
@@ -57,6 +58,25 @@ export class FsmDrawTransitionComponent implements AfterViewInit {
     }
   }
 
+  get curvy() {
+    // control point angle
+    const cpoint = {
+      x: (this.transition.sourceState.x + (this.length + this.stateRadius) / 2),
+      y: (this.transition.sourceState.y + this.transition.rotation)
+    };
+    const spt = { x: (this.transition.sourceState.x), y: (this.transition.sourceState.y) };
+    const dpt = { x: (this.transition.sourceState.x + this.length + this.stateRadius), y: this.transition.sourceState.y };
+    const theta = Math.atan((cpoint.y - spt.y) / (cpoint.x - spt.x));
+    const offset = { x: this.stateRadius * Math.cos(theta), y: this.stateRadius * Math.sin(theta) };
+    return ' M ' + (spt.x + offset.x) + ' ' + (spt.y + offset.y)
+      + ' Q ' + cpoint.x + ' ' + cpoint.y + ' ' + (dpt.x - offset.x) + ' ' + (dpt.y + offset.y);
+  }
+
+  get linkToSelfPath() {
+    const p1 = (this.transition.destState.x + this.stateRadius) + ' ' + this.transition.destState.y;
+    const p2 = this.transition.destState.x + ' ' + (this.transition.destState.y + this.stateRadius + 14);
+    return 'M' + p1 + ' A ' + this.stateRadius + ' ' + this.stateRadius + ' 0 1 1 ' + p2;
+  }
 
   constructor(private _detect: ChangeDetectorRef) { }
 

@@ -19,7 +19,7 @@ export class FsmTransition extends FsmObject {
   public destState: FsmState;
   // this can be a comma seperated list of characters or a RegEx character classes (i.e. a,b or [a..z] or [abc])
   public charactersAccepted = '';
-  public rotation ?= 0;
+  public rotation = 0;
 }
 
 
@@ -153,7 +153,7 @@ export class FsmDataService {
   }
 
   public addTransition = (source: FsmState, dest: FsmState): FsmTransition => {
-    const trans = { sourceState: source, destState: dest, charactersAccepted: 'a', type: 'transition' };
+    const trans = { sourceState: source, destState: dest, charactersAccepted: 'a', type: 'transition', rotation: 0 };
     this.fsmTransitions.push(trans);
     return trans;
   }
@@ -212,6 +212,7 @@ export class FsmDataService {
     this.fsmTransitions = [];
     this.fsmTransitions = JSON.parse(data);
     for (const trans of this.fsmTransitions) {
+      if (!trans.rotation) {trans.rotation = 0; }
       if (!this.fsmStates.find(item => item.name === trans.sourceState.name)) {
         this.fsmStates.push(trans.sourceState);
       }
