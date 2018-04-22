@@ -50,19 +50,6 @@ export class FsmDrawTransitionComponent {
 
   get uniqueID() { return this.transition.sourceState.name + '=>' + this.transition.destState.name; }
 
-  get curvyText() {
-    // control point angle
-    const cpoint = {
-      x: (this.length + this.stateRadius) / 2,
-      y: this.transition.rotation
-    };
-    const spt = { x: 0, y: 0 };
-    const dpt = { x: this.length + this.stateRadius, y: 0 };
-    const theta = Math.atan((cpoint.y - spt.y) / (cpoint.x - spt.x));
-    const offset = { x: this.stateRadius * Math.cos(theta), y: this.stateRadius * Math.sin(theta) };
-    return ' M ' + (spt.x + offset.x) + ' ' + (spt.y + offset.y)
-      + ' Q ' + cpoint.x + ' ' + cpoint.y + ' ' + (dpt.x - offset.x) + ' ' + (dpt.y + offset.y);
-  }
   get curvy() {
     // control point angle
     const cpoint = {

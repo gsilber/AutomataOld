@@ -25,10 +25,10 @@
         <!--The text element-->
         <ng-template [ngIf]='transition.sourceState!==transition.destState'>
         <svg:defs>
-          <path [attr.id]='uniqueID'  [attr.d]='curvyText' />  
+          <path [attr.id]='uniqueID'  [attr.d]='curvy' />  
         </svg:defs>
-        <svg:svg [attr.x]='transition.sourceState.x' [attr.y]='transition.sourceState.y' >
-            <svg:text [attr.x]='curveLength/2' stroke-width='1' fill='black' text-anchor='middle'>
+        <svg:svg >
+            <svg:text [attr.x]='curveLength/2' stroke-width='1' fill='black' text-anchor='middle' transform='translate(0,-5)'>
                 <svg:textPath attr.xlink:href='#{{uniqueID}}' side='right'>
                     {{transition.charactersAccepted}}
                 </svg:textPath>             
