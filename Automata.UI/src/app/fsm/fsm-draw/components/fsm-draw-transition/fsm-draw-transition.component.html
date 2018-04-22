@@ -26,10 +26,10 @@
         <svg:svg [attr.x]='transition.sourceState.x' [attr.y]='transition.sourceState.y-(textRotate===180? 0 :textheight)' [attr.width]='length'
             [attr.height]='textheight'>
             <svg:g [attr.transform]='"translate(" + length + "," + textheight +") rotate("+textRotate+")"'>
-                <svg:textPath [attr.path]='curvy' class='fsm-transition-text-element' #textEl [attr.x]='length / 2' [attr.y]='textheight/2' text-anchor='middle'
+                <svg:text [attr.path]='curvy' class='fsm-transition-text-element' #textEl [attr.x]='length / 2' [attr.y]='textheight/2' text-anchor='middle'
                     alignment-baseline='central'>
                     {{transition.charactersAccepted}}
-                </svg:textPath>
+                </svg:text>
             </svg:g>
         </svg:svg>
 

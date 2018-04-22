@@ -153,8 +153,14 @@ export class FsmDataService {
   }
 
   public addTransition = (source: FsmState, dest: FsmState): FsmTransition => {
-    const trans = { sourceState: source, destState: dest, charactersAccepted: 'a', type: 'transition', rotation: 0 };
-    this.fsmTransitions.push(trans);
+    let trans = { sourceState: source, destState: dest, charactersAccepted: 'a', type: 'transition', rotation: 0 };
+    const problems = this.fsmTransitions.filter((item) => source === dest && 
+      item.sourceState === item.destState && item.sourceState===source);
+    if (problems.length === 0){
+      this.fsmTransitions.push(trans);
+    } else {
+      trans = problems[0];
+    }
     return trans;
   }
 

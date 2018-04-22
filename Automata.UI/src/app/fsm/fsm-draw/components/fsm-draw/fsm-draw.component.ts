@@ -89,15 +89,18 @@ export class FsmDrawComponent implements AfterViewInit {
       this.selected &&
       this.selected.type === 'transition') {
       const s = this.selected as FsmTransition;
-      const deltaX = s.sourceState.x - this.mouseX;
-      const deltaY = s.sourceState.y - this.mouseY;
-      const theta = Math.atan2(deltaY , deltaX);
-      const thetad = theta * (180.0 / Math.PI);
       if (s.sourceState === s.destState) {
-        // rotation is angle to move around compute the angle of the mouse from the horizontal, and that becomes rotation.
+        const deltaX = s.sourceState.x - this.mouseX;
+        const deltaY = s.sourceState.y - this.mouseY;
+        const theta = Math.atan2(deltaY, deltaX);
+        const thetad = theta * (180.0 / Math.PI);
         s.rotation = thetad + 180;
       } else {
-        // rotation is an offset in the x or y direction based on tangential motion.  Need to figure out
+        const d = ((s.destState.y - s.sourceState.y) * this.mouseX - (s.destState.x - s.sourceState.x) * this.mouseY +
+          s.destState.x * s.sourceState.y - s.destState.y * s.sourceState.x) / Math.sqrt(Math.pow(s.destState.y - s.sourceState.y, 2) +
+            Math.pow(s.destState.x - s.sourceState.x, 2));
+            // this is a hack, since we are using control point, we need to scale back so the mouse is actually near the line.
+        s.rotation = d * -1 - d * .8;
       }
 
     }
