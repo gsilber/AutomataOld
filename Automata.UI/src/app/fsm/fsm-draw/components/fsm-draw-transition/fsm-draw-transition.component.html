@@ -16,22 +16,25 @@
 
         <!--The line segment quadratic curve-->
         <ng-template [ngIf]='transition.sourceState!==transition.destState'>
-            <svg:path [ngClass]='{"i-fsm-transition-selected": selected }' class='fsm-transition' stroke-width='2' stroke='blue' fill='none' [attr.d]='curvy' marker-end='url(#arrow)' />
+            <svg:path #transPath [ngClass]='{"i-fsm-transition-selected": selected }' class='fsm-transition' stroke-width='2' stroke='blue' fill='none' [attr.d]='curvy' marker-end='url(#arrow)' />
         </ng-template>
         <ng-template [ngIf]='transition.sourceState===transition.destState'>
             <svg:path [ngClass]='{"i-fsm-transition-selected": selected }' class='fsm-transition fsm-transition-self' [attr.d]='linkToSelfPath' stroke='blue' fill='none' stroke-width='2' marker-end='url(#arrowlong)' [attr.transform]='"rotate("+transition.rotation+","+transition.sourceState.x+","+transition.sourceState.y+")"'></svg:path>
         </ng-template>
 
-        <!--This is now painfully broken.  Need to fix.-->
-        <svg:svg [attr.x]='transition.sourceState.x' [attr.y]='transition.sourceState.y-(textRotate===180? 0 :textheight)' [attr.width]='length'
-            [attr.height]='textheight'>
-            <svg:g [attr.transform]='"translate(" + length + "," + textheight +") rotate("+textRotate+")"'>
-                <svg:text [attr.path]='curvy' class='fsm-transition-text-element' #textEl [attr.x]='length / 2' [attr.y]='textheight/2' text-anchor='middle'
-                    alignment-baseline='central'>
+        <!--The text element-->
+        <ng-template [ngIf]='transition.sourceState!==transition.destState'>
+        <svg:defs>
+          <path [attr.id]='uniqueID'  [attr.d]='curvyText' />  
+        </svg:defs>
+        <svg:svg [attr.x]='transition.sourceState.x' [attr.y]='transition.sourceState.y' >
+            <svg:text [attr.x]='curveLength/2' stroke-width='1' fill='black' text-anchor='middle'>
+                <svg:textPath attr.xlink:href='#{{uniqueID}}' side='right'>
                     {{transition.charactersAccepted}}
-                </svg:text>
-            </svg:g>
+                </svg:textPath>             
+            </svg:text>
         </svg:svg>
+        </ng-template>
 
         <!--hidden event targets: one for each transition type, enlarged to 10 pixels wide to make selection easier-->
             <ng-template [ngIf]='transition.sourceState!==transition.destState'>

@@ -154,9 +154,11 @@ export class FsmDataService {
 
   public addTransition = (source: FsmState, dest: FsmState): FsmTransition => {
     let trans = { sourceState: source, destState: dest, charactersAccepted: 'a', type: 'transition', rotation: 0 };
-    const problems = this.fsmTransitions.filter((item) => source === dest && 
-      item.sourceState === item.destState && item.sourceState===source);
-    if (problems.length === 0){
+    const problems = this.fsmTransitions.filter((item) =>
+      (source === dest && item.sourceState === item.destState && item.sourceState === source) ||
+      (source !== dest && item.sourceState === source && item.destState === dest)
+    );
+    if (problems.length === 0) {
       this.fsmTransitions.push(trans);
     } else {
       trans = problems[0];
@@ -218,7 +220,7 @@ export class FsmDataService {
     this.fsmTransitions = [];
     this.fsmTransitions = JSON.parse(data);
     for (const trans of this.fsmTransitions) {
-      if (!trans.rotation) {trans.rotation = 0; }
+      if (!trans.rotation) { trans.rotation = 0; }
       if (!this.fsmStates.find(item => item.name === trans.sourceState.name)) {
         this.fsmStates.push(trans.sourceState);
       }
