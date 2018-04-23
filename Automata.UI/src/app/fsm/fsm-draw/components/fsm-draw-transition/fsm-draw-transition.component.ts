@@ -1,7 +1,7 @@
 import { FsmDrawStateComponent } from './../fsm-draw-state/fsm-draw-state.component';
 import { ChildMouseEvent } from './../fsm-draw-surface/fsm-draw-surface.component';
 import { FsmTransition } from './../../../fsm-core/services/fsm-data.service';
-import { Component, Input, Output, EventEmitter, ViewChild, ElementRef, ChangeDetectorRef } from '@angular/core';
+import { Component, Input, Output, EventEmitter, ViewChild, ElementRef, ChangeDetectorRef, AfterViewInit } from '@angular/core';
 
 @Component({
   // tslint:disable-next-line:component-selector
@@ -9,7 +9,7 @@ import { Component, Input, Output, EventEmitter, ViewChild, ElementRef, ChangeDe
   templateUrl: './fsm-draw-transition.component.html',
   styleUrls: ['./fsm-draw-transition.component.css']
 })
-export class FsmDrawTransitionComponent {
+export class FsmDrawTransitionComponent implements AfterViewInit {
 
   @Input() transition: FsmTransition = null;
   @Input() selected: boolean;
@@ -24,7 +24,15 @@ export class FsmDrawTransitionComponent {
   @Output() transitionmouseover: EventEmitter<ChildMouseEvent> = new EventEmitter<ChildMouseEvent>();
   @Output() transitionmouseup: EventEmitter<ChildMouseEvent> = new EventEmitter<ChildMouseEvent>();
   @ViewChild('transPath') pathElement: ElementRef;
+  @ViewChild('TextSample') textElement: ElementRef;
 
+  private get cpoint() {
+    return {
+      x: (this.transition.sourceState.x + (this.length + this.stateRadius) / 2),
+      y: (this.transition.sourceState.y + this.transition.rotation)
+    };
+
+  }
   private get deltaX() {
     return this.transition.sourceState.x - this.transition.destState.x;
   }
@@ -50,18 +58,39 @@ export class FsmDrawTransitionComponent {
 
   get uniqueID() { return this.transition.sourceState.name + '=>' + this.transition.destState.name; }
 
-  get curvy() {
-    // control point angle
-    const cpoint = {
-      x: (this.transition.sourceState.x + (this.length + this.stateRadius) / 2),
-      y: (this.transition.sourceState.y + this.transition.rotation)
-    };
+  get textvoffset() {
+    if (this.transition.sourceState.x > this.transition.destState.x) {
+      if (this.cpoint.y < this.transition.sourceState.y) {
+        return -1 * this.textheight + 3;
+      }
+      return 5;
+    }
+    if (this.cpoint.y < this.transition.sourceState.y) {
+      return -5;
+    }
+    return this.textheight - 5;
+  }
+  get curvyTextPath() {
+    // same as curvy path but always left to right
     const spt = { x: (this.transition.sourceState.x), y: (this.transition.sourceState.y) };
     const dpt = { x: (this.transition.sourceState.x + this.length + this.stateRadius), y: this.transition.sourceState.y };
-    const theta = Math.atan((cpoint.y - spt.y) / (cpoint.x - spt.x));
+    const theta = Math.atan((this.cpoint.y - spt.y) / (this.cpoint.x - spt.x));
+    const offset = { x: this.stateRadius * Math.cos(theta), y: this.stateRadius * Math.sin(theta) };
+    if (this.transition.sourceState.x > this.transition.destState.x) {
+      return ' M ' + (dpt.x - offset.x) + ' ' + (dpt.y + offset.y)
+        + ' Q ' + this.cpoint.x + ' ' + this.cpoint.y + ' ' + (spt.x + offset.x) + ' ' + (spt.y + offset.y);
+    }
+    return ' M ' + (spt.x + offset.x) + ' ' + (spt.y + offset.y)
+      + ' Q ' + this.cpoint.x + ' ' + this.cpoint.y + ' ' + (dpt.x - offset.x) + ' ' + (dpt.y + offset.y);
+  }
+
+  get curvyPath() {
+    const spt = { x: (this.transition.sourceState.x), y: (this.transition.sourceState.y) };
+    const dpt = { x: (this.transition.sourceState.x + this.length + this.stateRadius), y: this.transition.sourceState.y };
+    const theta = Math.atan((this.cpoint.y - spt.y) / (this.cpoint.x - spt.x));
     const offset = { x: this.stateRadius * Math.cos(theta), y: this.stateRadius * Math.sin(theta) };
     return ' M ' + (spt.x + offset.x) + ' ' + (spt.y + offset.y)
-      + ' Q ' + cpoint.x + ' ' + cpoint.y + ' ' + (dpt.x - offset.x) + ' ' + (dpt.y + offset.y);
+      + ' Q ' + this.cpoint.x + ' ' + this.cpoint.y + ' ' + (dpt.x - offset.x) + ' ' + (dpt.y + offset.y);
   }
 
   get linkToSelfPath() {
@@ -75,6 +104,12 @@ export class FsmDrawTransitionComponent {
       return this.pathElement.nativeElement.getTotalLength();
     }
     return 0;
+  }
+
+  get textheight() {
+    if (this.textElement) {
+      return this.textElement.nativeElement.getBBox().height;
+    }
   }
   constructor(private _detect: ChangeDetectorRef) { }
 
@@ -109,5 +144,7 @@ export class FsmDrawTransitionComponent {
   onMouseUp = (evt: MouseEvent) => {
     this.transitionmouseup.emit({ srcEvent: evt, child: this.transition, type: 'transition' }); evt.stopPropagation(); return false;
   }
-
+  ngAfterViewInit() {
+    this._detect.detectChanges();
+  }
 }

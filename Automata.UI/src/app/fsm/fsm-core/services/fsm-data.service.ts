@@ -221,11 +221,17 @@ export class FsmDataService {
     this.fsmTransitions = JSON.parse(data);
     for (const trans of this.fsmTransitions) {
       if (!trans.rotation) { trans.rotation = 0; }
-      if (!this.fsmStates.find(item => item.name === trans.sourceState.name)) {
+      let state = this.fsmStates.find(item => item.name === trans.sourceState.name);
+      if (!state) {
         this.fsmStates.push(trans.sourceState);
+      } else {
+        trans.sourceState = state;
       }
-      if (!this.fsmStates.find(item => item.name === trans.destState.name)) {
+      state = this.fsmStates.find(item => item.name === trans.destState.name);
+      if (!state) {
         this.fsmStates.push(trans.destState);
+      } else {
+        trans.destState = state;
       }
     }
   }
