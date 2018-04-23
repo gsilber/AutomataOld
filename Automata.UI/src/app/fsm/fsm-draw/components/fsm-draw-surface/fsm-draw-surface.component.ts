@@ -32,8 +32,9 @@ export class SurfaceMouseEvent {
 export class FsmDrawSurfaceComponent implements AfterViewInit {
 
   @Input() set zoomPercent(val) {
-    this.scrollvalue = 2000 / (val / 100.0);
+    this.scrollvalue = 4000 / (val / 100.0);
   }
+  
   @Output() surfaceclick: EventEmitter<SurfaceMouseEvent> = new EventEmitter<SurfaceMouseEvent>();
   @Output() surfacedblclick: EventEmitter<SurfaceMouseEvent> = new EventEmitter<SurfaceMouseEvent>();
   @Output() surfacecontextmenu: EventEmitter<SurfaceMouseEvent> = new EventEmitter<SurfaceMouseEvent>();
@@ -48,7 +49,7 @@ export class FsmDrawSurfaceComponent implements AfterViewInit {
   @ContentChildren(FsmDrawStateComponent) states: QueryList<FsmDrawStateComponent>;
   @ContentChildren(FsmDrawTransitionComponent) transitions: QueryList<FsmDrawTransitionComponent>;
 
-  public scrollvalue = 2000;
+  public scrollvalue = 4000;
   private prevHooks: any[] = [];
 
   constructor(private _elementRef: ElementRef) { }

@@ -1,7 +1,7 @@
 <div class='row' style='margin:0;'>
   <div [ngClass]='{"col-md-9":!readonly,"col-md-12": readonly}' style='padding:0;'>
     <div class='scroll-container' [style.height]='height' oncontextmenu='return false'>
-      <div class='draw-container bg-drawing'>
+      <div class='draw-container bg-drawing' [style.height.px]='scrollsize' [style.width.px]='scrollsize'>      
         <app-fsm-draw-surface [zoomPercent]='zoomPercent' (surfaceclick)='onSurfaceClick($event)' (surfacemousedown)='onSurfaceMouseDown($event)' (surfacemousemove)='onSurfaceMouseMove($event)'
           (surfacecontextmenu)='onSurfaceContextMenu($event)'>
 
@@ -22,7 +22,7 @@
 
         </app-fsm-draw-surface>
 
-      </div>
+      </div>  
     </div>
   </div>
 

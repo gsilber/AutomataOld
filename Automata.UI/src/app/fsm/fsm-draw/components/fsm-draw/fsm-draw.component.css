@@ -4,3 +4,7 @@
     overflow:scroll; 
     position: relative;
 }
+
+.draw-container{
+    overflow:hidden;
+}

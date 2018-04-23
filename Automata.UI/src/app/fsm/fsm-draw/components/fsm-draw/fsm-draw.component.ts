@@ -23,12 +23,15 @@ export class FsmDrawComponent implements AfterViewInit {
 
   get zoomPercent() { return this._zoomPercent; }
   set zoomPercent(val) {
-    if (val >= 50 && val <= 200){
-      this._zoomPercent = val;
+    if (val >= 50 && val <= 200) {
+      this.scrollsize = 2000 * val / 100.0;
+       this._zoomPercent = val;
+
     }
   }
   selected: FsmObject = null;
 
+  scrollsize = 2000;
   private mode: Modes = Modes.POINTER;
   stateContextOpen = null;
   transContextOpen = null;
@@ -107,7 +110,7 @@ export class FsmDrawComponent implements AfterViewInit {
         const d = ((s.destState.y - s.sourceState.y) * this.mouseX - (s.destState.x - s.sourceState.x) * this.mouseY +
           s.destState.x * s.sourceState.y - s.destState.y * s.sourceState.x) / Math.sqrt(Math.pow(s.destState.y - s.sourceState.y, 2) +
             Math.pow(s.destState.x - s.sourceState.x, 2));
-            // this is a hack, since we are using control point, we need to scale back so the mouse is actually near the line.
+        // this is a hack, since we are using control point, we need to scale back so the mouse is actually near the line.
         s.rotation = d * -1 - d * .8;
       }
 
@@ -133,8 +136,8 @@ export class FsmDrawComponent implements AfterViewInit {
   onCtrlbarZoom = (direction) => {
     const deltaPercent = 10 * direction * -1;
     this.zoomPercent -= deltaPercent;
-    if (deltaPercent===0){
-    this.zoomPercent=100;
+    if (deltaPercent === 0) {
+      this.zoomPercent = 100;
     }
     console.log('zoom direction: ' + direction);
   }
