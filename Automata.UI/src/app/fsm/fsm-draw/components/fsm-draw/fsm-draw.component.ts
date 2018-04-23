@@ -20,6 +20,13 @@ export class FsmDrawComponent implements AfterViewInit {
 
   @ViewChild(FsmDrawPropsComponent) props: FsmDrawPropsComponent;
   @ViewChild(FsmDrawControlbarComponent) ctrlBar: FsmDrawControlbarComponent;
+
+  get zoomPercent() { return this._zoomPercent; }
+  set zoomPercent(val) {
+    if (val >= 50 && val <= 200){
+      this._zoomPercent = val;
+    }
+  }
   selected: FsmObject = null;
 
   private mode: Modes = Modes.POINTER;
@@ -29,6 +36,7 @@ export class FsmDrawComponent implements AfterViewInit {
   mouseX: number;
   mouseY: number;
   mouseHover: FsmObject;
+  private _zoomPercent = 100.0;
 
   constructor(public fsmSvc: FsmDataService, private _detect: ChangeDetectorRef) { }
 
@@ -122,7 +130,14 @@ export class FsmDrawComponent implements AfterViewInit {
   onCtrlbarClear = () => this.fsmSvc.clear();
   onCtrlbarHelp = () => console.log('help');
   onCtrlbarValidate = () => console.log('validate');
-  onCtrlbarZoom = (direction) => console.log('zoom direction: ' + direction);
+  onCtrlbarZoom = (direction) => {
+    const deltaPercent = 10 * direction * -1;
+    this.zoomPercent -= deltaPercent;
+    if (deltaPercent===0){
+    this.zoomPercent=100;
+    }
+    console.log('zoom direction: ' + direction);
+  }
 
   // Context menus handlers
   onStateContextClickDelete = (evt) => {

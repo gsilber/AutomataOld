@@ -1,7 +1,7 @@
 import { FsmObject } from './../../../fsm-core/services/fsm-data.service';
 import { FsmDrawTransitionComponent } from './../fsm-draw-transition/fsm-draw-transition.component';
 import { FsmDrawStateComponent } from './../fsm-draw-state/fsm-draw-state.component';
-import { Output, Component, QueryList, EventEmitter, ElementRef, ContentChildren, AfterViewInit, Renderer } from '@angular/core';
+import { Output, Component, QueryList, EventEmitter, ElementRef, ContentChildren, AfterViewInit, Renderer, Input } from '@angular/core';
 
 export class ChildMouseEvent {
   child: any;
@@ -31,6 +31,9 @@ export class SurfaceMouseEvent {
 })
 export class FsmDrawSurfaceComponent implements AfterViewInit {
 
+  @Input() set zoomPercent(val) {
+    this.scrollvalue = 2000 / (val / 100.0);
+  }
   @Output() surfaceclick: EventEmitter<SurfaceMouseEvent> = new EventEmitter<SurfaceMouseEvent>();
   @Output() surfacedblclick: EventEmitter<SurfaceMouseEvent> = new EventEmitter<SurfaceMouseEvent>();
   @Output() surfacecontextmenu: EventEmitter<SurfaceMouseEvent> = new EventEmitter<SurfaceMouseEvent>();
@@ -45,6 +48,7 @@ export class FsmDrawSurfaceComponent implements AfterViewInit {
   @ContentChildren(FsmDrawStateComponent) states: QueryList<FsmDrawStateComponent>;
   @ContentChildren(FsmDrawTransitionComponent) transitions: QueryList<FsmDrawTransitionComponent>;
 
+  public scrollvalue = 2000;
   private prevHooks: any[] = [];
 
   constructor(private _elementRef: ElementRef) { }
