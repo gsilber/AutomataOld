@@ -34,7 +34,7 @@ export class FsmDrawSurfaceComponent implements AfterViewInit {
   @Input() set zoomPercent(val) {
     this.scrollvalue = 4000 / (val / 100.0);
   }
-  
+
   @Output() surfaceclick: EventEmitter<SurfaceMouseEvent> = new EventEmitter<SurfaceMouseEvent>();
   @Output() surfacedblclick: EventEmitter<SurfaceMouseEvent> = new EventEmitter<SurfaceMouseEvent>();
   @Output() surfacecontextmenu: EventEmitter<SurfaceMouseEvent> = new EventEmitter<SurfaceMouseEvent>();
