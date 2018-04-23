@@ -5,19 +5,19 @@
         <app-fsm-draw-surface (surfaceclick)='onSurfaceClick($event)' (surfacemousedown)='onSurfaceMouseDown($event)' (surfacemousemove)='onSurfaceMouseMove($event)'
           (surfacecontextmenu)='onSurfaceContextMenu($event)'>
 
-          <!--Transition creating-endpoint not selected yet-->
-          <ng-template [ngIf]='transitionSelectedState'>
-            <svg:g app-fsm-draw-transition [transition]='startTransition(mouseX,mouseY)' />
-          </ng-template>
 
           <!--Draw transitions-->
           <ng-template ngFor let-item [ngForOf]='fsmSvc.fsmTransitions'>
             <svg:g app-fsm-draw-transition [transition]='item' [selected]='selected && selected===item' />
           </ng-template>
-
           <!--Draw states-->
           <ng-template ngFor let-item [ngForOf]='fsmSvc.fsmStates'>
             <svg:g app-fsm-draw-state [state]='item' [selected]='selected && selected===item' />
+          </ng-template>
+
+          <!--Transition creating-endpoint not selected yet-->
+          <ng-template [ngIf]='transitionSelectedState'>
+            <svg:g app-fsm-draw-transition [transition]='startTransition(mouseX,mouseY)' />
           </ng-template>
 
         </app-fsm-draw-surface>

@@ -18,7 +18,7 @@
         <ng-template [ngIf]='transition.sourceState!==transition.destState'>
             <!--The line segment quadratic curve-->
             <svg:path #transPath [ngClass]='{"i-fsm-transition-selected": selected }' class='fsm-transition' stroke-width='2' stroke='blue'
-                fill='none' [attr.d]='curvyTextPath' marker-end='url(#arrow)' />
+                fill='none' [attr.d]='curvyPath' marker-end='url(#arrow)' />
             <!--The text element-->
             <svg:text class='fsm-transition-label' [attr.x]='curveLength/2' stroke-width='1' fill='blue' text-anchor='middle' [attr.transform]='"translate(0,"+textvoffset+")"'>
                 <svg:textPath attr.xlink:href='#{{uniqueID}}' side='right'>
