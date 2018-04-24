@@ -185,7 +185,9 @@ export class FsmDataService {
   // public methods for transitions
   public validateAcceptChars(transition: FsmTransition) {
     if (transition.charactersAccepted.length === 0) { return 'Invalid accept set'; }
-    // do more validation here to make sure it adheres to our rules
+    // check to make sure it is a , delimited list of single characters (escapes ok) or ranges like a-z,A-Z,0-9,b,c,\r,\n
+    // with escapes make sure they are legal, with ranges make sure ascii value of first is less than second and include all 
+    // chars between ascii values
     return '';
   }
 
