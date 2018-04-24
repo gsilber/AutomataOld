@@ -11,7 +11,8 @@ import { Component, Input, Output, EventEmitter, ViewChild, ElementRef, ChangeDe
 })
 export class FsmDrawTransitionComponent implements AfterViewInit {
 
-  @Input() transition: FsmTransition = null;
+  get transition(): FsmTransition { return this._transition; }
+  @Input() set transition(val) { this._transition = val; this._detect.detectChanges(); }
   @Input() selected: boolean;
   @Output() transitionclick: EventEmitter<ChildMouseEvent> = new EventEmitter<ChildMouseEvent>();
   @Output() transitiondblclick: EventEmitter<ChildMouseEvent> = new EventEmitter<ChildMouseEvent>();
@@ -26,6 +27,8 @@ export class FsmDrawTransitionComponent implements AfterViewInit {
   @ViewChild('transPath') pathElement: ElementRef;
   @ViewChild('TextSample') textElement: ElementRef;
 
+
+  private _transition: FsmTransition = null;
   private get cpoint() {
     return {
       x: (this.transition.sourceState.x + (this.length + this.stateRadius) / 2),

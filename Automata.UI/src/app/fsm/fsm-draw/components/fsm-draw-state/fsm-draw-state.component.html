@@ -10,7 +10,7 @@
 <svg:circle *ngIf='isFinal()' class='fsm-state-final' [attr.cx]='state.x' [attr.cy]='state.y' [attr.r]='radius-5' stroke='black' stroke-width='2' fill='none' />
 
 <!-- State Label -->
-<svg:text class='svg-text fsm-state-label' [attr.x]='state.x-10' [attr.y]='state.y+5' fill='blue' font-weight='bold' >
+<svg:text class='svg-text fsm-state-label' [attr.x]='state.x' [attr.y]='state.y' fill='blue' font-weight='bold' alignment-baseline='central' text-anchor='middle' >
   {{state.name}}
 </svg:text>
 

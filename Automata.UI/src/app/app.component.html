@@ -1,16 +1,9 @@
 <div class='container'>
-    <div class='row'><div class='col-md-8'  style='border:1px solid black;padding:1px; background:lightblue'>
+    <div class='row'>
+        <div class='col-md-8 draw-box-holder'>
+            
     <app-fsm-draw (json)='onJSONChange($event)'></app-fsm-draw>
 </div></div>
 </div>
 {{json}}
 
-<div style='width:500px;height:500px;background:yellow;overflow: hidden;position: relative;'>
-    <div #parent style='height:inherit'>
-    <div style='background:lightblue;width:100%;position:relative;box-sizing: border-box;border:solid 1px black' [style.height.px]='parent.offsetHeight-cbar.offsetHeight' >
-        a:{{cbar.offsetHeight}}
-    </div>
-    <div #cbar style='background:red;width:100%;height:50px'> blah blah </div>
-</div>
-</div>
-<router-outlet></router-outlet>

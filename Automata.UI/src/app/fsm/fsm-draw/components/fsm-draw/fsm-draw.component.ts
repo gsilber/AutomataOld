@@ -1,12 +1,8 @@
-import { FsmTransition } from './../../../fsm-core/services/fsm-data.service';
 import { SurfaceMouseEvent } from './../fsm-draw-surface/fsm-draw-surface.component';
-import { Modes, FsmDrawControlbarComponent } from './../fsm-draw-controlbar/fsm-draw-controlbar.component';
-import {
-  Component, Input, ContentChild, ViewChild, ElementRef,
-  EventEmitter, Output, AfterViewInit, ChangeDetectorRef
-} from '@angular/core';
-import { FsmDataService, StateTypes, FsmState, FsmObject } from '../../../fsm-core/services/fsm-data.service';
+import { Component, Input, ViewChild, AfterViewInit, ChangeDetectorRef } from '@angular/core';
+import { FsmTransition, FsmDataService, StateTypes, FsmState, FsmObject } from '../../../fsm-core/services/fsm-data.service';
 import { FsmDrawPropsComponent } from '../fsm-draw-props/fsm-draw-props.component';
+import { Modes, FsmDrawControlbarComponent } from './../fsm-draw-controlbar/fsm-draw-controlbar.component';
 
 @Component({
   selector: 'app-fsm-draw',
@@ -14,9 +10,7 @@ import { FsmDrawPropsComponent } from '../fsm-draw-props/fsm-draw-props.componen
   styleUrls: ['./fsm-draw.component.css']
 })
 export class FsmDrawComponent implements AfterViewInit {
-  @Input() height = '500px';
   @Input() readonly = false;
-  @Output() json: EventEmitter<string> = new EventEmitter<string>();
 
   @ViewChild(FsmDrawPropsComponent) props: FsmDrawPropsComponent;
   @ViewChild(FsmDrawControlbarComponent) ctrlBar: FsmDrawControlbarComponent;
@@ -25,9 +19,22 @@ export class FsmDrawComponent implements AfterViewInit {
   set zoomPercent(val) {
     if (val >= 50 && val <= 200) {
       this.scrollsize = 2000 * val / 100.0;
-       this._zoomPercent = val;
+      this._zoomPercent = val;
 
     }
+  }
+  get startTransition(): FsmTransition {
+    let dest = { x: this.mouseX, y: this.mouseY, stateIndex: 99, name: 'temp', stateType: StateTypes.NORMAL, type: 'state' };
+    if (this.mouseHover && this.mouseHover.type === 'state' && this.mouseHover === this.transitionSelectedState) {
+      dest = this.transitionSelectedState;
+    }
+    return {
+      sourceState: this.transitionSelectedState,
+      destState: dest,
+      charactersAccepted: '',
+      type: 'transition',
+      rotation: 0
+    };
   }
   selected: FsmObject = null;
 
@@ -44,10 +51,6 @@ export class FsmDrawComponent implements AfterViewInit {
   constructor(public fsmSvc: FsmDataService, private _detect: ChangeDetectorRef) { }
 
   ngAfterViewInit() {
-    // tslint:disable-next-line:max-line-length
-    //  this.fsmSvc.fromJson('[{"sourceState":{"name":"q0","stateIndex":0,"x":278.0078125,"y":241.0078125,"stateType":"normal","type":"state"},"destState":{"name":"q3","stateIndex":3,"x":245.00782775878906,"y":450.0078125,"stateType":"normal","type":"state"},"charactersAccepted":"a","type":"transition"},{"sourceState":{"name":"q0","stateIndex":0,"x":278.0078125,"y":241.0078125,"stateType":"normal","type":"state"},"destState":{"name":"q5","stateIndex":5,"x":494.0078125,"y":276.0078125,"stateType":"normal","type":"state"},"charactersAccepted":"a","type":"transition"},{"sourceState":{"name":"q0","stateIndex":0,"x":278.0078125,"y":241.0078125,"stateType":"normal","type":"state"},"destState":{"name":"q8","stateIndex":8,"x":335.0078125,"y":23.0078125,"stateType":"normal","type":"state"},"charactersAccepted":"a","type":"transition"},{"sourceState":{"name":"q0","stateIndex":0,"x":278.0078125,"y":241.0078125,"stateType":"normal","type":"state"},"destState":{"name":"q2","stateIndex":2,"x":60.00782012939453,"y":271.0078125,"stateType":"normal","type":"state"},"charactersAccepted":"a","type":"transition"},{"sourceState":{"name":"q0","stateIndex":0,"x":278.0078125,"y":241.0078125,"stateType":"normal","type":"state"},"destState":{"name":"q1","stateIndex":1,"x":59.00782012939453,"y":203.0078125,"stateType":"normal","type":"state"},"charactersAccepted":"a","type":"transition"},{"sourceState":{"name":"q0","stateIndex":0,"x":278.0078125,"y":241.0078125,"stateType":"normal","type":"state"},"destState":{"name":"q7","stateIndex":7,"x":208.00782775878906,"y":24.0078125,"stateType":"normal","type":"state"},"charactersAccepted":"a","type":"transition"},{"sourceState":{"name":"q0","stateIndex":0,"x":278.0078125,"y":241.0078125,"stateType":"normal","type":"state"},"destState":{"name":"q6","stateIndex":6,"x":493.0078125,"y":215.0078125,"stateType":"normal","type":"state"},"charactersAccepted":"a","type":"transition"},{"sourceState":{"name":"q0","stateIndex":0,"x":278.0078125,"y":241.0078125,"stateType":"normal","type":"state"},"destState":{"name":"q4","stateIndex":4,"x":313.0078125,"y":451.0078125,"stateType":"normal","type":"state"},"charactersAccepted":"a","type":"transition"},{"sourceState":{"name":"q0","stateIndex":0,"x":278.0078125,"y":241.0078125,"stateType":"normal","type":"state"},"destState":{"name":"q9","stateIndex":9,"x":104.00782012939453,"y":388.0078125,"stateType":"normal","type":"state"},"charactersAccepted":"a","type":"transition"},{"sourceState":{"name":"q0","stateIndex":0,"x":278.0078125,"y":241.0078125,"stateType":"normal","type":"state"},"destState":{"name":"q12","stateIndex":12,"x":409.0078125,"y":366.0078125,"stateType":"normal","type":"state"},"charactersAccepted":"a","type":"transition"},{"sourceState":{"name":"q0","stateIndex":0,"x":278.0078125,"y":241.0078125,"stateType":"normal","type":"state"},"destState":{"name":"q11","stateIndex":11,"x":429.0078125,"y":81.0078125,"stateType":"normal","type":"state"},"charactersAccepted":"a","type":"transition"},{"sourceState":{"name":"q0","stateIndex":0,"x":278.0078125,"y":241.0078125,"stateType":"normal","type":"state"},"destState":{"name":"q10","stateIndex":10,"x":80.00782012939453,"y":88.0078125,"stateType":"normal","type":"state"},"charactersAccepted":"a","type":"transition"}]');
-    // tslint:disable-next-line:max-line-length
-    this.fsmSvc.fromJson('[{"sourceState":{"name":"q0","stateIndex":0,"x":408.6328125,"y":241.0078125,"stateType":"normal","type":"state"},"destState":{"name":"q3","stateIndex":3,"x":96.63282012939453,"y":243.0078125,"stateType":"normal","type":"state"},"charactersAccepted":"a","type":"transition","rotation":132.51650818085807},{"sourceState":{"name":"q3","stateIndex":3,"x":96.63282012939453,"y":243.0078125,"stateType":"normal","type":"state"},"destState":{"name":"q3","stateIndex":3,"x":96.63282012939453,"y":243.0078125,"stateType":"normal","type":"state"},"charactersAccepted":"a","type":"transition","rotation":0}]');
     this._detect.detectChanges();
   }
   // Local surface event handlers
@@ -70,7 +73,6 @@ export class FsmDrawComponent implements AfterViewInit {
         } else { if (this.mode === 'transition' && evt.type !== 'state') { this.transitionSelectedState = null; } }
       }
     }
-    this.json.emit(this.fsmSvc.toJson());
   }
 
   onSurfaceContextMenu = (evt: SurfaceMouseEvent) => {
@@ -115,7 +117,6 @@ export class FsmDrawComponent implements AfterViewInit {
       }
 
     }
-    this.json.emit(this.fsmSvc.toJson());
   }
 
   onSurfaceMouseDown = (evt: SurfaceMouseEvent) => {
@@ -125,7 +126,6 @@ export class FsmDrawComponent implements AfterViewInit {
       if (evt.type === 'surface') { this.selected = null; } else { this.selectObject(evt.child); }
 
     }
-    this.json.emit(this.fsmSvc.toJson());
   }
 
   // FsmDrawControlbar event handlers
@@ -139,7 +139,6 @@ export class FsmDrawComponent implements AfterViewInit {
     if (deltaPercent === 0) {
       this.zoomPercent = 100;
     }
-    console.log('zoom direction: ' + direction);
   }
 
   // Context menus handlers
@@ -150,19 +149,16 @@ export class FsmDrawComponent implements AfterViewInit {
     this.selected = null;
     this.props.cancel();
     this.refreshProps();
-    this.json.emit(this.fsmSvc.toJson());
   }
   onStateContextClickStart = (evt) => {
     FsmDataService.toggleStateValue(this.stateContextOpen.obj, StateTypes.START);
     this.stateContextOpen = null;
     this.refreshProps();
-    this.json.emit(this.fsmSvc.toJson());
   }
   onStateContextClickFinal = (evt) => {
     FsmDataService.toggleStateValue(this.stateContextOpen.obj, StateTypes.FINAL);
     this.stateContextOpen = null;
     this.refreshProps();
-    this.json.emit(this.fsmSvc.toJson());
   }
 
   onTransContextClickDelete = (evt) => {
@@ -172,23 +168,9 @@ export class FsmDrawComponent implements AfterViewInit {
     this.selected = null;
     this.props.cancel();
     this.refreshProps();
-    this.json.emit(this.fsmSvc.toJson());
   }
 
   // Helper Methods
-  startTransition(x: number, y: number): FsmTransition {
-    let dest = { x: x, y: y, stateIndex: 99, name: 'temp', stateType: StateTypes.NORMAL, type: 'state' };
-    if (this.mouseHover && this.mouseHover.type === 'state' && this.mouseHover === this.transitionSelectedState) {
-      dest = this.transitionSelectedState;
-    }
-    return {
-      sourceState: this.transitionSelectedState,
-      destState: dest,
-      charactersAccepted: '',
-      type: 'transition',
-      rotation: 0
-    };
-  }
 
   closeAllContextMenus() {
     this.stateContextOpen = null;
@@ -200,4 +182,5 @@ export class FsmDrawComponent implements AfterViewInit {
   refreshProps() {
     this.props.refresh();
   }
+
 }
