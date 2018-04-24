@@ -3,6 +3,7 @@ import { FsmDrawTransitionComponent } from './../fsm-draw-transition/fsm-draw-tr
 import { FsmDrawStateComponent } from './../fsm-draw-state/fsm-draw-state.component';
 import { Output, Component, QueryList, EventEmitter, ElementRef, ContentChildren, AfterViewInit, Renderer, Input } from '@angular/core';
 
+// Helper classes
 export class ChildMouseEvent {
   child: any;
   type: String;
@@ -24,6 +25,7 @@ export class SurfaceMouseEvent {
   }
 }
 
+// the surface component
 @Component({
   selector: 'app-fsm-draw-surface',
   templateUrl: './fsm-draw-surface.component.html',
@@ -31,10 +33,18 @@ export class SurfaceMouseEvent {
 })
 export class FsmDrawSurfaceComponent implements AfterViewInit {
 
+  // public variables
+  public scrollvalue = 4000;
+
+  // private variables
+  private prevHooks: any[] = [];
+
+  // input variables
   @Input() set zoomPercent(val) {
     this.scrollvalue = 4000 / (val / 100.0);
   }
 
+  // output events
   @Output() surfaceclick: EventEmitter<SurfaceMouseEvent> = new EventEmitter<SurfaceMouseEvent>();
   @Output() surfacedblclick: EventEmitter<SurfaceMouseEvent> = new EventEmitter<SurfaceMouseEvent>();
   @Output() surfacecontextmenu: EventEmitter<SurfaceMouseEvent> = new EventEmitter<SurfaceMouseEvent>();
@@ -46,14 +56,14 @@ export class FsmDrawSurfaceComponent implements AfterViewInit {
   @Output() surfacemouseover: EventEmitter<SurfaceMouseEvent> = new EventEmitter<SurfaceMouseEvent>();
   @Output() surfacemouseup: EventEmitter<SurfaceMouseEvent> = new EventEmitter<SurfaceMouseEvent>();
 
+  // referenced child objects
   @ContentChildren(FsmDrawStateComponent) states: QueryList<FsmDrawStateComponent>;
   @ContentChildren(FsmDrawTransitionComponent) transitions: QueryList<FsmDrawTransitionComponent>;
 
-  public scrollvalue = 4000;
-  private prevHooks: any[] = [];
 
   constructor(private _elementRef: ElementRef) { }
 
+  // this method is going out and getting all the events from the child objects and subscribing to them to intercept
   ngAfterViewInit() {
     this.initEvents();
     this.states.changes.subscribe(_ => {
@@ -64,6 +74,7 @@ export class FsmDrawSurfaceComponent implements AfterViewInit {
     });
   }
 
+  // private methods
   private initEvents = () => {
     this.prevHooks.forEach((subscription) => subscription.unsubscribe());
 
@@ -104,6 +115,7 @@ export class FsmDrawSurfaceComponent implements AfterViewInit {
   onMouseOver = (evt: MouseEvent) => this.fireAugmentedMouseEvent(evt, this.surfacemouseover);
   onMouseUp = (evt: MouseEvent) => this.fireAugmentedMouseEvent(evt, this.surfacemouseup);
 
+  // override all mouse events being bubbled from children, with the child and type attached
   onChildClick = (obj: ChildMouseEvent) => this.fireAugmentedMouseEvent(obj.srcEvent, this.surfaceclick, obj.child, obj.type);
   onChildDblClick = (obj: ChildMouseEvent) => this.fireAugmentedMouseEvent(obj.srcEvent, this.surfacedblclick, obj.child, obj.type);
   onChildContextMenu = (obj: ChildMouseEvent) => this.fireAugmentedMouseEvent(obj.srcEvent, this.surfacecontextmenu, obj.child, obj.type);
@@ -115,6 +127,7 @@ export class FsmDrawSurfaceComponent implements AfterViewInit {
   onChildMouseOver = (obj: ChildMouseEvent) => this.fireAugmentedMouseEvent(obj.srcEvent, this.surfacemouseover, obj.child, obj.type);
   onChildMouseUp = (obj: ChildMouseEvent) => this.fireAugmentedMouseEvent(obj.srcEvent, this.surfacemouseup, obj.child, obj.type);
 
+  // Helper methods
   private fireAugmentedMouseEvent(
     evt: MouseEvent, emitter: EventEmitter<SurfaceMouseEvent>, child: any = null, type: String = 'surface'): boolean {
     const pt = this.clientToSurface(evt.clientX, evt.clientY);

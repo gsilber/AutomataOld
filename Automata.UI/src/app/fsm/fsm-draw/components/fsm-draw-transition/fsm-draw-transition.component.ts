@@ -10,10 +10,13 @@ import { Component, Input, Output, EventEmitter, ViewChild, ElementRef, ChangeDe
   styleUrls: ['./fsm-draw-transition.component.css']
 })
 export class FsmDrawTransitionComponent implements AfterViewInit {
+  // private variables
+  private _transition: FsmTransition = null;
 
-  get transition(): FsmTransition { return this._transition; }
+  // input variables
   @Input() set transition(val) { this._transition = val; this._detect.detectChanges(); }
   @Input() selected: boolean;
+  // output events
   @Output() transitionclick: EventEmitter<ChildMouseEvent> = new EventEmitter<ChildMouseEvent>();
   @Output() transitiondblclick: EventEmitter<ChildMouseEvent> = new EventEmitter<ChildMouseEvent>();
   @Output() transitioncontextmenu: EventEmitter<ChildMouseEvent> = new EventEmitter<ChildMouseEvent>();
@@ -24,11 +27,12 @@ export class FsmDrawTransitionComponent implements AfterViewInit {
   @Output() transitionmouseout: EventEmitter<ChildMouseEvent> = new EventEmitter<ChildMouseEvent>();
   @Output() transitionmouseover: EventEmitter<ChildMouseEvent> = new EventEmitter<ChildMouseEvent>();
   @Output() transitionmouseup: EventEmitter<ChildMouseEvent> = new EventEmitter<ChildMouseEvent>();
+
+  // referenced children
   @ViewChild('transPath') pathElement: ElementRef;
   @ViewChild('TextSample') textElement: ElementRef;
 
-
-  private _transition: FsmTransition = null;
+  // private properties
   private get cpoint() {
     return {
       x: (this.transition.sourceState.x + (this.length + this.stateRadius) / 2),
@@ -42,6 +46,10 @@ export class FsmDrawTransitionComponent implements AfterViewInit {
   private get deltaY() {
     return this.transition.sourceState.y - this.transition.destState.y;
   }
+
+  // properties
+  get transition(): FsmTransition { return this._transition; }
+
   get length() {
     return Math.sqrt(Math.pow(this.deltaX, 2) + Math.pow(this.deltaY, 2)) - this.stateRadius;
   }
@@ -114,8 +122,10 @@ export class FsmDrawTransitionComponent implements AfterViewInit {
       return this.textElement.nativeElement.getBBox().height;
     }
   }
+
   constructor(private _detect: ChangeDetectorRef) { }
 
+  // internal event handlers which bubble augmented events up to the surface object
   onClick = (evt: MouseEvent) => {
     this.transitionclick.emit({ srcEvent: evt, child: this.transition, type: 'transition' });
     if (this.transition.destState.name !== 'temp') { evt.stopPropagation(); return false; }

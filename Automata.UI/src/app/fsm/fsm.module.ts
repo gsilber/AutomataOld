@@ -6,7 +6,7 @@ import { CommonModule } from '@angular/common';
 @NgModule({
   imports: [
     CommonModule,
-    FsmCoreModule,
+    FsmCoreModule, // Required by the draw module
     FsmDrawModule
   ],
   declarations: []

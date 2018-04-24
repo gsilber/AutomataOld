@@ -27,7 +27,21 @@
     stroke-dasharray: 5 2;
 }
 
+.fsm-transition{
+    stroke: blue;
+    stroke-width:2;
+}
+.fsm-transition-self{
+    stroke: blue;
+    stroke-width:2;
+}
 .fsm-transition-label{
     font-weight:bold;
     fill:blue;
+}
+.fsm-transition-arrow{
+    fill: #f00;
+} 
+.fsm-transition-arrow-creating{
+    fill: #f00;
 }

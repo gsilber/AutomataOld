@@ -9,15 +9,18 @@ export enum Modes { POINTER = 'pointer', STATE = 'state', TRANSITION = 'transiti
   styleUrls: ['./fsm-draw-controlbar.component.scss']
 })
 export class FsmDrawControlbarComponent implements OnInit {
-
+  // variables
+  imode: Modes = Modes.POINTER;
+  // output event emitters
   @Output() mode: EventEmitter<Modes> = new EventEmitter<Modes>();
   @Output() zoom: EventEmitter<number> = new EventEmitter<number>();
   @Output() clear: EventEmitter<boolean> = new EventEmitter<boolean>();
   @Output() validate: EventEmitter<boolean> = new EventEmitter<boolean>();
   @Output() help: EventEmitter<boolean> = new EventEmitter<boolean>();
 
+  // input variables
   @Input() readonly = false;
-  imode: Modes = Modes.POINTER;
+
   constructor() { }
 
   // Lifecycle hooks
@@ -27,12 +30,13 @@ export class FsmDrawControlbarComponent implements OnInit {
     this.clear.emit(true);
   }
 
+  // public method to allow external interface to change mode
   public setMode = (mode: Modes) => {
-    this.imode=mode;
+    this.imode = mode;
     this.mode.emit(mode);
   }
-  // Event Handlers
-  onModeChange = (mode) => { this.imode=mode; this.mode.emit(mode); return false; };
+  // Local Event Handlers
+  onModeChange = (mode) => { this.imode = mode; this.mode.emit(mode); return false; };
   onZoom = (direction) => { this.zoom.emit(direction); return false; };
   onClear = () => { this.clear.emit(true); return false; };
   onValidate = () => { this.validate.emit(true); return false; };

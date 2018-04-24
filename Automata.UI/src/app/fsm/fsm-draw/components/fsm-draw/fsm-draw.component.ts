@@ -10,11 +10,28 @@ import { Modes, FsmDrawControlbarComponent } from './../fsm-draw-controlbar/fsm-
   styleUrls: ['./fsm-draw.component.css']
 })
 export class FsmDrawComponent implements AfterViewInit {
+  // variables
+  selected: FsmObject = null;
+  scrollsize = 2000;
+  stateContextOpen = null;
+  transContextOpen = null;
+  transitionSelectedState = null;
+  mouseX: number;
+  mouseY: number;
+  mouseHover: FsmObject;
+
+  // private variables
+  private _zoomPercent = 100.0;
+  private mode: Modes = Modes.POINTER;
+
+  // input variables
   @Input() readonly = false;
 
+  // dom components
   @ViewChild(FsmDrawPropsComponent) props: FsmDrawPropsComponent;
   @ViewChild(FsmDrawControlbarComponent) ctrlBar: FsmDrawControlbarComponent;
 
+  // properties
   get zoomPercent() { return this._zoomPercent; }
   set zoomPercent(val) {
     if (val >= 50 && val <= 200) {
@@ -36,17 +53,6 @@ export class FsmDrawComponent implements AfterViewInit {
       rotation: 0
     };
   }
-  selected: FsmObject = null;
-
-  scrollsize = 2000;
-  private mode: Modes = Modes.POINTER;
-  stateContextOpen = null;
-  transContextOpen = null;
-  transitionSelectedState = null;
-  mouseX: number;
-  mouseY: number;
-  mouseHover: FsmObject;
-  private _zoomPercent = 100.0;
 
   constructor(public fsmSvc: FsmDataService, private _detect: ChangeDetectorRef) { }
 

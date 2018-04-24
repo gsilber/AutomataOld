@@ -1,13 +1,23 @@
 import { FsmObject, FsmState, FsmTransition, StateTypes, FsmDataService } from './../../../fsm-core/services/fsm-data.service';
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, Input } from '@angular/core';
 
 @Component({
   selector: 'app-fsm-draw-props',
   templateUrl: './fsm-draw-props.component.html',
   styleUrls: ['./fsm-draw-props.component.css']
 })
-export class FsmDrawPropsComponent implements OnInit {
+export class FsmDrawPropsComponent {
+  // variables
+  iname: string;
+  itype: StateTypes;
+  iCharAccepted: string;
+  stateErrMsg = '';
+  transitionErrMsg = '';
 
+  // Private variables
+  private _object: FsmObject = null;
+
+  // Input properties
   @Input() set object(val) {
     this._object = val;
     if (this.state) {
@@ -18,6 +28,8 @@ export class FsmDrawPropsComponent implements OnInit {
       this.iCharAccepted = this.transition.charactersAccepted;
     }
   }
+
+  // Properties
   get object(): FsmObject { return this._object; }
   get validState(): boolean {
     if (!this.state) { return false; }
@@ -29,7 +41,6 @@ export class FsmDrawPropsComponent implements OnInit {
     this.transitionErrMsg = this._fsmSvc.validateAcceptChars(this.transition);
     return this.transitionErrMsg === '';
   }
-
   get dirty(): boolean {
     if (this.state) {
       return this.state.name !== this.iname || this.state.stateType !== this.itype;
@@ -44,10 +55,6 @@ export class FsmDrawPropsComponent implements OnInit {
   get final() { return this.state && (this.state.stateType === 'final' || this.state.stateType === 'startfinal'); }
   set final(val: boolean) { FsmDataService.setStateValue(this.state, StateTypes.FINAL, !val); }
 
-
-
-  private _object: FsmObject = null;
-
   get state(): FsmState {
     if (this._object && this._object.type === 'state') {
       return this._object as FsmState;
@@ -60,18 +67,9 @@ export class FsmDrawPropsComponent implements OnInit {
     }
   }
 
-  // state properties
-  iname: string;
-  itype: StateTypes;
-  iCharAccepted: string;
-  stateErrMsg = '';
-  transitionErrMsg = '';
-
   constructor(private _fsmSvc: FsmDataService) { }
 
-  ngOnInit() {
-  }
-
+  // state property page event handlers
   updateStateEdit = () => {
     this.iname = this.state.name;
     this.itype = this.state.stateType;
@@ -86,6 +84,7 @@ export class FsmDrawPropsComponent implements OnInit {
     this.object = null;
   }
 
+  // transition property page event handlers
   updateTransitionEdit = () => {
     this.iCharAccepted = this.transition.charactersAccepted;
     this.itype = this.state.stateType;
@@ -99,6 +98,7 @@ export class FsmDrawPropsComponent implements OnInit {
     this.object = null;
   }
 
+  // Externally callable methods to refresh the page, or cancel the edit
   public refresh = () => this.object = this.object;
 
   public cancel = () => {

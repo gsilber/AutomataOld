@@ -1,6 +1,7 @@
 import { FsmDrawTransitionComponent } from './../../fsm-draw/components/fsm-draw-transition/fsm-draw-transition.component';
 import { Injectable } from '@angular/core';
 
+// Exported classes and enums used by the service
 export enum StateTypes { START = 'start', FINAL = 'final', NORMAL = 'normal', STARTFINAL = 'startfinal' }
 
 export class FsmObject {
@@ -22,16 +23,18 @@ export class FsmTransition extends FsmObject {
   public rotation = 0;
 }
 
-
+// Service code
 @Injectable()
 export class FsmDataService {
-  // public fsmStates: FsmState[] = [{ x: 50, y: 50, stateIndex: 0, name: 'q0', stateType: StateTypes.NORMAL }];
+  // public member variables
   public fsmStates: FsmState[] = [];
   public fsmTransitions: FsmTransition[] = [];
   public defaultStateLabel = 'q';
+
   constructor() {
   }
 
+  // public static methods for states
   public static toggleState(item: FsmState) {
     switch (item.stateType) {
       case StateTypes.NORMAL: {
@@ -128,42 +131,10 @@ export class FsmDataService {
     }
   }
 
-  public validateLabel(state: FsmState): string {
-    if (state.name.length === 0 || state.name.length > 3) { return 'Not a valid label name'; }
-    if (state.name.startsWith(this.defaultStateLabel) && state.name !== this.defaultStateLabel + state.stateIndex) {
-      return 'Names beginning with ' + this.defaultStateLabel + ' are reserved';
-    }
-    for (const item of this.fsmStates) {
-      if (item !== state && item.name === state.name) { return 'Duplicate state name'; }
-    }
-    return '';
-  }
-  public validateAcceptChars(transition: FsmTransition) {
-    if (transition.charactersAccepted.length === 0) { return 'Invalid accept set'; }
-    // do more validation here to make sure it adheres to our rules
-    return '';
-  }
-  public clear = () => {
-    this.fsmStates = [];
-    this.fsmTransitions = [];
-  }
+  // public methods for states
   public addState = (state: FsmState): FsmState => {
     this.fsmStates.push(state);
     return state;
-  }
-
-  public addTransition = (source: FsmState, dest: FsmState): FsmTransition => {
-    let trans = { sourceState: source, destState: dest, charactersAccepted: 'a', type: 'transition', rotation: 0 };
-    const problems = this.fsmTransitions.filter((item) =>
-      (source === dest && item.sourceState === item.destState && item.sourceState === source) ||
-      (source !== dest && item.sourceState === source && item.destState === dest)
-    );
-    if (problems.length === 0) {
-      this.fsmTransitions.push(trans);
-    } else {
-      trans = problems[0];
-    }
-    return trans;
   }
 
   public addDefaultState = (x: number, y: number): FsmState => {
@@ -192,6 +163,46 @@ export class FsmDataService {
     });
   }
 
+  public validateLabel(state: FsmState): string {
+    if (state.name.length === 0 || state.name.length > 3) { return 'Not a valid label name'; }
+    if (state.name.startsWith(this.defaultStateLabel) && state.name !== this.defaultStateLabel + state.stateIndex) {
+      return 'Names beginning with ' + this.defaultStateLabel + ' are reserved';
+    }
+    for (const item of this.fsmStates) {
+      if (item !== state && item.name === state.name) { return 'Duplicate state name'; }
+    }
+    return '';
+  }
+
+  public removeState(state: FsmState) {
+    this.removeTransitionsForState(state);
+    const index = this.fsmStates.indexOf(state);
+    if (index > -1) {
+      this.fsmStates.splice(index, 1);
+    }
+  }
+
+  // public methods for transitions
+  public validateAcceptChars(transition: FsmTransition) {
+    if (transition.charactersAccepted.length === 0) { return 'Invalid accept set'; }
+    // do more validation here to make sure it adheres to our rules
+    return '';
+  }
+
+  public addTransition = (source: FsmState, dest: FsmState): FsmTransition => {
+    let trans = { sourceState: source, destState: dest, charactersAccepted: 'a', type: 'transition', rotation: 0 };
+    const problems = this.fsmTransitions.filter((item) =>
+      (source === dest && item.sourceState === item.destState && item.sourceState === source) ||
+      (source !== dest && item.sourceState === source && item.destState === dest)
+    );
+    if (problems.length === 0) {
+      this.fsmTransitions.push(trans);
+    } else {
+      trans = problems[0];
+    }
+    return trans;
+  }
+
   public removeTransition(transition: FsmTransition) {
     const index = this.fsmTransitions.indexOf(transition);
     if (index > -1) {
@@ -204,12 +215,10 @@ export class FsmDataService {
       function (item) { return item.sourceState !== state && item.destState !== state; });
   }
 
-  public removeState(state: FsmState) {
-    this.removeTransitionsForState(state);
-    const index = this.fsmStates.indexOf(state);
-    if (index > -1) {
-      this.fsmStates.splice(index, 1);
-    }
+  // public methods for FSM
+  public clear = () => {
+    this.fsmStates = [];
+    this.fsmTransitions = [];
   }
 
   public toJson() {

@@ -10,9 +10,13 @@ import { ChildMouseEvent } from '../fsm-draw-surface/fsm-draw-surface.component'
   styleUrls: ['./fsm-draw-state.component.css']
 })
 export class FsmDrawStateComponent {
+  // public variables
   public static stateRadius = 30;
+
+  // Input variables
   @Input() state: FsmState;
   @Input() selected: boolean;
+  // Output events
   @Output() stateclick: EventEmitter<ChildMouseEvent> = new EventEmitter<ChildMouseEvent>();
   @Output() statedblclick: EventEmitter<ChildMouseEvent> = new EventEmitter<ChildMouseEvent>();
   @Output() statecontextmenu: EventEmitter<ChildMouseEvent> = new EventEmitter<ChildMouseEvent>();
@@ -24,14 +28,20 @@ export class FsmDrawStateComponent {
   @Output() statemouseover: EventEmitter<ChildMouseEvent> = new EventEmitter<ChildMouseEvent>();
   @Output() statemouseup: EventEmitter<ChildMouseEvent> = new EventEmitter<ChildMouseEvent>();
 
+  // Properties
   get radius() { return FsmDrawStateComponent.stateRadius; }
+
   constructor() { }
 
+  // State type methods
   isStart = () => this.state.stateType === StateTypes.START || this.state.stateType === StateTypes.STARTFINAL;
   isFinal = () => this.state.stateType === StateTypes.FINAL || this.state.stateType === StateTypes.STARTFINAL;
   isNormal = () => this.state.stateType === StateTypes.NORMAL;
+
+  // get default fill based on type, overridden in css
   getFill = () => (this.isStart() ? 'yellow' : 'white');
 
+  // State event handlers
   onClick = (evt: MouseEvent) => {
     this.stateclick.emit({ srcEvent: evt, child: this.state, type: 'state' }); evt.stopPropagation(); return false;
   }
