@@ -1,4 +1,4 @@
-import { AlertModalComponent } from './../../../../reusable/alert-modal/alert-modal/alert-modal.component';
+import { AlertModalComponent, AlertModalResult } from './../../../../reusable/alert-modal/alert-modal/alert-modal.component';
 import { SurfaceMouseEvent } from './../fsm-draw-surface/fsm-draw-surface.component';
 import { Component, Input, ViewChild, AfterViewInit, ChangeDetectorRef } from '@angular/core';
 import { FsmTransition, FsmDataService, StateTypes, FsmState, FsmObject } from '../../../fsm-core/services/fsm-data.service';
@@ -141,48 +141,9 @@ export class FsmDrawComponent implements AfterViewInit {
 
   // FsmDrawControlbar event handlers
   onCtrlbarMode = (mode: Modes) => { this.mode = mode; if (mode !== Modes.POINTER) { this.selected = null; } };
-  onCtrlbarNew = () => {
-    this.popupFileDirty(this.newCallback);
-  }
-  newCallback(result: string) {
-    if (result === 'Yes'){
-      this.saveFile();
-      this.fsmSvc.clear();
-      this.dirty = false;
-      return;
-    }
-    if (result === 'No'){
-      this.fsmSvc.clear();
-      this.dirty = false;
-      return;
-    }
-  }
-
-  onCtrlbarLoad = () => {
-    this.popupFileDirty(this.loadCallback);
-
-  }
-
-  loadCallback(result: string) {
-    console.log(result);
-    if (result === 'Yes'){
-      this.saveFile();
-      this.loadFile();
-      this.dirty = false;
-      return;
-    }
-    if (result === 'No'){
-      this.loadFile();
-      this.dirty = false;
-      return;
-    }
-  }
-
-  onCtrlbarSave = () => {
-    if (this.saveFile()) {
-      this.dirty = false;
-    }
-  }
+  onCtrlbarNew = () => this.popupFileDirty('clear');
+  onCtrlbarLoad = () => this.popupFileDirty('loadFile');
+  onCtrlbarSave = () => this.saveFile();
   onCtrlbarValidate = () => console.log('validate');
   onCtrlbarZoom = (direction) => {
     const deltaPercent = 10 * direction * -1;
@@ -226,13 +187,25 @@ export class FsmDrawComponent implements AfterViewInit {
   }
 
   // UI Action methods
-  popupFileDirty(callback: any): boolean {
-    // popup warning ##########
-    if (!this.dirty) { return true; }
-  this.popup.open('The file has changed.  \r\nWould you like to save the FSM to a file?', 'Warning',
-    ['Yes', 'No', 'Cancel'], callback);
-    let result: string;
-    result = 'No';
+  popupFileDirty(callback: string) {
+    if (this.dirty) {
+      this.popup.open('The file has changed.  \r\nWould you like to save the FSM to a file?', 'Warning',
+        ['Yes', 'No', 'Cancel'],  callback);
+      return;
+    }
+    this[callback]();
+  }
+
+  onmodalclose(result: AlertModalResult) {
+    if (result.result === 'Yes') {
+      this.saveFile();
+      if (result.callback){this[result.callback]();}
+      return;
+    }
+    if (result.result === 'No') {
+      if (result.callback){this[result.callback]();}
+      return;
+    }
   }
 
   // Helper Methods
@@ -248,11 +221,18 @@ export class FsmDrawComponent implements AfterViewInit {
     this.props.refresh();
   }
 
-  saveFile(): boolean {
-    return false;
+  saveFile() {
+    console.log('save');
+    this.dirty = false;
   }
 
-  loadFile(): boolean {
-    return true;
+  loadFile() {
+    console.log('load');
+    this.dirty = false;
+  }
+
+  clear() {
+    this.fsmSvc.clear();
+    this.dirty = false;
   }
 }
