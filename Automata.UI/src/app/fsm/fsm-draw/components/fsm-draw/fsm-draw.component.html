@@ -11,9 +11,9 @@
               <svg:g app-fsm-draw-transition [transition]='item' [selected]='selected && selected===item' />
             </ng-template>
             <ng-template [ngIf]='transitionSelectedState'>
-                <svg:g app-fsm-draw-transition [transition]='startTransition' />
-              </ng-template>
-              <ng-template ngFor let-item [ngForOf]='fsmSvc.fsmStates'>
+              <svg:g app-fsm-draw-transition [transition]='startTransition' />
+            </ng-template>
+            <ng-template ngFor let-item [ngForOf]='fsmSvc.fsmStates'>
               <svg:g app-fsm-draw-state [state]='item' [selected]='selected && selected===item' />
             </ng-template>
           </app-fsm-draw-surface>
@@ -21,12 +21,12 @@
       </div>
     </div>
     <div *ngIf='!readonly' class='col-md-3' style='padding:0'>
-        <app-fsm-draw-props [object]='selected'></app-fsm-draw-props>
+      <app-fsm-draw-props [object]='selected'></app-fsm-draw-props>
     </div>
   </div>
   <div #cbar style='position: absolute;bottom:0;left:1px;right:1px;'>
-    <app-fsm-draw-controlbar [readonly]='readonly' (newfile)='onCtrlbarNew()' (loadfile)='onCtrlbarLoad()' (savefile)='onCtrlbarSave()' (mode)='onCtrlbarMode($event)'
-    (validate)='onCtrlbarValidate()' (zoom)='onCtrlbarZoom($event)'></app-fsm-draw-controlbar>
+    <app-fsm-draw-controlbar [readonly]='readonly' (newfile)='onCtrlbarNew()' (loadfile)='onCtrlbarLoad()' (savefile)='onCtrlbarSave()'
+      (mode)='onCtrlbarMode($event)' (validate)='onCtrlbarValidate()' (zoom)='onCtrlbarZoom($event)'></app-fsm-draw-controlbar>
   </div>
 </div>
 

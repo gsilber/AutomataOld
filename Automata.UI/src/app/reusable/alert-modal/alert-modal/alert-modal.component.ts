@@ -1,7 +1,7 @@
 import { Component, OnInit, ViewChild, ElementRef, Output, EventEmitter } from '@angular/core';
 import { NgbModal, ModalDismissReasons, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 
-export class AlertModalResult{
+export class AlertModalResult {
   callback: string;
   result: string;
 }
