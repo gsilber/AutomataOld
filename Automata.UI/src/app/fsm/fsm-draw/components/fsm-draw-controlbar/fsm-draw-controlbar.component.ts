@@ -14,7 +14,9 @@ export class FsmDrawControlbarComponent implements OnInit {
   // output event emitters
   @Output() mode: EventEmitter<Modes> = new EventEmitter<Modes>();
   @Output() zoom: EventEmitter<number> = new EventEmitter<number>();
-  @Output() clear: EventEmitter<boolean> = new EventEmitter<boolean>();
+  @Output() newfile: EventEmitter<boolean> = new EventEmitter<boolean>();
+  @Output() loadfile: EventEmitter<boolean> = new EventEmitter<boolean>();
+  @Output() savefile: EventEmitter<boolean> = new EventEmitter<boolean>();
   @Output() validate: EventEmitter<boolean> = new EventEmitter<boolean>();
   @Output() help: EventEmitter<boolean> = new EventEmitter<boolean>();
 
@@ -27,7 +29,7 @@ export class FsmDrawControlbarComponent implements OnInit {
   ngOnInit() {
     this.imode = Modes.POINTER;
     this.mode.emit(Modes.POINTER);
-    this.clear.emit(true);
+    this.newfile.emit(true);
   }
 
   // public method to allow external interface to change mode
@@ -38,7 +40,8 @@ export class FsmDrawControlbarComponent implements OnInit {
   // Local Event Handlers
   onModeChange = (mode) => { this.imode = mode; this.mode.emit(mode); return false; };
   onZoom = (direction) => { this.zoom.emit(direction); return false; };
-  onClear = () => { this.clear.emit(true); return false; };
+  onNew = () => { this.newfile.emit(true); return false; };
+  onLoad = () => { this.loadfile.emit(true); return false; };
+  onSave = () => { this.savefile.emit(true); return false; };
   onValidate = () => { this.validate.emit(true); return false; };
-  onHelp = () => { this.help.emit(true); return false; };
 }

@@ -41,27 +41,32 @@
     </ul>
   </div>
   <div class='border'>
-    <div class='fas ctrlBarGroupHeader border-bottom'>Tools</div>
+    <div class='fas ctrlBarGroupHeader border-bottom'>Help</div>
     <ul class="nav nav-pills">
 
-      <li *ngIf='!readonly' class="nav-item" (click)='onClear()' ngbTooltip='Clear Canvas' placement='top'>
+      <li *ngIf='!readonly' class="nav-item" (click)='onNew()' ngbTooltip='New FSM' placement='top'>
         <a href='' class="nav-link">
-          <span class="fas fa-cut"></span>
+          <span class="fas fa-file"></span>
         </a>
       </li>
-      <li class="nav-item" (click)='onValidate()' ngbTooltip='Validate Automata' placement='top'>
+      <li *ngIf='!readonly' class="nav-item" (click)='onLoad()' ngbTooltip='Open FSM' placement='top'>
         <a href='' class="nav-link">
-          <span class="fas fa-check"></span>
+          <span class="fas fa-folder-open"></span>
+        </a>
+      </li>
+      <li *ngIf='!readonly' class="nav-item" (click)='onSave()' ngbTooltip='Save FSM' placement='top'>
+        <a href='' class="nav-link">
+          <span class="fas fa-save"></span>
         </a>
       </li>
     </ul>
   </div>
   <div class='border'>
-    <div class='fas ctrlBarGroupHeader border-bottom'>Help</div>
+    <div class='fas ctrlBarGroupHeader border-bottom'>Check</div>
     <ul class='nav nav-pills'>
-      <li class="nav-item" (click)='onHelp()' ngbTooltip='Help' placement='top'>
+      <li class="nav-item" ngbTooltip='Validate Automata' placement='top' >
         <a href='' class="nav-link">
-          <span class="fas fa-question"></span>
+          <span class="fas fa-check" ></span>
         </a>
       </li>
     </ul>

@@ -25,9 +25,8 @@
     </div>
   </div>
   <div #cbar style='position: absolute;bottom:0;left:1px;right:1px;'>
-    <app-fsm-draw-controlbar [readonly]='readonly' (clear)='onCtrlbarClear()' (help)='onCtrlbarHelp()' (mode)='onCtrlbarMode($event)'
-      (validate)='onCtrlbarValidate()' (zoom)='onCtrlbarZoom($event)'>
-    </app-fsm-draw-controlbar>
+    <app-fsm-draw-controlbar [readonly]='readonly' (newfile)='onCtrlbarNew()' (loadfile)='onCtrlbarLoad()' (savefile)='onCtrlbarSave()' (mode)='onCtrlbarMode($event)'
+    (validate)='onCtrlbarValidate()' (zoom)='onCtrlbarZoom($event)'></app-fsm-draw-controlbar>
   </div>
 </div>
 
@@ -51,3 +50,4 @@
     Delete
   </app-context-menu-item>
 </app-context-menu>
+<app-alert-modal></app-alert-modal>

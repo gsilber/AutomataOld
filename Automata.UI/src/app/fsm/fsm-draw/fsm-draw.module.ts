@@ -1,3 +1,4 @@
+import { AlertModalModule } from './../../reusable/alert-modal/alert-modal.module';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
@@ -15,9 +16,11 @@ import { FormsModule } from '@angular/forms';
     CommonModule,
     NgbModule,
     ContextMenuModule,
+    AlertModalModule,
     FormsModule
   ],
   exports: [FsmDrawComponent],
-  declarations: [FsmDrawComponent, FsmDrawControlbarComponent, FsmDrawStateComponent, FsmDrawTransitionComponent, FsmDrawSurfaceComponent, FsmDrawPropsComponent]
+  declarations: [FsmDrawComponent, FsmDrawControlbarComponent, FsmDrawStateComponent,
+    FsmDrawTransitionComponent, FsmDrawSurfaceComponent, FsmDrawPropsComponent]
 })
 export class FsmDrawModule { }

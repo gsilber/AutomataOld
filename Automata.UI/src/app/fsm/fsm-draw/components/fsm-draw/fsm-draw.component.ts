@@ -1,3 +1,4 @@
+import { AlertModalComponent } from './../../../../reusable/alert-modal/alert-modal/alert-modal.component';
 import { SurfaceMouseEvent } from './../fsm-draw-surface/fsm-draw-surface.component';
 import { Component, Input, ViewChild, AfterViewInit, ChangeDetectorRef } from '@angular/core';
 import { FsmTransition, FsmDataService, StateTypes, FsmState, FsmObject } from '../../../fsm-core/services/fsm-data.service';
@@ -19,6 +20,7 @@ export class FsmDrawComponent implements AfterViewInit {
   mouseX: number;
   mouseY: number;
   mouseHover: FsmObject;
+  dirty = false;
 
   // private variables
   private _zoomPercent = 100.0;
@@ -30,6 +32,7 @@ export class FsmDrawComponent implements AfterViewInit {
   // dom components
   @ViewChild(FsmDrawPropsComponent) props: FsmDrawPropsComponent;
   @ViewChild(FsmDrawControlbarComponent) ctrlBar: FsmDrawControlbarComponent;
+  @ViewChild(AlertModalComponent) popup: AlertModalComponent;
 
   // properties
   get zoomPercent() { return this._zoomPercent; }
@@ -66,6 +69,7 @@ export class FsmDrawComponent implements AfterViewInit {
     if (this.mode === Modes.STATE && evt.type === 'surface') {
       this.ctrlBar.setMode(Modes.POINTER);
       this.selectObject(this.fsmSvc.addDefaultState(evt.surfaceX, evt.surfaceY));
+      this.dirty = true;
     } else {
       if (this.mode === Modes.TRANSITION && evt.type === 'state' && !this.transitionSelectedState) {
         // start a transition
@@ -74,6 +78,7 @@ export class FsmDrawComponent implements AfterViewInit {
         if (this.mode === Modes.TRANSITION && evt.type === 'state' && this.transitionSelectedState) {
           // end transition
           this.selectObject(this.fsmSvc.addTransition(this.transitionSelectedState, evt.child as FsmState));
+          this.dirty = true;
           this.ctrlBar.setMode(Modes.POINTER);
           this.transitionSelectedState = null;
         } else { if (this.mode === 'transition' && evt.type !== 'state') { this.transitionSelectedState = null; } }
@@ -102,6 +107,7 @@ export class FsmDrawComponent implements AfterViewInit {
       this.selected.type === 'state') {
       (this.selected as FsmState).x = evt.surfaceX;
       (this.selected as FsmState).y = evt.surfaceY;
+      this.dirty = true;
     }
     if (this.mode === Modes.POINTER &&
       evt.srcEvent.buttons === 1 &&
@@ -121,7 +127,7 @@ export class FsmDrawComponent implements AfterViewInit {
         // this is a hack, since we are using control point, we need to scale back so the mouse is actually near the line.
         s.rotation = d * -1 - d * .8;
       }
-
+      this.dirty = true;
     }
   }
 
@@ -130,14 +136,53 @@ export class FsmDrawComponent implements AfterViewInit {
     if (this.readonly || evt.srcEvent.which !== 1) { return false; }
     if (this.mode === Modes.POINTER) {
       if (evt.type === 'surface') { this.selected = null; } else { this.selectObject(evt.child); }
-
     }
   }
 
   // FsmDrawControlbar event handlers
   onCtrlbarMode = (mode: Modes) => { this.mode = mode; if (mode !== Modes.POINTER) { this.selected = null; } };
-  onCtrlbarClear = () => this.fsmSvc.clear();
-  onCtrlbarHelp = () => console.log('help');
+  onCtrlbarNew = () => {
+    this.popupFileDirty(this.newCallback);
+  }
+  newCallback(result: string) {
+    if (result === 'Yes'){
+      this.saveFile();
+      this.fsmSvc.clear();
+      this.dirty = false;
+      return;
+    }
+    if (result === 'No'){
+      this.fsmSvc.clear();
+      this.dirty = false;
+      return;
+    }
+  }
+
+  onCtrlbarLoad = () => {
+    this.popupFileDirty(this.loadCallback);
+
+  }
+
+  loadCallback(result: string) {
+    console.log(result);
+    if (result === 'Yes'){
+      this.saveFile();
+      this.loadFile();
+      this.dirty = false;
+      return;
+    }
+    if (result === 'No'){
+      this.loadFile();
+      this.dirty = false;
+      return;
+    }
+  }
+
+  onCtrlbarSave = () => {
+    if (this.saveFile()) {
+      this.dirty = false;
+    }
+  }
   onCtrlbarValidate = () => console.log('validate');
   onCtrlbarZoom = (direction) => {
     const deltaPercent = 10 * direction * -1;
@@ -155,16 +200,19 @@ export class FsmDrawComponent implements AfterViewInit {
     this.selected = null;
     this.props.cancel();
     this.refreshProps();
+    this.dirty = true;
   }
   onStateContextClickStart = (evt) => {
     FsmDataService.toggleStateValue(this.stateContextOpen.obj, StateTypes.START);
     this.stateContextOpen = null;
     this.refreshProps();
+    this.dirty = true;
   }
   onStateContextClickFinal = (evt) => {
     FsmDataService.toggleStateValue(this.stateContextOpen.obj, StateTypes.FINAL);
     this.stateContextOpen = null;
     this.refreshProps();
+    this.dirty = true;
   }
 
   onTransContextClickDelete = (evt) => {
@@ -174,6 +222,17 @@ export class FsmDrawComponent implements AfterViewInit {
     this.selected = null;
     this.props.cancel();
     this.refreshProps();
+    this.dirty = true;
+  }
+
+  // UI Action methods
+  popupFileDirty(callback: any): boolean {
+    // popup warning ##########
+    if (!this.dirty) { return true; }
+  this.popup.open('The file has changed.  \r\nWould you like to save the FSM to a file?', 'Warning',
+    ['Yes', 'No', 'Cancel'], callback);
+    let result: string;
+    result = 'No';
   }
 
   // Helper Methods
@@ -189,4 +248,11 @@ export class FsmDrawComponent implements AfterViewInit {
     this.props.refresh();
   }
 
+  saveFile(): boolean {
+    return false;
+  }
+
+  loadFile(): boolean {
+    return true;
+  }
 }
