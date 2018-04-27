@@ -228,8 +228,7 @@ export class FsmDrawComponent implements AfterViewInit {
 
   exportImage() {
     if (this.fsmSvc.fsmStates.length > 0) {
-      const b = new Blob([this.surface.exportAsSvg()], { type: 'image/svg+xml' });
-      this.fileIO.download(b, 'save.svg');
+      this.surface.exportAsPng(this.fsmSvc.maxPos());
     }
   }
   saveFile() {
