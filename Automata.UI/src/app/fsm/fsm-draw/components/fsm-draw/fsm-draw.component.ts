@@ -147,7 +147,7 @@ export class FsmDrawComponent implements AfterViewInit {
   onCtrlbarNew = () => this.popupFileDirty('clear');
   onCtrlbarLoad = () => this.popupFileDirty('loadFile');
   onCtrlbarSave = () => this.saveFile();
-  onCtrlbarValidate = () => console.log('validate');
+  onCtrlbarValidate = () => this.validate();
   onCtrlbarZoom = (direction) => {
     const deltaPercent = 10 * direction * -1;
     this.zoomPercent -= deltaPercent;
@@ -262,5 +262,12 @@ export class FsmDrawComponent implements AfterViewInit {
   clear() {
     this.fsmSvc.clear();
     this.dirty = false;
+  }
+  validate(){
+    if (this.fsmSvc.machineValid){
+      this.popup.open('The machine is not valid', 'Error');
+    } else {
+      this.popup.open('The machine is valid', 'Success');
+    }
   }
 }
