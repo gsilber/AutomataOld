@@ -260,9 +260,10 @@ export class FsmDrawComponent implements AfterViewInit {
   }
   validate() {
     if (this.fsmSvc.machineValid) {
-      this.popup.open('The machine is not valid', 'Error');
+      this.popup.open('The machine is valid', 'FSM Status');
     } else {
-      this.popup.open('The machine is valid', 'Success');
+      this.popup.open('The machine is not valid', 'FSM Status');
     }
+    return false;
   }
 }
