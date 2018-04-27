@@ -31,6 +31,9 @@ export class FsmDataService {
   public fsmTransitions: FsmTransition[] = [];
   public defaultStateLabel = 'q';
 
+  public get machineValid() {
+    return true;
+  }
   constructor() {
   }
 

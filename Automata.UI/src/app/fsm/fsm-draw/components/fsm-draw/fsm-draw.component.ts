@@ -1,6 +1,6 @@
 import { AlertModalComponent, AlertModalResult } from './../../../../reusable/alert-modal/alert-modal/alert-modal.component';
 import { SurfaceMouseEvent } from './../fsm-draw-surface/fsm-draw-surface.component';
-import { Component, Input, ViewChild, AfterViewInit, ChangeDetectorRef } from '@angular/core';
+import { Component, Input, ViewChild, AfterViewInit, ChangeDetectorRef, ElementRef } from '@angular/core';
 import { FsmTransition, FsmDataService, StateTypes, FsmState, FsmObject } from '../../../fsm-core/services/fsm-data.service';
 import { FsmDrawPropsComponent } from '../fsm-draw-props/fsm-draw-props.component';
 import { Modes, FsmDrawControlbarComponent } from './../fsm-draw-controlbar/fsm-draw-controlbar.component';
@@ -25,6 +25,7 @@ export class FsmDrawComponent implements AfterViewInit {
   // private variables
   private _zoomPercent = 100.0;
   private mode: Modes = Modes.POINTER;
+  private dataBlob: Blob;
 
   // input variables
   @Input() readonly = false;
@@ -33,6 +34,8 @@ export class FsmDrawComponent implements AfterViewInit {
   @ViewChild(FsmDrawPropsComponent) props: FsmDrawPropsComponent;
   @ViewChild(FsmDrawControlbarComponent) ctrlBar: FsmDrawControlbarComponent;
   @ViewChild(AlertModalComponent) popup: AlertModalComponent;
+  @ViewChild('fileInput') fileInput: ElementRef;
+  @ViewChild('fileOutput') fileOutput: ElementRef;
 
   // properties
   get zoomPercent() { return this._zoomPercent; }
@@ -222,13 +225,38 @@ export class FsmDrawComponent implements AfterViewInit {
   }
 
   saveFile() {
-    console.log('save');
-    this.dirty = false;
+    if (this.fsmSvc.machineValid) {
+      const blob = new Blob([this.fsmSvc.toJson() + '\n'], { type: 'application/json' });
+      this.fileOutput.nativeElement.href = window.URL.createObjectURL(blob);
+      this.fileOutput.nativeElement.download = 'save.fsm';
+      this.fileOutput.nativeElement.click();
+      this.dirty = false;
+    } else {
+      this.popup.open('The current FSM is invalid.  Save Failed', 'Error');
+    }
   }
 
   loadFile() {
-    console.log('load');
+    this.props.cancel();
+    this.fsmSvc.clear();
+    this.fileInput.nativeElement.click();
     this.dirty = false;
+  }
+  onFileLoad(evt) {
+    const self = this;
+    if (evt.target && evt.target.files && evt.target.files.length > 0) {
+      const f = evt.target.files[0];
+      const reader = new FileReader();
+      reader.onload = (function (file) {
+        return function (e) {
+          self.fsmSvc.clear();
+          console.log(e.target.result);
+          self.fsmSvc.fromJson(e.target.result);
+        };
+      })(f);
+      reader.readAsText(f);
+
+    }
   }
 
   clear() {

@@ -107,5 +107,6 @@ export class FsmDrawPropsComponent {
     if (this.object && this.object.type === 'transition') {
       this.cancelTransitionEdit();
     }
+    this.object = null;
   }
 }
