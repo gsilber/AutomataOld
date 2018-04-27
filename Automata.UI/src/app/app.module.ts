@@ -6,11 +6,15 @@ import { NgbModule, NgbModalModule } from '@ng-bootstrap/ng-bootstrap';
 import { AppRoutingModule } from './app-routing.module';
 
 import { AppComponent } from './app.component';
+import { FsmpageComponent } from './pages/fsmpage/fsmpage.component';
+import { HeaderMenuComponent } from './components/header-menu/header-menu.component';
 
 
 @NgModule({
   declarations: [
-    AppComponent
+    AppComponent,
+    FsmpageComponent,
+    HeaderMenuComponent
   ],
   imports: [
     BrowserModule,
