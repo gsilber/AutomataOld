@@ -263,8 +263,8 @@ export class FsmDrawComponent implements AfterViewInit {
     this.fsmSvc.clear();
     this.dirty = false;
   }
-  validate(){
-    if (this.fsmSvc.machineValid){
+  validate() {
+    if (this.fsmSvc.machineValid) {
       this.popup.open('The machine is not valid', 'Error');
     } else {
       this.popup.open('The machine is valid', 'Success');
