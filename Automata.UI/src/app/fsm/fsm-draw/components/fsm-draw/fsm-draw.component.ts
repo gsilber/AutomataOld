@@ -230,7 +230,9 @@ export class FsmDrawComponent implements AfterViewInit {
       this.fileIO.download(blob, 'save.fsm');
       this.dirty = false;
     } else {
-      this.popup.open('The current FSM is invalid.  Save Failed', 'Error');
+      this.popup.open(
+        'The current FSM is invalid.  a finite state machine must have at least one start and at least one final state.',
+         'Save Failed');
     }
   }
 
