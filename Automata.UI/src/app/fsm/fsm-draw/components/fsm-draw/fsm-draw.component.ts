@@ -231,7 +231,7 @@ export class FsmDrawComponent implements AfterViewInit {
       this.dirty = false;
     } else {
       this.popup.open(
-        'The current FSM is invalid.  a finite state machine must have at least one start and at least one final state.',
+        'The current FSM is invalid.  A finite state machine must have at least one start and at least one final state.',
          'Save Failed');
     }
   }
