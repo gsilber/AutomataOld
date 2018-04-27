@@ -51,5 +51,4 @@
   </app-context-menu-item>
 </app-context-menu>
 <app-alert-modal (modalclose)='onmodalclose($event)'></app-alert-modal>
-<input #fileInput type='file' style='display:none' (change)='onFileLoad($event)' />
-<a #fileOutput></a>
+<app-file-io type='text' (file)='onIoFileUpload($event)'> </app-file-io>
