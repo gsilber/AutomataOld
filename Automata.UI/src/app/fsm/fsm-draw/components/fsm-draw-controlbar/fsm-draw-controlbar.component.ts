@@ -17,6 +17,7 @@ export class FsmDrawControlbarComponent implements OnInit {
   @Output() newfile: EventEmitter<boolean> = new EventEmitter<boolean>();
   @Output() loadfile: EventEmitter<boolean> = new EventEmitter<boolean>();
   @Output() savefile: EventEmitter<boolean> = new EventEmitter<boolean>();
+  @Output() saveimage: EventEmitter<boolean> = new EventEmitter<boolean>();
   @Output() validate: EventEmitter<boolean> = new EventEmitter<boolean>();
   @Output() help: EventEmitter<boolean> = new EventEmitter<boolean>();
 
@@ -43,5 +44,6 @@ export class FsmDrawControlbarComponent implements OnInit {
   onNew = () => { this.newfile.emit(true); return false; };
   onLoad = () => { this.loadfile.emit(true); return false; };
   onSave = () => { this.savefile.emit(true); return false; };
+  onExport = () => { this.saveimage.emit(true); return false; };
   onValidate = () => { this.validate.emit(true); return false; };
 }

@@ -1,6 +1,6 @@
 import { File, FileIoComponent } from './../../../../reusable/file-io/file-io/file-io.component';
 import { AlertModalComponent, AlertModalResult } from './../../../../reusable/alert-modal/alert-modal/alert-modal.component';
-import { SurfaceMouseEvent } from './../fsm-draw-surface/fsm-draw-surface.component';
+import { SurfaceMouseEvent, FsmDrawSurfaceComponent } from './../fsm-draw-surface/fsm-draw-surface.component';
 import { Component, Input, ViewChild, AfterViewInit, ChangeDetectorRef, ElementRef } from '@angular/core';
 import { FsmTransition, FsmDataService, StateTypes, FsmState, FsmObject } from '../../../fsm-core/services/fsm-data.service';
 import { FsmDrawPropsComponent } from '../fsm-draw-props/fsm-draw-props.component';
@@ -32,6 +32,7 @@ export class FsmDrawComponent implements AfterViewInit {
   @Input() readonly = false;
 
   // dom components
+  @ViewChild(FsmDrawSurfaceComponent) surface: FsmDrawSurfaceComponent;
   @ViewChild(FsmDrawPropsComponent) props: FsmDrawPropsComponent;
   @ViewChild(FsmDrawControlbarComponent) ctrlBar: FsmDrawControlbarComponent;
   @ViewChild(AlertModalComponent) popup: AlertModalComponent;
@@ -147,6 +148,7 @@ export class FsmDrawComponent implements AfterViewInit {
   onCtrlbarNew = () => this.popupFileDirty('clear');
   onCtrlbarLoad = () => this.popupFileDirty('loadFile');
   onCtrlbarSave = () => this.saveFile();
+  onCtrlbarExport = () => this.exportImage();
   onCtrlbarValidate = () => this.validate();
   onCtrlbarZoom = (direction) => {
     const deltaPercent = 10 * direction * -1;
@@ -224,6 +226,12 @@ export class FsmDrawComponent implements AfterViewInit {
     this.props.refresh();
   }
 
+  exportImage() {
+    if (this.fsmSvc.fsmStates.length > 0) {
+      const b = new Blob([this.surface.exportAsSvg()], { type: 'image/svg+xml' });
+      this.fileIO.download(b, 'save.svg');
+    }
+  }
   saveFile() {
     if (this.fsmSvc.machineValid) {
       const blob = new Blob([this.fsmSvc.toJson() + '\n'], { type: 'application/json' });
@@ -232,7 +240,7 @@ export class FsmDrawComponent implements AfterViewInit {
     } else {
       this.popup.open(
         'The current FSM is invalid.  A finite state machine must have at least one start and at least one final state.',
-         'Save Failed');
+        'Save Failed');
     }
   }
 

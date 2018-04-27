@@ -143,6 +143,15 @@ export class FsmDataService {
   }
 
   // public methods for states
+  public maxPos = () => {
+    let maxX = 0;
+    let maxY = 0;
+    this.fsmStates.forEach(state => {
+      if (state.x > maxX) { maxX = state.x; }
+      if (state.y > maxY) { maxY = state.y; }
+    });
+    return { x: maxX, y: maxY };
+  }
   public addState = (state: FsmState): FsmState => {
     this.fsmStates.push(state);
     return state;

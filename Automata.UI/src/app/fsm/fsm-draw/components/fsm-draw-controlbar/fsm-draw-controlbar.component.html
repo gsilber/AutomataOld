@@ -41,7 +41,7 @@
     </ul>
   </div>
   <div class='border'>
-    <div class='fas ctrlBarGroupHeader border-bottom'>Help</div>
+    <div class='fas ctrlBarGroupHeader border-bottom'>File</div>
     <ul class="nav nav-pills">
 
       <li *ngIf='!readonly' class="nav-item" (click)='onNew()' ngbTooltip='New FSM' placement='top'>
@@ -49,7 +49,7 @@
           <span class="fas fa-file"></span>
         </a>
       </li>
-      <li *ngIf='!readonly' class="nav-item" (click)='onLoad()' ngbTooltip='Open FSM' placement='top'>
+      <li class="nav-item" (click)='onLoad()' ngbTooltip='Open FSM' placement='top'>
         <a href='' class="nav-link">
           <span class="fas fa-folder-open"></span>
         </a>
@@ -57,6 +57,11 @@
       <li *ngIf='!readonly' class="nav-item" (click)='onSave()' ngbTooltip='Save FSM' placement='top'>
         <a href='' class="nav-link">
           <span class="fas fa-save"></span>
+        </a>
+      </li>
+      <li class="nav-item" (click)='onExport()' ngbTooltip='Export FSM to SVG File' placement='top'>
+        <a href='' class="nav-link">
+          <span class="fas fa-image"></span>
         </a>
       </li>
     </ul>
