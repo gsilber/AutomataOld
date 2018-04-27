@@ -204,7 +204,9 @@ export class FsmDrawComponent implements AfterViewInit {
   onmodalclose(result: AlertModalResult) {
     if (result.result === 'Yes') {
       this.saveFile();
-      if (result.callback) { this[result.callback](); }
+      if (this.fsmSvc.machineValid) {
+        if (result.callback) { this[result.callback](); }
+      }
       return;
     }
     if (result.result === 'No') {
@@ -238,7 +240,7 @@ export class FsmDrawComponent implements AfterViewInit {
       this.dirty = false;
     } else {
       this.popup.open(
-        'The current FSM is invalid.  A finite state machine must have at least one start and at least one final state.',
+        'The current FSM is invalid.  A finite state machine must have at least one start and at least one final state and one transition.',
         'Save Failed');
     }
   }

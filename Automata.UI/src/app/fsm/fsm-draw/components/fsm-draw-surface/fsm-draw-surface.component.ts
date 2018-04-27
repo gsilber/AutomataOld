@@ -2,7 +2,7 @@ import { FsmObject, FsmState } from './../../../fsm-core/services/fsm-data.servi
 import { FsmDrawTransitionComponent } from './../fsm-draw-transition/fsm-draw-transition.component';
 import { FsmDrawStateComponent } from './../fsm-draw-state/fsm-draw-state.component';
 import { Output, Component, QueryList, EventEmitter, ElementRef, ContentChildren, AfterViewInit, Renderer, Input } from '@angular/core';
-import { saveSvgAsPng } from '../../../../../../extras/saveSvgAsPng/saveSvgAsPng';
+import { saveSvgAsPng } from '../../../../../extras/saveSvgAsPng/saveSvgAsPng';
 // Helper classes
 export class ChildMouseEvent {
   child: any;
