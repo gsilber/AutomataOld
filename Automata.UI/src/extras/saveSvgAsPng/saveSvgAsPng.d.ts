@@ -1,0 +1,1 @@
+export declare function saveSvgAsPng(el, name, options);
