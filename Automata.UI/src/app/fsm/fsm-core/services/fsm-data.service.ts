@@ -32,8 +32,16 @@ export class FsmDataService {
   public defaultStateLabel = 'q';
 
   public get machineValid() {
+    // does it at least one start and one final state.  Everything else is handled by individual inserts
+    if (this.fsmStates.filter(item => item.stateType === StateTypes.START || item.stateType === StateTypes.STARTFINAL).length === 0) {
+      return false;
+    }
+    if (this.fsmStates.filter(item => item.stateType === StateTypes.FINAL || item.stateType === StateTypes.STARTFINAL).length === 0) {
+      return false;
+    }
     return true;
   }
+  
   constructor() {
   }
 
