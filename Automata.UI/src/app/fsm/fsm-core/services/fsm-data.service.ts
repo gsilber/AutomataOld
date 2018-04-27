@@ -190,7 +190,8 @@ export class FsmDataService {
     // check to make sure it is a , delimited list of single characters (escapes ok) or ranges like a-z,A-Z,0-9,b,c,\r,\n
     // with escapes make sure they are legal, with ranges make sure ascii value of first is less than second and include all
     // chars between ascii values
-    return '';
+    const result = /^(([\s\S]|[\s\S]-[\s\S])(\,([\s\S]|[\s\S]-[\s\S]))*)$/g.test(transition.charactersAccepted);
+    return (result ? '' : 'Invalid accept set');
   }
 
   public addTransition = (source: FsmState, dest: FsmState): FsmTransition => {

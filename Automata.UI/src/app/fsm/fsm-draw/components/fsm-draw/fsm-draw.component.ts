@@ -190,7 +190,7 @@ export class FsmDrawComponent implements AfterViewInit {
   popupFileDirty(callback: string) {
     if (this.dirty) {
       this.popup.open('The file has changed.  \r\nWould you like to save the FSM to a file?', 'Warning',
-        ['Yes', 'No', 'Cancel'],  callback);
+        ['Yes', 'No', 'Cancel'], callback);
       return;
     }
     this[callback]();
@@ -199,11 +199,11 @@ export class FsmDrawComponent implements AfterViewInit {
   onmodalclose(result: AlertModalResult) {
     if (result.result === 'Yes') {
       this.saveFile();
-      if (result.callback){this[result.callback]();}
+      if (result.callback) { this[result.callback](); }
       return;
     }
     if (result.result === 'No') {
-      if (result.callback){this[result.callback]();}
+      if (result.callback) { this[result.callback](); }
       return;
     }
   }

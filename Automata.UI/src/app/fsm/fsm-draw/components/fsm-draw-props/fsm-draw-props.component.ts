@@ -87,7 +87,6 @@ export class FsmDrawPropsComponent {
   // transition property page event handlers
   updateTransitionEdit = () => {
     this.iCharAccepted = this.transition.charactersAccepted;
-    this.itype = this.state.stateType;
   }
   cancelTransitionEdit = () => {
     this.transition.charactersAccepted = this.iCharAccepted;
