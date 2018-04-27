@@ -250,6 +250,7 @@ export class FsmDataService {
   public toJson() {
     return JSON.stringify(this.fsmTransitions);
   }
+
   public fromJson(data: string) {
     this.fsmStates = [];
     this.fsmTransitions = [];
