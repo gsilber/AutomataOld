@@ -57,3 +57,4 @@ typings/
 # dotenv environment variables file
 .env
 
+Automata.UI/extras/saveSvgAsPng
