@@ -15,6 +15,7 @@ export enum FileTypes { TEXT = 'text', URL = 'url', BINARY = 'binary', ARRAY = '
 export class FileIoComponent implements OnInit {
 
   @Output() file: EventEmitter<File> = new EventEmitter<File>();
+  @Output() fileprogress: EventEmitter<number> = new EventEmitter<number>();
   @Input() type: FileTypes = FileTypes.TEXT;
   @ViewChild('fileInput') fileInput: ElementRef;
   @ViewChild('fileOutput') fileOutput: ElementRef;
@@ -29,6 +30,11 @@ export class FileIoComponent implements OnInit {
     if (evt.target && evt.target.files && evt.target.files.length > 0) {
       const f = evt.target.files[0];
       const reader = new FileReader();
+      reader.onprogress = function (progevt) {
+        if (evt.lengthComputable) {
+          self.fileprogress.emit(progevt.loaded / progevt.total);
+        }
+      };
       reader.onload = (function (file) {
         return function (e) {
           self.file.emit({ name: f.name, size: f.size, contents: e.target.result });
