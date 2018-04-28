@@ -145,7 +145,7 @@ export class FsmDataService {
   }
 
   // public methods for states
-  public getStates(deterministic = false){
+  public getStates(deterministic = false) {
     return this._fsmStates;
   }
   public maxPos = () => {
@@ -210,7 +210,7 @@ export class FsmDataService {
   }
 
   // public methods for transitions
-  public getTransitions(deterministic=false){
+  public getTransitions(deterministic = false) {
     return this._fsmTransitions;
   }
   public validateAcceptChars(transition: FsmTransition) {
