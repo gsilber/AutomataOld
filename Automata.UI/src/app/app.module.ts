@@ -8,13 +8,17 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { FsmpageComponent } from './pages/fsmpage/fsmpage.component';
 import { HeaderMenuComponent } from './components/header-menu/header-menu.component';
+import { PdapageComponent } from './pages/pdapage/pdapage.component';
+import { TuringpageComponent } from './pages/turingpage/turingpage.component';
 
 
 @NgModule({
   declarations: [
     AppComponent,
     FsmpageComponent,
-    HeaderMenuComponent
+    HeaderMenuComponent,
+    PdapageComponent,
+    TuringpageComponent
   ],
   imports: [
     BrowserModule,
