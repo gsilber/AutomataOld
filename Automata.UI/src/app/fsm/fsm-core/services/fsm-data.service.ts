@@ -12,6 +12,7 @@ export class FsmState extends FsmObject {
   public y: number;
   public stateIndex: number;
   public name: string;
+  public transitions: FsmTransition[] = [];
   public stateType: StateTypes = StateTypes.NORMAL;
 }
 
@@ -27,19 +28,19 @@ export class FsmTransition extends FsmObject {
 @Injectable()
 export class FsmDataService {
   // public member variables
-  public fsmStates: FsmState[] = [];
-  public fsmTransitions: FsmTransition[] = [];
+  private _fsmStates: FsmState[] = [];
+  private _fsmTransitions: FsmTransition[] = [];
   public defaultStateLabel = 'q';
 
   public get machineValid() {
     // does it at least one start and one final state.  Everything else is handled by individual inserts
-    if (this.fsmStates.filter(item => item.stateType === StateTypes.START || item.stateType === StateTypes.STARTFINAL).length === 0) {
+    if (this._fsmStates.filter(item => item.stateType === StateTypes.START || item.stateType === StateTypes.STARTFINAL).length === 0) {
       return false;
     }
-    if (this.fsmStates.filter(item => item.stateType === StateTypes.FINAL || item.stateType === StateTypes.STARTFINAL).length === 0) {
+    if (this._fsmStates.filter(item => item.stateType === StateTypes.FINAL || item.stateType === StateTypes.STARTFINAL).length === 0) {
       return false;
     }
-    if (this.fsmTransitions.length === 0) { return false; }
+    if (this._fsmTransitions.length === 0) { return false; }
     return true;
   }
 
@@ -144,24 +145,27 @@ export class FsmDataService {
   }
 
   // public methods for states
+  public getStates(deterministic = false){
+    return this._fsmStates;
+  }
   public maxPos = () => {
     let maxX = 0;
     let maxY = 0;
-    this.fsmStates.forEach(state => {
+    this._fsmStates.forEach(state => {
       if (state.x > maxX) { maxX = state.x; }
       if (state.y > maxY) { maxY = state.y; }
     });
     return { x: maxX, y: maxY };
   }
   public addState = (state: FsmState): FsmState => {
-    this.fsmStates.push(state);
+    this._fsmStates.push(state);
     return state;
   }
 
   public addDefaultState = (x: number, y: number): FsmState => {
     let count = 0;
     const objCheck = {};
-    for (const state of this.fsmStates) {
+    for (const state of this._fsmStates) {
       count++;
       objCheck[state.stateIndex] = state;
     }
@@ -180,6 +184,7 @@ export class FsmDataService {
       x: x,
       y: y,
       stateType: StateTypes.NORMAL,
+      transitions: [],
       type: 'state'
     });
   }
@@ -189,21 +194,25 @@ export class FsmDataService {
     if (state.name.startsWith(this.defaultStateLabel) && state.name !== this.defaultStateLabel + state.stateIndex) {
       return 'Names beginning with ' + this.defaultStateLabel + ' are reserved';
     }
-    for (const item of this.fsmStates) {
+    for (const item of this._fsmStates) {
       if (item !== state && item.name === state.name) { return 'Duplicate state name'; }
     }
     return '';
   }
 
   public removeState(state: FsmState) {
-    this.removeTransitionsForState(state);
-    const index = this.fsmStates.indexOf(state);
+    this._fsmTransitions = this._fsmTransitions.filter(
+      function (item) { return item.sourceState !== state && item.destState !== state; });
+    const index = this._fsmStates.indexOf(state);
     if (index > -1) {
-      this.fsmStates.splice(index, 1);
+      this._fsmStates.splice(index, 1);
     }
   }
 
   // public methods for transitions
+  public getTransitions(deterministic=false){
+    return this._fsmTransitions;
+  }
   public validateAcceptChars(transition: FsmTransition) {
     if (transition.charactersAccepted.length === 0) { return 'Invalid accept set'; }
     // .|.-.(,[.|.-.])* need to make sure . can match all special chars or it will need to be classed.
@@ -217,12 +226,13 @@ export class FsmDataService {
 
   public addTransition = (source: FsmState, dest: FsmState): FsmTransition => {
     let trans = { sourceState: source, destState: dest, charactersAccepted: 'a', type: 'transition', rotation: 0 };
-    const problems = this.fsmTransitions.filter((item) =>
+    const problems = this._fsmTransitions.filter((item) =>
       (source === dest && item.sourceState === item.destState && item.sourceState === source) ||
       (source !== dest && item.sourceState === source && item.destState === dest)
     );
     if (problems.length === 0) {
-      this.fsmTransitions.push(trans);
+      trans.sourceState.transitions.push(trans);
+      this._fsmTransitions.push(trans);
     } else {
       trans = problems[0];
     }
@@ -230,42 +240,42 @@ export class FsmDataService {
   }
 
   public removeTransition(transition: FsmTransition) {
-    const index = this.fsmTransitions.indexOf(transition);
+    let index = transition.sourceState.transitions.indexOf(transition);
     if (index > -1) {
-      this.fsmTransitions.splice(index, 1);
+      transition.sourceState.transitions.splice(index, 1);
     }
-  }
+    index = this._fsmTransitions.indexOf(transition);
+    if (index > -1) {
+      this._fsmTransitions.splice(index, 1);
 
-  private removeTransitionsForState(state: FsmState) {
-    this.fsmTransitions = this.fsmTransitions.filter(
-      function (item) { return item.sourceState !== state && item.destState !== state; });
+    }
   }
 
   // public methods for FSM
   public clear = () => {
-    this.fsmStates = [];
-    this.fsmTransitions = [];
+    this._fsmStates = [];
+    this._fsmTransitions = [];
   }
 
   public toJson() {
-    return JSON.stringify(this.fsmTransitions);
+    return JSON.stringify(this._fsmTransitions);
   }
 
   public fromJson(data: string) {
-    this.fsmStates = [];
-    this.fsmTransitions = [];
-    this.fsmTransitions = JSON.parse(data);
-    for (const trans of this.fsmTransitions) {
+    this._fsmStates = [];
+    this._fsmTransitions = [];
+    this._fsmTransitions = JSON.parse(data);
+    for (const trans of this._fsmTransitions) {
       if (!trans.rotation) { trans.rotation = 0; }
-      let state = this.fsmStates.find(item => item.name === trans.sourceState.name);
+      let state = this._fsmStates.find(item => item.name === trans.sourceState.name);
       if (!state) {
-        this.fsmStates.push(trans.sourceState);
+        this._fsmStates.push(trans.sourceState);
       } else {
         trans.sourceState = state;
       }
-      state = this.fsmStates.find(item => item.name === trans.destState.name);
+      state = this._fsmStates.find(item => item.name === trans.destState.name);
       if (!state) {
-        this.fsmStates.push(trans.destState);
+        this._fsmStates.push(trans.destState);
       } else {
         trans.destState = state;
       }

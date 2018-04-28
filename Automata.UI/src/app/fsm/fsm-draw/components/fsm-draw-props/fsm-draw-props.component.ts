@@ -79,8 +79,8 @@ export class FsmDrawPropsComponent {
     this.state.stateType = this.itype;
   }
   deleteState = () => {
-    this.cancel();
     this._fsmSvc.removeState(this.state);
+    this.cancel();
     this.object = null;
   }
 
@@ -92,8 +92,8 @@ export class FsmDrawPropsComponent {
     this.transition.charactersAccepted = this.iCharAccepted;
   }
   deleteTransition = () => {
-    this.cancel();
     this._fsmSvc.removeTransition(this.transition);
+    this.cancel();
     this.object = null;
   }
 

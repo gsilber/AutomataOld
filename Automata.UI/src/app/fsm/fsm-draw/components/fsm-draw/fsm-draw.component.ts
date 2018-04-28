@@ -48,7 +48,10 @@ export class FsmDrawComponent implements AfterViewInit {
     }
   }
   get startTransition(): FsmTransition {
-    let dest = { x: this.mouseX, y: this.mouseY, stateIndex: 99, name: 'temp', stateType: StateTypes.NORMAL, type: 'state' };
+    let dest = {
+      x: this.mouseX, y: this.mouseY, stateIndex: 99, name: 'temp', stateType: StateTypes.NORMAL,
+      transitions: [], type: 'state'
+    };
     if (this.mouseHover && this.mouseHover.type === 'state' && this.mouseHover === this.transitionSelectedState) {
       dest = this.transitionSelectedState;
     }
@@ -136,10 +139,9 @@ export class FsmDrawComponent implements AfterViewInit {
   }
 
   onSurfaceMouseDown = (evt: SurfaceMouseEvent) => {
-    this.props.cancel();
     if (this.readonly || evt.srcEvent.which !== 1) { return false; }
     if (this.mode === Modes.POINTER) {
-      if (evt.type === 'surface') { this.selected = null; } else { this.selectObject(evt.child); }
+      if (evt.type === 'surface') {     this.props.cancel(); this.selected = null; } else { this.selectObject(evt.child); }
     }
   }
 
@@ -217,6 +219,9 @@ export class FsmDrawComponent implements AfterViewInit {
 
   // Helper Methods
 
+  getStates = (): FsmState[] => this.fsmSvc.getStates();
+  getTransitions = (): FsmTransition[] => this.fsmSvc.getTransitions();
+
   closeAllContextMenus() {
     this.stateContextOpen = null;
     this.transContextOpen = null;
@@ -229,7 +234,7 @@ export class FsmDrawComponent implements AfterViewInit {
   }
 
   exportImage() {
-    if (this.fsmSvc.fsmStates.length > 0) {
+    if (this.fsmSvc.getStates().length > 0) {
       this.surface.exportAsPng(this.fsmSvc.maxPos());
     }
   }

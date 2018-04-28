@@ -7,13 +7,13 @@
         <div class='draw-container bg-drawing' [style.height.px]='scrollsize' [style.width.px]='scrollsize'>
           <app-fsm-draw-surface [zoomPercent]='zoomPercent' (surfaceclick)='onSurfaceClick($event)' (surfacemousedown)='onSurfaceMouseDown($event)'
             (surfacemousemove)='onSurfaceMouseMove($event)' (surfacecontextmenu)='onSurfaceContextMenu($event)'>
-            <ng-template ngFor let-item [ngForOf]='fsmSvc.fsmTransitions'>
+            <ng-template ngFor let-item [ngForOf]='getTransitions()'>
               <svg:g app-fsm-draw-transition [transition]='item' [selected]='selected && selected===item' />
             </ng-template>
             <ng-template [ngIf]='transitionSelectedState'>
               <svg:g app-fsm-draw-transition [transition]='startTransition' />
             </ng-template>
-            <ng-template ngFor let-item [ngForOf]='fsmSvc.fsmStates'>
+            <ng-template ngFor let-item [ngForOf]='getStates()'>
               <svg:g app-fsm-draw-state [state]='item' [selected]='selected && selected===item' />
             </ng-template>
           </app-fsm-draw-surface>
@@ -24,9 +24,11 @@
       <app-fsm-draw-props [object]='selected'></app-fsm-draw-props>
     </div>
   </div>
-  <div #cbar style='position: absolute;bottom:0;left:1px;right:1px;'>
-    <app-fsm-draw-controlbar [readonly]='readonly' (newfile)='onCtrlbarNew()' (loadfile)='onCtrlbarLoad()' (savefile)='onCtrlbarSave()'
-      (mode)='onCtrlbarMode($event)' (validate)='onCtrlbarValidate()' (zoom)='onCtrlbarZoom($event)' (saveimage)='onCtrlbarExport()'></app-fsm-draw-controlbar>
+  <div #cbar class='bg-light' style='position: absolute;bottom:0;left:0px;right:0px;width:100%'>
+    <div  [ngClass]='{"col-md-9":!readonly,"col-md-12": readonly}' style='padding-left:0;padding-right:0' >
+      <app-fsm-draw-controlbar [readonly]='readonly' (newfile)='onCtrlbarNew()' (loadfile)='onCtrlbarLoad()' (savefile)='onCtrlbarSave()'
+        (mode)='onCtrlbarMode($event)' (validate)='onCtrlbarValidate()' (zoom)='onCtrlbarZoom($event)' (saveimage)='onCtrlbarExport()'></app-fsm-draw-controlbar>
+    </div>
   </div>
 </div>
 

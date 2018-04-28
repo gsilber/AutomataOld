@@ -1,9 +1,40 @@
-<div class='container'>
-  <div class='row'>
-      <div class='col-md-8 draw-box-holder'>
-          
-  <app-fsm-draw></app-fsm-draw>
-</div></div>
+<p>&nbsp;</p>
+<h2 class='text-center'> Finite State Automata</h2>
+<br />
+<div>
+  <div class='offset-2 col-md-8' style='overflow:hidden;position:relative'>
+    <div class='d-flex flex-row'>
+      <ul class="nav nav-tabs nav-tabs--vertical nav-tabs--left" role="navigation" style='margin-right:0;'>
+        <li class="nav-item">
+          <a href="#editFSM" class="nav-link active" data-toggle="tab" role="tab" aria-controls="editFSM">Edit Automata</a>
+        </li>
+        <li class="nav-item">
+          <a href="#infoFSM" class="nav-link" [ngClass]='{"disabled":!validFSM}' data-toggle="tab" role="tab" aria-controls="infoFSM">Automata Info</a>
+        </li>
+        <li class="nav-item">
+          <a href="#deterFSM" class="nav-link" [ngClass]='{"disabled":!validFSM}' data-toggle="tab" role="tab" aria-controls="deterFSM">Determinism</a>
+        </li>
+        <li class="nav-item">
+          <a href="#simFSM" class="nav-link" [ngClass]='{"disabled":!validFSM}' data-toggle="tab" role="tab" aria-controls="simFSM">Simulation</a>
+        </li>
+      </ul>
+      <div class="tab-content tab-content-container">
+        <div class="tab-pane show active" id="editFSM" role="tabpanel">
+          <div class='draw-box-holder'>
+            <app-fsm-draw></app-fsm-draw>
+          </div>
+        </div>
+        <div class="tab-pane fade" id="infoFSM" role="tabpanel">
+          <h1>Automata Info</h1>
+        </div>
+        <div class="tab-pane fade" id="deterFSM" role="tabpanel">
+          <h1>Determinism</h1>
+        </div>
+        <div class="tab-pane fade" id="simFSM" role="tabpanel">
+          <h1>Simulation</h1>
+        </div>
+      </div>
+    </div>
+
+  </div>
 </div>
-
-
