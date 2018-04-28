@@ -30,6 +30,8 @@ export class FsmDataService {
   // public member variables
   private _fsmStates: FsmState[] = [];
   private _fsmTransitions: FsmTransition[] = [];
+  private _dfsmStates: FsmState[] = [];
+  private _dfsmTransitions: FsmTransition[] = [];
   public defaultStateLabel = 'q';
 
   public get machineValid() {
@@ -57,6 +59,16 @@ export class FsmDataService {
     return deter;
   }
 
+  public get alphabet(): any {
+    const sigma = {};
+    this._fsmStates.forEach((state) => {
+      const transitions = this.getStateOutboundTransitions(state);
+      transitions.forEach((transition) => {
+        transition.characterMap.forEach(item => { if (!(item in sigma)) { sigma[item] = true; } });
+      });
+    });
+    return sigma;
+  }
   constructor() {
   }
 
@@ -159,7 +171,10 @@ export class FsmDataService {
 
   // public methods for states
   public getStates(deterministic = false) {
-    return this._fsmStates;
+    if (!deterministic) { return this._fsmStates; }
+    if (this.isDeterministic) { return this._fsmStates; }
+    // here a deterministic version of a non-deterministic FSA has been requested.  We need to generate an DFSM with
+    // subset method
   }
   public maxPos = () => {
     let maxX = 0;
@@ -231,6 +246,7 @@ export class FsmDataService {
   }
   public setTransitionChars(transition: FsmTransition, chars: string) {
     transition.charactersAccepted = chars;
+    this.calculateDeterministicFSM();
     this.validateAcceptChars(transition);
   }
 
@@ -282,6 +298,7 @@ export class FsmDataService {
     } else {
       trans = problems[0];
     }
+    this.calculateDeterministicFSM();
     return trans;
   }
 
@@ -289,12 +306,52 @@ export class FsmDataService {
     const index = this._fsmTransitions.indexOf(transition);
     if (index > -1) {
       this._fsmTransitions.splice(index, 1);
-
     }
+    this.calculateDeterministicFSM();
+  }
+
+  // helper methods
+  calculateDeterministicFSM() {
+    this._dfsmStates = [];
+    this._dfsmTransitions = [];
+    if (this.isDeterministic) {
+      this._dfsmStates = this._fsmStates;
+      this._dfsmTransitions = this._fsmTransitions;
+    } else {
+      const sigma = this.alphabet;
+      const startStates =
+        this._fsmStates.filter(state => state.stateType === StateTypes.START || state.stateType === StateTypes.STARTFINAL);
+      const finalStates =
+        this._fsmStates.filter(state => state.stateType === StateTypes.FINAL || state.stateType === StateTypes.STARTFINAL);
+      // combine start states into a state
+      let stateList = [];
+      stateList.push({ states: startStates, processed: false, transitions: [] });
+      while (stateList.filter(state => !state.processed).length > 0) {
+        const workingState = stateList.filter(state => !state.processed)[0];
+        stateList = this.processTransitionState(workingState, stateList, sigma);
+      }
+      // here statelist contains a set of our state objects and transitions, we can build a new FSM from this data.
+    }
+  }
+
+  processTransitionState(state, stateList, sigma) {
+    const ourTranactions = this._fsmTransitions.filter(transition => state.states.indexOf(transition.sourceState) !== -1);
+    sigma.forEach(letter => {
+      const letterTrans = ourTranactions.filter(transaction => transaction.characterMap.indexOf(letter) !== -1);
+      const newState = letterTrans.map(trans => trans.destState);
+      if (stateList.filter(item => item.states === newState).length === 0) {
+        stateList.push({ states: newState, processed: false, transitions: [] });
+      }
+      state.transitions.push({letter: letter, destination: newState});
+    });
+    state.processed = true;
+    return stateList;
   }
 
   // public methods for FSM
   public clear = () => {
+    this._dfsmStates = [];
+    this._dfsmTransitions = [];
     this._fsmStates = [];
     this._fsmTransitions = [];
   }
@@ -322,5 +379,6 @@ export class FsmDataService {
         trans.destState = state;
       }
     }
+    this.calculateDeterministicFSM();
   }
 }
