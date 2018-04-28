@@ -44,6 +44,19 @@ export class FsmDataService {
     return true;
   }
 
+  public get isDeterministic(): boolean {
+    let deter = true;
+    this._fsmStates.forEach((state) => {
+      let map = [];
+      const transitions = this.getStateOutboundTransitions(state);
+      transitions.forEach((transition) => {
+        map = map.concat(transition.characterMap);
+      });
+      if (!map.every((elem, i, array) => array.lastIndexOf(elem) === i)) { deter = false; }
+    });
+    return deter;
+  }
+
   constructor() {
   }
 
@@ -199,6 +212,10 @@ export class FsmDataService {
     return '';
   }
 
+  public getStateOutboundTransitions(state: FsmState) {
+    return this._fsmTransitions.filter((item) => item.sourceState === state);
+  }
+
   public removeState(state: FsmState) {
     this._fsmTransitions = this._fsmTransitions.filter(
       function (item) { return item.sourceState !== state && item.destState !== state; });
@@ -222,11 +239,6 @@ export class FsmDataService {
   }
   public validateAcceptChars(transition: FsmTransition) {
     if (this.getTransitionChars(transition).length === 0) { return 'Invalid accept set'; }
-    // .|.-.(,[.|.-.])* need to make sure . can match all special chars or it will need to be classed.
-
-    // check to make sure it is a , delimited list of single characters (escapes ok) or ranges like a-z,A-Z,0-9,b,c,\r,\n
-    // with escapes make sure they are legal, with ranges make sure ascii value of first is less than second and include all
-    // chars between ascii values
     const result = /^(([\s\S]|[\s\S]-[\s\S])(\,([\s\S]|[\s\S]-[\s\S]))*)$/g.test(this.getTransitionChars(transition));
     if (!result) { return 'Invalid accept set'; }
     // Here we need to check for duplicate values in the accept string and build character map.
@@ -253,7 +265,7 @@ export class FsmDataService {
     });
     if (flag) { return 'Invalid character range in set'; }
     const unique = map.every((elem, i, array) => array.lastIndexOf(elem) === i);
-    if (!unique) {return 'Duplicate values in set'; }
+    if (!unique) { return 'Duplicate values in set'; }
     transition.characterMap = map;
     return '';
   }
