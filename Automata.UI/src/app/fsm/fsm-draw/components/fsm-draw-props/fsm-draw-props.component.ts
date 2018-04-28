@@ -17,6 +17,12 @@ export class FsmDrawPropsComponent {
   // Private variables
   private _object: FsmObject = null;
 
+  public get transitionCharacters(): string {
+    return this._fsmSvc.getTransitionChars(this.transition);
+  }
+  public set transitionCharacters(val: string) {
+    this._fsmSvc.setTransitionChars(this.transition, val);
+  }
   // Input properties
   @Input() set object(val) {
     this._object = val;
@@ -25,7 +31,7 @@ export class FsmDrawPropsComponent {
       this.itype = this.state.stateType;
     }
     if (this.transition) {
-      this.iCharAccepted = this.transition.charactersAccepted;
+      this.iCharAccepted = this.transitionCharacters;
     }
   }
 
@@ -46,7 +52,7 @@ export class FsmDrawPropsComponent {
       return this.state.name !== this.iname || this.state.stateType !== this.itype;
     }
     if (this.transition) {
-      return this.transition.charactersAccepted !== this.iCharAccepted;
+      return this.transitionCharacters !== this.iCharAccepted;
     }
     return false;
   }
@@ -86,10 +92,10 @@ export class FsmDrawPropsComponent {
 
   // transition property page event handlers
   updateTransitionEdit = () => {
-    this.iCharAccepted = this.transition.charactersAccepted;
+    this.iCharAccepted = this.transitionCharacters;
   }
   cancelTransitionEdit = () => {
-    this.transition.charactersAccepted = this.iCharAccepted;
+    this.transitionCharacters = this.iCharAccepted;
   }
   deleteTransition = () => {
     this._fsmSvc.removeTransition(this.transition);

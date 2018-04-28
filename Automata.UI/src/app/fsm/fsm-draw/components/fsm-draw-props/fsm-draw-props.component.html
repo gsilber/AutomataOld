@@ -41,7 +41,7 @@
                 <br/>
                 <div class='border'>{{transition.destState.name}}</div>
                 <br/> Accepted characters
-                <input type='text' [(ngModel)]='transition.charactersAccepted' ngbTooltip='Enter a comma seperated list of single characters or ranges (i.e. A-Z,a-z,0-9,x)'/>
+                <input type='text' [(ngModel)]='transitionCharacters' ngbTooltip='Enter a comma seperated list of single characters or ranges (i.e. A-Z,a-z,0-9,x)'/>
                 <p></p>
                 <div class='text-center align-bottom'>
                     <button class=' btn btn-primary' [disabled]='!validTransition||!dirty' (click)='updateTransitionEdit()'>Update</button>

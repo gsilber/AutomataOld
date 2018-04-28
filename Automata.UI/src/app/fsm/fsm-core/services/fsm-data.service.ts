@@ -1,5 +1,5 @@
 import { FsmDrawTransitionComponent } from './../../fsm-draw/components/fsm-draw-transition/fsm-draw-transition.component';
-import { Injectable } from '@angular/core';
+import { Injectable, ModuleWithComponentFactories } from '@angular/core';
 
 // Exported classes and enums used by the service
 export enum StateTypes { START = 'start', FINAL = 'final', NORMAL = 'normal', STARTFINAL = 'startfinal' }
@@ -20,6 +20,7 @@ export class FsmTransition extends FsmObject {
   public destState: FsmState;
   // this can be a comma seperated list of characters or a RegEx character classes (i.e. a,b or [a..z] or [abc])
   public charactersAccepted = '';
+  public characterMap?: string[] = [];
   public rotation = 0;
 }
 
@@ -211,19 +212,55 @@ export class FsmDataService {
   public getTransitions(deterministic = false) {
     return this._fsmTransitions;
   }
+  public setTransitionChars(transition: FsmTransition, chars: string) {
+    transition.charactersAccepted = chars;
+    this.validateAcceptChars(transition);
+  }
+
+  public getTransitionChars(transition: FsmTransition) {
+    return transition.charactersAccepted;
+  }
   public validateAcceptChars(transition: FsmTransition) {
-    if (transition.charactersAccepted.length === 0) { return 'Invalid accept set'; }
+    if (this.getTransitionChars(transition).length === 0) { return 'Invalid accept set'; }
     // .|.-.(,[.|.-.])* need to make sure . can match all special chars or it will need to be classed.
 
     // check to make sure it is a , delimited list of single characters (escapes ok) or ranges like a-z,A-Z,0-9,b,c,\r,\n
     // with escapes make sure they are legal, with ranges make sure ascii value of first is less than second and include all
     // chars between ascii values
-    const result = /^(([\s\S]|[\s\S]-[\s\S])(\,([\s\S]|[\s\S]-[\s\S]))*)$/g.test(transition.charactersAccepted);
-    return (result ? '' : 'Invalid accept set');
+    const result = /^(([\s\S]|[\s\S]-[\s\S])(\,([\s\S]|[\s\S]-[\s\S]))*)$/g.test(this.getTransitionChars(transition));
+    if (!result) { return 'Invalid accept set'; }
+    // Here we need to check for duplicate values in the accept string and build character map.
+    const sChars = this.getTransitionChars(transition);
+    const aChars = sChars.split(',');
+    const map = [];
+    let flag = false;
+    aChars.forEach(charClass => {
+      if (charClass.length === 1) {
+        map.push(charClass);
+      }
+      if (charClass.length > 1) {
+        const start = charClass.charCodeAt(0);
+        const end = charClass.charCodeAt(charClass.length - 1);
+        if (start > end) {
+          flag = true;
+        } else {
+          for (let i = start; i <= end; i++) {
+            const char = String.fromCharCode(i);
+            map.push(char);
+          }
+        }
+      }
+    });
+    if (flag) { return 'Invalid character range in set'; }
+    const unique = map.every((elem, i, array) => array.lastIndexOf(elem) === i);
+    if (!unique) {return 'Duplicate values in set'; }
+    transition.characterMap = map;
+    return '';
   }
 
   public addTransition = (source: FsmState, dest: FsmState): FsmTransition => {
-    let trans = { sourceState: source, destState: dest, charactersAccepted: 'a', type: 'transition', rotation: 0 };
+    let trans = { sourceState: source, destState: dest, charactersAccepted: '', type: 'transition', rotation: 0 };
+    this.setTransitionChars(trans, 'a');
     const problems = this._fsmTransitions.filter((item) =>
       (source === dest && item.sourceState === item.destState && item.sourceState === source) ||
       (source !== dest && item.sourceState === source && item.destState === dest)
