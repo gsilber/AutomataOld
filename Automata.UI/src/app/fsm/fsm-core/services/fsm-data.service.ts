@@ -30,8 +30,6 @@ export class FsmDataService {
   // public member variables
   private _fsmStates: FsmState[] = [];
   private _fsmTransitions: FsmTransition[] = [];
-  private _dfsmStates: FsmState[] = [];
-  private _dfsmTransitions: FsmTransition[] = [];
   public defaultStateLabel = 'q';
 
   public get machineValid() {
@@ -185,20 +183,13 @@ export class FsmDataService {
     });
     return { x: maxX, y: maxY };
   }
-  public addState = (state: FsmState, deterministic = false): FsmState => {
-    if (deterministic === false) {
-      this._fsmStates.push(state);
-    } else {
-      this._dfsmStates.push(state);
-    }
+  public addState = (state: FsmState): FsmState => {
+    this._fsmStates.push(state);
     return state;
   }
 
   public addDefaultState = (x: number, y: number, deterministic = false): FsmState => {
-    let stateList = this._fsmStates;
-    if (deterministic) {
-      stateList = this._dfsmStates;
-    }
+    const stateList = this._fsmStates;
     let count = 0;
     const objCheck = {};
     for (const state of stateList) {
@@ -221,7 +212,7 @@ export class FsmDataService {
       y: y,
       stateType: StateTypes.NORMAL,
       type: 'state'
-    }, deterministic);
+    });
   }
 
   public validateLabel(state: FsmState): string {
@@ -249,18 +240,21 @@ export class FsmDataService {
   }
 
   // public methods for transitions
-  public getTransitions(deterministic = false) {
+  public getTransitions() {
     return this._fsmTransitions;
   }
   public setTransitionChars(transition: FsmTransition, chars: string) {
+    const oldchars = transition.charactersAccepted;
     transition.charactersAccepted = chars;
-    this.calculateDeterministicFSM();
-    this.validateAcceptChars(transition);
+    if (this.validateAcceptChars(transition).length > 0) {
+      transition.charactersAccepted = oldchars;
+    }
   }
 
   public getTransitionChars(transition: FsmTransition) {
     return transition.charactersAccepted;
   }
+
   public validateAcceptChars(transition: FsmTransition) {
     if (this.getTransitionChars(transition).length === 0) { return 'Invalid accept set'; }
     const result = /^(([\s\S]|[\s\S]-[\s\S])(\,([\s\S]|[\s\S]-[\s\S]))*)$/g.test(this.getTransitionChars(transition));
@@ -294,22 +288,16 @@ export class FsmDataService {
     return '';
   }
 
-  public addTransition = (source: FsmState, dest: FsmState, transCharacter = 'a', deterministic = false): FsmTransition => {
+  public addTransition = (source: FsmState, dest: FsmState, transCharacter = 'a'): FsmTransition => {
     let trans = { sourceState: source, destState: dest, charactersAccepted: '', type: 'transition', rotation: 0 };
     this.setTransitionChars(trans, transCharacter);
-    let transList = this._fsmTransitions;
-    if (deterministic) { transList = this._dfsmTransitions; }
+    const transList = this._fsmTransitions;
     const problems = transList.filter((item) =>
       (source === dest && item.sourceState === item.destState && item.sourceState === source) ||
       (source !== dest && item.sourceState === source && item.destState === dest)
     );
     if (problems.length === 0) {
-      if (deterministic) {
-        this._dfsmTransitions.push(trans);
-      } else {
         this._fsmTransitions.push(trans);
-        this.calculateDeterministicFSM();
-      }
     } else {
       trans = problems[0];
     }
@@ -321,84 +309,10 @@ export class FsmDataService {
     if (index > -1) {
       this._fsmTransitions.splice(index, 1);
     }
-    this.calculateDeterministicFSM();
-  }
-
-  // helper methods
-  calculateDeterministicFSM() {
-    this._dfsmStates = [];
-    this._dfsmTransitions = [];
-    if (this.isDeterministic) {
-      this._dfsmStates = this._fsmStates;
-      this._dfsmTransitions = this._fsmTransitions;
-    } else {
-      const sigma = this.alphabet;
-      const startStates =
-        this._fsmStates.filter(state => state.stateType === StateTypes.START || state.stateType === StateTypes.STARTFINAL);
-      // combine start states into a state
-      let stateList = [];
-      stateList.push({ states: startStates, final: false, processed: false, transitions: [] });
-      while (stateList.filter(state => !state.processed).length > 0) {
-        const workingState = stateList.filter(state => !state.processed)[0];
-        stateList = this.processTransitionState(workingState, stateList, sigma);
-      }
-      // here statelist contains a set of our state objects and transitions, we can build a new FSM from this data.
-      // startStates is our startState.  Any state which contains a final state in it's list is a final state.
-      // transitions can be build from the structures
-      // state: {states,final,processed,transitions:[{letter,destState}]}
-      // mark the final states
-      stateList.forEach(state => {
-        if (state.states.filter(item => item.stateType === StateTypes.FINAL || item.stateType === StateTypes.STARTFINAL).length > 0) {
-          state.final = true;
-        }
-      });
-      const buildstates = [];
-      // construct all the states in the list
-      let xpos = 50;
-      let ypos = 50;
-      stateList.forEach(state => {
-        const newState = this.addDefaultState(xpos, ypos, true);
-        buildstates.push({ state: newState, srcStates: state });
-        xpos += 100;
-        if (xpos > 3900) { ypos += 100; xpos = 50; }
-      });
-      const nullState = this.addDefaultState(xpos, ypos, true);
-      // for each state, go back and construct the transitions (possibly consolidated) from buildstates
-      buildstates.forEach(state => {
-        state.srcState.transitions.forEach(trans => {
-          // trans.letter is accepted
-          // state.srcState.final is final state
-          const destStates = buildstates.filter(item => item.srcState.states === trans.destState);
-          let dest = nullState;
-          if (destStates.length > 0) { dest = destStates[0].state; }
-          this.addTransition(state.state, dest, trans.letter, true);
-        });
-      });
-    }
-  }
-
-  processTransitionState(state, stateList, sigma) {
-    const ourTranactions = this._fsmTransitions.filter(transition => state.states.indexOf(transition.sourceState) !== -1);
-    sigma.forEach(letter => {
-      const letterTrans = ourTranactions.filter(transaction => transaction.characterMap.indexOf(letter) !== -1);
-      if (letterTrans.length === 0) {
-        state.transitions.push({ letter: letter, destination: [] });
-      } else {
-        const newState = letterTrans.map(trans => trans.destState);
-        if (stateList.filter(item => item.states === newState).length === 0) {
-          stateList.push({ states: newState, final: false, processed: false, transitions: [] });
-        }
-        state.transitions.push({ letter: letter, destination: newState });
-      }
-    });
-    state.processed = true;
-    return stateList;
   }
 
   // public methods for FSM
   public clear = () => {
-    this._dfsmStates = [];
-    this._dfsmTransitions = [];
     this._fsmStates = [];
     this._fsmTransitions = [];
   }
@@ -426,6 +340,5 @@ export class FsmDataService {
         trans.destState = state;
       }
     }
-    this.calculateDeterministicFSM();
   }
 }
