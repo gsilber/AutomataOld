@@ -50,7 +50,7 @@ export class FsmDrawComponent implements AfterViewInit {
   get startTransition(): FsmTransition {
     let dest = {
       x: this.mouseX, y: this.mouseY, stateIndex: 99, name: 'temp', stateType: StateTypes.NORMAL,
-      transitions: [], type: 'state'
+      type: 'state'
     };
     if (this.mouseHover && this.mouseHover.type === 'state' && this.mouseHover === this.transitionSelectedState) {
       dest = this.transitionSelectedState;

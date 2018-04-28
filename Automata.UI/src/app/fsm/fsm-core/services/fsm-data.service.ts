@@ -12,7 +12,6 @@ export class FsmState extends FsmObject {
   public y: number;
   public stateIndex: number;
   public name: string;
-  public transitions: FsmTransition[] = [];
   public stateType: StateTypes = StateTypes.NORMAL;
 }
 
@@ -184,7 +183,6 @@ export class FsmDataService {
       x: x,
       y: y,
       stateType: StateTypes.NORMAL,
-      transitions: [],
       type: 'state'
     });
   }
@@ -231,7 +229,6 @@ export class FsmDataService {
       (source !== dest && item.sourceState === source && item.destState === dest)
     );
     if (problems.length === 0) {
-      trans.sourceState.transitions.push(trans);
       this._fsmTransitions.push(trans);
     } else {
       trans = problems[0];
@@ -240,11 +237,7 @@ export class FsmDataService {
   }
 
   public removeTransition(transition: FsmTransition) {
-    let index = transition.sourceState.transitions.indexOf(transition);
-    if (index > -1) {
-      transition.sourceState.transitions.splice(index, 1);
-    }
-    index = this._fsmTransitions.indexOf(transition);
+    const index = this._fsmTransitions.indexOf(transition);
     if (index > -1) {
       this._fsmTransitions.splice(index, 1);
 

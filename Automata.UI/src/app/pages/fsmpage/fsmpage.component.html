@@ -12,10 +12,10 @@
           <a href="#infoFSM" class="nav-link" [ngClass]='{"disabled":!validFSM}' data-toggle="tab" role="tab" aria-controls="infoFSM">Automata Info</a>
         </li>
         <li class="nav-item">
-          <a href="#deterFSM" class="nav-link" [ngClass]='{"disabled":!validFSM}' data-toggle="tab" role="tab" aria-controls="deterFSM">Determinism</a>
+          <a href="#deterFSM" class="nav-link" [ngClass]='{"disabled":!validFSM || true}' data-toggle="tab" role="tab" aria-controls="deterFSM">Determinism</a>
         </li>
         <li class="nav-item">
-          <a href="#simFSM" class="nav-link" [ngClass]='{"disabled":!validFSM}' data-toggle="tab" role="tab" aria-controls="simFSM">Simulation</a>
+          <a href="#simFSM" class="nav-link" [ngClass]='{"disabled":!validFSM || true}' data-toggle="tab" role="tab" aria-controls="simFSM">Simulation</a>
         </li>
       </ul>
       <div class="tab-content tab-content-container">

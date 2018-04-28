@@ -134,8 +134,8 @@ export class FsmDrawSurfaceComponent implements AfterViewInit {
   public exportAsPng(size) {
     saveSvgAsPng(this.svgElement, 'save.png',
       {
-        width: size.x + FsmDrawStateComponent.stateRadius + 20,
-        height: size.y + FsmDrawStateComponent.stateRadius + 20
+        width: size.x + FsmDrawStateComponent.stateRadius * 2 + 20,
+        height: size.y + FsmDrawStateComponent.stateRadius * 2 + 20
       });
   }
 
