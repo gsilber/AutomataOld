@@ -76,7 +76,7 @@ export class FsmDrawPropsComponent implements AfterViewInit {
   constructor(private _fsmSvc: FsmDataService, private _detect: ChangeDetectorRef) {}
 
   ngAfterViewInit(){
-    this._detect.detectChanges();
+    setTimeout(_ => this._detect.detectChanges());
   }
 
   // state property page event handlers
