@@ -204,7 +204,6 @@ export class FsmDataService {
       }
     }
     const calcName = this.defaultStateLabel + calcIndex;
-
     return this.addState({
       name: calcName,
       stateIndex: calcIndex,
