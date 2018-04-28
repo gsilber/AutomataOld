@@ -5,11 +5,16 @@ $color-link: #0275d8;
 $border-radius: .25rem;
 
 .tab-content-container{
+	width:100%;
+	position: relative;
 	overflow: hidden;
 }
-.draw-box-holder{
-    height:750px;
+.bg-fsm{
 	background-color:lightblue;
+}
+.draw-box-holder{
+	height:750px;
+	
 	overflow: hidden;
 	padding:0;
 	position: relative;
