@@ -1,4 +1,5 @@
 import { StateTypes, FsmState } from './../../../fsm-core/classes/fsm-state';
+import { Fsm } from './../../../fsm-core/classes/fsm';
 import { FsmTransition } from './../../../fsm-core/classes/fsm-transition';
 import { FsmObject } from './../../../fsm-core/classes/fsm-object';
 import { File, FileIoComponent } from './../../../../reusable/file-io/file-io/file-io.component';
@@ -24,9 +25,10 @@ export class FsmDrawComponent implements AfterViewInit {
   mouseX: number;
   mouseY: number;
   mouseHover: FsmObject;
-  dirty = false;
+  workingFsm: Fsm;
+  userFsm: Fsm;
 
-  // private variables
+  // peivate variables
   private _zoomPercent = 100.0;
   private mode: Modes = Modes.POINTER;
   private dataBlob: Blob;
@@ -42,11 +44,13 @@ export class FsmDrawComponent implements AfterViewInit {
   @ViewChild(FileIoComponent) fileIO: FileIoComponent;
 
   // properties
-  get isValid() { return this.fsmSvc.isMachineValid; }
-  get status() {
-    if (this.fsmSvc.isMachineEmpty) { return 'Empty FSM'; }
-    if (!this.fsmSvc.isMachineValid) { return 'Invalid FSM'; }
-    if (this.fsmSvc.isDeterministic) { return 'Deterministic FSM'; }
+  get isDirty() { return this.userFsm.dirty; }
+  get isValid() { return this.userFsm.valid; }
+  get isDeterministic() { return this.userFsm.deterministic; }
+    get status() {
+    if (this.userFsm.empty) { return 'Empty FSM'; }
+    if (!this.userFsm.valid) { return 'Invalid FSM'; }
+    if (this.userFsm.deterministic) { return 'Deterministic FSM'; }
     return 'Non-Deterministic FSM';
   }
 
@@ -74,7 +78,10 @@ export class FsmDrawComponent implements AfterViewInit {
     });
   }
 
-  constructor(public fsmSvc: FsmDataService, private _detect: ChangeDetectorRef) { }
+  constructor(private fsmSvc: FsmDataService, private _detect: ChangeDetectorRef) {
+    this.userFsm = this.fsmSvc.userFsm;
+    this.workingFsm = this.fsmSvc.userFsm;
+  }
 
   ngAfterViewInit() {
     this._detect.detectChanges();
@@ -86,7 +93,6 @@ export class FsmDrawComponent implements AfterViewInit {
     if (this.mode === Modes.STATE && evt.type === 'surface') {
       this.ctrlBar.setMode(Modes.POINTER);
       this.selectObject(this.fsmSvc.addDefaultState(evt.surfaceX, evt.surfaceY));
-      this.dirty = true;
     } else {
       if (this.mode === Modes.TRANSITION && evt.type === 'state' && !this.transitionSelectedState) {
         // start a transition
@@ -94,8 +100,7 @@ export class FsmDrawComponent implements AfterViewInit {
       } else {
         if (this.mode === Modes.TRANSITION && evt.type === 'state' && this.transitionSelectedState) {
           // end transition
-          this.selectObject(this.fsmSvc.addTransition(this.transitionSelectedState, evt.child as FsmState));
-          this.dirty = true;
+          this.selectObject(this.userFsm.addTransition(this.transitionSelectedState, evt.child as FsmState));
           this.ctrlBar.setMode(Modes.POINTER);
           this.transitionSelectedState = null;
         } else { if (this.mode === 'transition' && evt.type !== 'state') { this.transitionSelectedState = null; } }
@@ -123,7 +128,6 @@ export class FsmDrawComponent implements AfterViewInit {
       this.selected &&
       this.selected.type === 'state') {
       (this.selected as FsmState).updatePosition(evt.surfaceX, evt.surfaceY);
-      this.dirty = true;
     }
     if (this.mode === Modes.POINTER &&
       evt.srcEvent.buttons === 1 &&
@@ -143,7 +147,6 @@ export class FsmDrawComponent implements AfterViewInit {
         // this is a hack, since we are using control point, we need to scale back so the mouse is actually near the line.
         s.setRotation(d * -1 - d * .8);
       }
-      this.dirty = true;
     }
   }
 
@@ -171,39 +174,35 @@ export class FsmDrawComponent implements AfterViewInit {
   // Context menus handlers
   onStateContextClickDelete = (evt) => {
     this.props.cancel();
-    this.fsmSvc.removeState(this.stateContextOpen.obj);
+    this.workingFsm.removeState(this.stateContextOpen.obj);
     this.stateContextOpen = null;
     this.selected = null;
     this.props.cancel();
     this.refreshProps();
-    this.dirty = true;
   }
   onStateContextClickStart = (evt) => {
     this.stateContextOpen.obj.toggleStateValue(StateTypes.START);
     this.stateContextOpen = null;
     this.refreshProps();
-    this.dirty = true;
   }
   onStateContextClickFinal = (evt) => {
     this.stateContextOpen.obj.toggleStateValue(StateTypes.FINAL);
     this.stateContextOpen = null;
     this.refreshProps();
-    this.dirty = true;
   }
 
   onTransContextClickDelete = (evt) => {
     this.props.cancel();
-    this.fsmSvc.removeTransition(this.transContextOpen.obj);
+    this.workingFsm.removeTransition(this.transContextOpen.obj);
     this.transContextOpen = null;
     this.selected = null;
     this.props.cancel();
     this.refreshProps();
-    this.dirty = true;
   }
 
   // UI Action methods
   popupFileDirty(callback: string) {
-    if (this.dirty) {
+    if (this.userFsm.dirty) {
       this.popup.open('The file has changed.  \r\nWould you like to save the FSM to a file?', 'Warning',
         ['Yes', 'No', 'Cancel'], callback);
       return;
@@ -214,7 +213,7 @@ export class FsmDrawComponent implements AfterViewInit {
   onmodalclose(result: AlertModalResult) {
     if (result.result === 'Yes') {
       this.saveFile();
-      if (this.fsmSvc.isMachineValid) {
+      if (this.workingFsm.valid) {
         if (result.callback) { this[result.callback](); }
       }
       return;
@@ -227,8 +226,8 @@ export class FsmDrawComponent implements AfterViewInit {
 
   // Helper Methods
 
-  getStates = (): FsmState[] => this.fsmSvc.states;
-  getTransitions = (): FsmTransition[] => this.fsmSvc.transitions;
+  getStates = (): FsmState[] => this.workingFsm.fsmStates;
+  getTransitions = (): FsmTransition[] => this.workingFsm.fsmTransitions;
 
   closeAllContextMenus() {
     this.stateContextOpen = null;
@@ -242,15 +241,15 @@ export class FsmDrawComponent implements AfterViewInit {
   }
 
   exportImage() {
-    if (this.fsmSvc.states.length > 0) {
-      this.surface.exportAsPng(this.fsmSvc.maxPos());
+    if (!this.workingFsm.empty) {
+      this.surface.exportAsPng(this.workingFsm.maxPos);
     }
   }
   saveFile() {
-    if (this.fsmSvc.isMachineValid) {
+    if (this.workingFsm.valid) {
       const blob = new Blob([this.fsmSvc.toJson() + '\n'], { type: 'application/json' });
       this.fileIO.download(blob, 'save.fsm');
-      this.dirty = false;
+      this.userFsm.setClean();
     } else {
       this.popup.open(
         'The current FSM is invalid.  A finite state machine must have at least one start and at least one final state and one transition.',
@@ -264,13 +263,11 @@ export class FsmDrawComponent implements AfterViewInit {
   }
 
   onIoFileUpload(file: File) {
-    this.fsmSvc.clearFsm();
-    this.dirty = false;
+    this.fsmSvc.clearFsms();
     this.fsmSvc.fromJson(file.contents);
   }
 
   clear() {
-    this.fsmSvc.clearFsm();
-    this.dirty = false;
+    this.fsmSvc.clearFsms();
   }
 }

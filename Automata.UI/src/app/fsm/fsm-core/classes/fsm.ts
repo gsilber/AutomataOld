@@ -2,9 +2,18 @@ import { FsmTransition, FsmTransitionData } from './fsm-transition';
 import { FsmState, StateTypes, FsmStateData } from './fsm-state';
 
 export class Fsm {
+
     fsmStates: FsmState[] = [];
     fsmTransitions: FsmTransition[] = [];
+    _dirty = false;
 
+    get dirty(): boolean {
+        let dirty = false;
+        this.fsmStates.forEach(state => { if (state.dirty) { dirty = true; } });
+        this.fsmTransitions.forEach(trans => { if (trans.dirty) { dirty = true; } });
+        return dirty || this._dirty;
+    }
+    get empty(): boolean { return this.fsmStates.length === 0; }
     get valid(): boolean {
         // does it at least one start and one final state.  Everything else is handled by individual inserts
         if (this.fsmTransitions.length === 0 ||
@@ -61,6 +70,7 @@ export class Fsm {
         if (index > -1) {
             this.fsmStates.splice(index, 1);
         }
+        this._dirty = true;
     }
 
     public stateLabelError(state: FsmState): string {
@@ -73,7 +83,7 @@ export class Fsm {
     }
 
     // public methods for transitions
-    public addTransition(source: FsmState, dest: FsmState, transCharacter): FsmTransition {
+    public addTransition(source: FsmState, dest: FsmState, transCharacter: string = 'a'): FsmTransition {
         let trans = new FsmTransition({ sourceState: source, destState: dest, charactersAccepted: '', rotation: 0 });
         trans.charactersAccepted = transCharacter;
         const problems = this.fsmTransitions.filter((item) =>
@@ -93,11 +103,18 @@ export class Fsm {
         if (index > -1) {
             this.fsmTransitions.splice(index, 1);
         }
+        this._dirty = true;
     }
     // global methods
+    public setClean = () => {
+        this._dirty = false;
+        this.fsmStates.forEach(state => state.dirty = false);
+        this.fsmTransitions.forEach(trans => trans.dirty = false);
+    }
     public clear = () => {
         this.fsmStates = [];
         this.fsmTransitions = [];
+        this._dirty = false;
     }
 
     public asSerializableObject() {

@@ -1,3 +1,4 @@
+import { Fsm } from './../../../fsm-core/classes/fsm';
 import { FsmTransition } from './../../../fsm-core/classes/fsm-transition';
 import { FsmState } from './../../../fsm-core/classes/fsm-state';
 import { FsmObject } from './../../../fsm-core/classes/fsm-object';
@@ -17,7 +18,8 @@ export class FsmDrawPropsComponent implements AfterViewInit {
   iCharAccepted: string;
   stateErrMsg = '';
   transitionErrMsg = '';
-
+  userFsm: Fsm;
+  workingFsm: Fsm;
   // Private variables
   private _object: FsmObject = null;
 
@@ -43,7 +45,7 @@ export class FsmDrawPropsComponent implements AfterViewInit {
   get object(): FsmObject { return this._object; }
   get validState(): boolean {
     if (!this.state) { return false; }
-    this.stateErrMsg = this._fsmSvc.getStateLabelError(this.state);
+    this.stateErrMsg = this.workingFsm.stateLabelError(this.state);
     return this.stateErrMsg === '';
   }
   get validTransition(): boolean {
@@ -77,7 +79,10 @@ export class FsmDrawPropsComponent implements AfterViewInit {
     }
   }
 
-  constructor(private _fsmSvc: FsmDataService, private _detect: ChangeDetectorRef) { }
+  constructor(private _fsmSvc: FsmDataService, private _detect: ChangeDetectorRef) {
+    this.userFsm = _fsmSvc.userFsm;
+    this.workingFsm = _fsmSvc.userFsm;
+  }
 
   ngAfterViewInit() {
     setTimeout(_ => this._detect.detectChanges(), 1);
@@ -92,7 +97,7 @@ export class FsmDrawPropsComponent implements AfterViewInit {
     this.state.updateValues(this.iname, this.itype);
   }
   deleteState = () => {
-    this._fsmSvc.removeState(this.state);
+    this.workingFsm.removeState(this.state);
     this.cancel();
     this.object = null;
   }
@@ -105,7 +110,7 @@ export class FsmDrawPropsComponent implements AfterViewInit {
     this.transitionCharacters = this.iCharAccepted;
   }
   deleteTransition = () => {
-    this._fsmSvc.removeTransition(this.transition);
+    this.workingFsm.removeTransition(this.transition);
     this.cancel();
     this.object = null;
   }

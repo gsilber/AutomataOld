@@ -1,3 +1,4 @@
+import { EventEmitter } from '@angular/core';
 import { FsmState } from './fsm-state';
 import { FsmObject } from './fsm-object';
 
@@ -12,6 +13,7 @@ export class FsmTransitionData {
 
 export class FsmTransition extends FsmObject {
   private transitionData: FsmTransitionData;
+  public dirty = true;
   public get sourceState(): FsmState { return this.transitionData.sourceState; }
   public get destState(): FsmState { return this.transitionData.destState; }
   public get charactersAccepted(): string { return this.transitionData.charactersAccepted; }
@@ -20,6 +22,7 @@ export class FsmTransition extends FsmObject {
     this.transitionData.charactersAccepted = chars;
     if (this.charactersError.length > 0) {
       this.transitionData.charactersAccepted = oldchars;
+      this.dirty = true;
     }
   }
   public get characterMap(): string[] { return this.transitionData.characterMap; }
@@ -63,7 +66,11 @@ export class FsmTransition extends FsmObject {
     this.type = 'transition';
   }
 
-  setRotation = (rotation: number) => this.transitionData.rotation = rotation;
+  setRotation(rotation: number) {
+    this.transitionData.rotation = rotation;
+    this.dirty = true;
+  }
+
   asSerializableObject() {
     return {
       sourceState: this.sourceState.asSerializableObject(),

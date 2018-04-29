@@ -1,5 +1,6 @@
+import { FsmDrawComponent } from './../../fsm/fsm-draw/components/fsm-draw/fsm-draw.component';
 import { FsmDataService } from './../../fsm/fsm-core/services/fsm-data.service';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 
 @Component({
   selector: 'app-fsmpage',
@@ -7,14 +8,15 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./fsmpage.component.scss']
 })
 export class FsmpageComponent implements OnInit {
+  @ViewChild(FsmDrawComponent) private _fsmDraw: FsmDrawComponent;
 
-  constructor(private fsmSvc: FsmDataService) { }
+  constructor() { }
 
   get validFSM() {
-    return this.fsmSvc.isMachineValid;
+    return this._fsmDraw.isValid;
   }
   get deterministic() {
-    return this.fsmSvc.isDeterministic;
+    return this._fsmDraw.isDeterministic;
   }
   ngOnInit() {
   }

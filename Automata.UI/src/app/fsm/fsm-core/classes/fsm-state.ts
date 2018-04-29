@@ -1,3 +1,4 @@
+import { EventEmitter } from '@angular/core';
 import { FsmDataService } from './../services/fsm-data.service';
 import { FsmTransition } from './fsm-transition';
 import { FsmObject } from './fsm-object';
@@ -19,7 +20,7 @@ export class FsmStateData {
 export class FsmState extends FsmObject {
   private stateData: FsmStateData = new FsmStateData();
   public outboundTransitions: FsmTransition[] = [];
-
+  public dirty = true;
   constructor(data: FsmStateData) {
     super();
     this.stateData = data;
@@ -69,11 +70,13 @@ export class FsmState extends FsmObject {
   // public methods
   public addOutboundTransition(transition: FsmTransition) {
     this.outboundTransitions.push(transition);
+    this.dirty = true;
   }
   public removeOutboundTransition(transition: FsmTransition) {
     const index = this.outboundTransitions.indexOf(transition);
     if (index > -1) {
       this.outboundTransitions.splice(index, 1);
+      this.dirty = true;
     }
   }
   public toggleState() {
@@ -82,21 +85,24 @@ export class FsmState extends FsmObject {
       curPos = 0;
     }
     this.stateData.stateType = stateProgression[curPos];
+    this.dirty = true;
   }
 
   public toggleStateValue(value: StateTypes) {
-    if (value === StateTypes.START) { this.startState = !this.startState; }
-    if (value === StateTypes.FINAL) { this.finalState = !this.finalState; }
+    if (value === StateTypes.START) { this.startState = !this.startState; this.dirty = true; }
+    if (value === StateTypes.FINAL) { this.finalState = !this.finalState; this.dirty = true; }
   }
 
   public updateValues(name: string, type: StateTypes) {
     this.stateData.name = name;
     this.stateData.stateType = type;
+    this.dirty = true;
   }
 
   public updatePosition(x: number, y: number) {
     this.stateData.x = x;
     this.stateData.y = y;
+    this.dirty = true;
   }
 
   public asSerializableObject() {

@@ -10,24 +10,18 @@ import { Fsm } from '../classes/fsm';
 @Injectable()
 export class FsmDataService {
   // public member variables
-  private _fsm: Fsm = new Fsm();
+  private _userFsm: Fsm = new Fsm();
+  private _deterFsm: Fsm = new Fsm();
 
-  public get isMachineValid() {
-    return this._fsm.valid;
-  }
-  public get isMachineEmpty() { return this._fsm.fsmStates.length === 0; }
-  public get isDeterministic(): boolean {
-    return this._fsm.deterministic;
-  }
-  public get states() { return this._fsm.fsmStates; }
-  public get transitions() { return this._fsm.fsmTransitions; }
+  public get userFsm() { return this._userFsm; }
 
   constructor() {
   }
 
+
   // public methods for states
   public addDefaultState = (x: number, y: number, deterministic = false): FsmState => {
-    const stateList = this._fsm.fsmStates;
+    const stateList = this._userFsm.fsmStates;
     let count = 0;
     const objCheck = {};
     for (const state of stateList) {
@@ -42,7 +36,7 @@ export class FsmDataService {
       }
     }
     const calcName = DefaultStateLabel + calcIndex;
-    return this._fsm.addState({
+    return this._userFsm.addState({
       name: calcName,
       stateIndex: calcIndex,
       x: x,
@@ -51,26 +45,11 @@ export class FsmDataService {
     });
   }
 
-  public getStateLabelError(state: FsmState) {
-    return this._fsm.stateLabelError(state);
-  }
-
-  public removeState(state: FsmState) {
-    this._fsm.removeState(state);
-  }
-
-  // public methods for transitions
-  public addTransition(src: FsmState, dest: FsmState, char: string = 'a') {
-    return this._fsm.addTransition(src, dest, char);
-  }
-
-  public removeTransition(transition: FsmTransition) {
-    this._fsm.removeTransition(transition);
-  }
-
   // public methods for FSM
-  public maxPos = () => this._fsm.maxPos;
-  public clearFsm = () => this._fsm.clear();
-  public toJson = () => JSON.stringify(this._fsm.asSerializableObject());
-  public fromJson = (data: string) => this._fsm.fromSerializableObject(JSON.parse(data));
+  public clearFsms() {
+    this._userFsm.clear();
+    this._deterFsm.clear();
+  }
+  public toJson = () => JSON.stringify(this._userFsm.asSerializableObject());
+  public fromJson = (data: string) => this._userFsm.fromSerializableObject(JSON.parse(data));
 }
