@@ -1,4 +1,4 @@
-import { FsmObject, FsmState } from './../../../fsm-core/services/fsm-data.service';
+import { FsmObject } from './../../../fsm-core/classes/fsm-object';
 import { FsmDrawTransitionComponent } from './../fsm-draw-transition/fsm-draw-transition.component';
 import { FsmDrawStateComponent } from './../fsm-draw-state/fsm-draw-state.component';
 import { Output, Component, QueryList, EventEmitter, ElementRef, ContentChildren, AfterViewInit, Renderer, Input } from '@angular/core';
@@ -153,5 +153,4 @@ export class FsmDrawSurfaceComponent implements AfterViewInit {
     pt.y = y;
     return pt.matrixTransform(this._elementRef.nativeElement.children[0].getScreenCTM().inverse());
   }
-
 }

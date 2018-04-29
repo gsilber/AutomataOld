@@ -1,4 +1,4 @@
-import { FsmState, StateTypes } from './../../../fsm-core/services/fsm-data.service';
+import { FsmState, StateTypes } from './../../../fsm-core/classes/fsm-state';
 import { Component, Input, EventEmitter, Output, Renderer } from '@angular/core';
 import { ChildMouseEvent } from '../fsm-draw-surface/fsm-draw-surface.component';
 

@@ -1,6 +1,6 @@
+import { FsmTransition } from './../../../fsm-core/classes/fsm-transition';
 import { FsmDrawStateComponent } from './../fsm-draw-state/fsm-draw-state.component';
 import { ChildMouseEvent } from './../fsm-draw-surface/fsm-draw-surface.component';
-import { FsmTransition } from './../../../fsm-core/services/fsm-data.service';
 import { Component, Input, Output, EventEmitter, ViewChild, ElementRef, ChangeDetectorRef, AfterViewInit } from '@angular/core';
 
 @Component({

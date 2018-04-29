@@ -1,8 +1,11 @@
+import { StateTypes, FsmState } from './../../../fsm-core/classes/fsm-state';
+import { FsmTransition } from './../../../fsm-core/classes/fsm-transition';
+import { FsmObject } from './../../../fsm-core/classes/fsm-object';
 import { File, FileIoComponent } from './../../../../reusable/file-io/file-io/file-io.component';
 import { AlertModalComponent, AlertModalResult } from './../../../../reusable/alert-modal/alert-modal/alert-modal.component';
 import { SurfaceMouseEvent, FsmDrawSurfaceComponent } from './../fsm-draw-surface/fsm-draw-surface.component';
 import { Component, Input, ViewChild, AfterViewInit, ChangeDetectorRef, ElementRef } from '@angular/core';
-import { FsmTransition, FsmDataService, StateTypes, FsmState, FsmObject } from '../../../fsm-core/services/fsm-data.service';
+import { FsmDataService } from '../../../fsm-core/services/fsm-data.service';
 import { FsmDrawPropsComponent } from '../fsm-draw-props/fsm-draw-props.component';
 import { Modes, FsmDrawControlbarComponent } from './../fsm-draw-controlbar/fsm-draw-controlbar.component';
 

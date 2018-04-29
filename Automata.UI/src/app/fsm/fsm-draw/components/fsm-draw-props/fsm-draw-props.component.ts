@@ -1,5 +1,9 @@
-import { FsmObject, FsmState, FsmTransition, StateTypes, FsmDataService } from './../../../fsm-core/services/fsm-data.service';
+import { FsmTransition } from './../../../fsm-core/classes/fsm-transition';
+import { FsmState } from './../../../fsm-core/classes/fsm-state';
+import { FsmObject } from './../../../fsm-core/classes/fsm-object';
+import { FsmDataService } from './../../../fsm-core/services/fsm-data.service';
 import { Component, Input, AfterViewInit, ChangeDetectorRef } from '@angular/core';
+import { StateTypes } from '../../../fsm-core/classes/fsm-state';
 
 @Component({
   selector: 'app-fsm-draw-props',
@@ -75,8 +79,8 @@ export class FsmDrawPropsComponent implements AfterViewInit {
 
   constructor(private _fsmSvc: FsmDataService, private _detect: ChangeDetectorRef) {}
 
-  ngAfterViewInit(){
-    setTimeout(_ => this._detect.detectChanges());
+  ngAfterViewInit() {
+    setTimeout(_ => this._detect.detectChanges(), 1);
   }
 
   // state property page event handlers

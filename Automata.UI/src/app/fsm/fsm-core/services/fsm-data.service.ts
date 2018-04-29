@@ -1,52 +1,34 @@
-import { FsmDrawTransitionComponent } from './../../fsm-draw/components/fsm-draw-transition/fsm-draw-transition.component';
-import { Injectable, ModuleWithComponentFactories } from '@angular/core';
+import { FsmTransition } from './../classes/fsm-transition';
+import { FsmState, StateTypes } from './../classes/fsm-state';
+
+import { Injectable } from '@angular/core';
+import { Fsm } from '../classes/fsm';
 
 // Exported classes and enums used by the service
-export enum StateTypes { START = 'start', FINAL = 'final', NORMAL = 'normal', STARTFINAL = 'startfinal' }
 
-export class FsmObject {
-  public type: string;
-}
-export class FsmState extends FsmObject {
-  public x: number;
-  public y: number;
-  public stateIndex: number;
-  public name: string;
-  public stateType: StateTypes = StateTypes.NORMAL;
-}
-
-export class FsmTransition extends FsmObject {
-  public sourceState: FsmState;
-  public destState: FsmState;
-  // this can be a comma seperated list of characters or a RegEx character classes (i.e. a,b or [a..z] or [abc])
-  public charactersAccepted = '';
-  public characterMap?: string[] = [];
-  public rotation = 0;
-}
 
 // Service code
 @Injectable()
 export class FsmDataService {
   // public member variables
-  private _fsmStates: FsmState[] = [];
-  private _fsmTransitions: FsmTransition[] = [];
+  private _fsm: Fsm = new Fsm();
   public defaultStateLabel = 'q';
 
   public get machineValid() {
     // does it at least one start and one final state.  Everything else is handled by individual inserts
-    if (this._fsmStates.filter(item => item.stateType === StateTypes.START || item.stateType === StateTypes.STARTFINAL).length === 0) {
+    if (this._fsm.fsmStates.filter(item => item.stateType === StateTypes.START || item.stateType === StateTypes.STARTFINAL).length === 0) {
       return false;
     }
-    if (this._fsmStates.filter(item => item.stateType === StateTypes.FINAL || item.stateType === StateTypes.STARTFINAL).length === 0) {
+    if (this._fsm.fsmStates.filter(item => item.stateType === StateTypes.FINAL || item.stateType === StateTypes.STARTFINAL).length === 0) {
       return false;
     }
-    if (this._fsmTransitions.length === 0) { return false; }
+    if (this._fsm.fsmTransitions.length === 0) { return false; }
     return true;
   }
 
   public get isDeterministic(): boolean {
     let deter = true;
-    this._fsmStates.forEach((state) => {
+    this._fsm.fsmStates.forEach((state) => {
       let map = [];
       const transitions = this.getStateOutboundTransitions(state);
       transitions.forEach((transition) => {
@@ -59,7 +41,7 @@ export class FsmDataService {
 
   public get alphabet(): any {
     const sigma = {};
-    this._fsmStates.forEach((state) => {
+    this._fsm.fsmStates.forEach((state) => {
       const transitions = this.getStateOutboundTransitions(state);
       transitions.forEach((transition) => {
         transition.characterMap.forEach(item => { if (!(item in sigma)) { sigma[item] = true; } });
@@ -169,27 +151,27 @@ export class FsmDataService {
 
   // public methods for states
   public getStates(deterministic = false) {
-    if (!deterministic) { return this._fsmStates; }
-    if (this.isDeterministic) { return this._fsmStates; }
+    if (!deterministic) { return this._fsm.fsmStates; }
+    if (this.isDeterministic) { return this._fsm.fsmStates; }
     // here a deterministic version of a non-deterministic FSA has been requested.  We need to generate an DFSM with
     // subset method
   }
   public maxPos = () => {
     let maxX = 0;
     let maxY = 0;
-    this._fsmStates.forEach(state => {
+    this._fsm.fsmStates.forEach(state => {
       if (state.x > maxX) { maxX = state.x; }
       if (state.y > maxY) { maxY = state.y; }
     });
     return { x: maxX, y: maxY };
   }
   public addState = (state: FsmState): FsmState => {
-    this._fsmStates.push(state);
+    this._fsm.fsmStates.push(state);
     return state;
   }
 
   public addDefaultState = (x: number, y: number, deterministic = false): FsmState => {
-    const stateList = this._fsmStates;
+    const stateList = this._fsm.fsmStates;
     let count = 0;
     const objCheck = {};
     for (const state of stateList) {
@@ -219,28 +201,28 @@ export class FsmDataService {
     if (state.name.startsWith(this.defaultStateLabel) && state.name !== this.defaultStateLabel + state.stateIndex) {
       return 'Names beginning with ' + this.defaultStateLabel + ' are reserved';
     }
-    for (const item of this._fsmStates) {
+    for (const item of this._fsm.fsmStates) {
       if (item !== state && item.name === state.name) { return 'Duplicate state name'; }
     }
     return '';
   }
 
   public getStateOutboundTransitions(state: FsmState) {
-    return this._fsmTransitions.filter((item) => item.sourceState === state);
+    return this._fsm.fsmTransitions.filter((item) => item.sourceState === state);
   }
 
   public removeState(state: FsmState) {
-    this._fsmTransitions = this._fsmTransitions.filter(
+    this._fsm.fsmTransitions = this._fsm.fsmTransitions.filter(
       function (item) { return item.sourceState !== state && item.destState !== state; });
-    const index = this._fsmStates.indexOf(state);
+    const index = this._fsm.fsmStates.indexOf(state);
     if (index > -1) {
-      this._fsmStates.splice(index, 1);
+      this._fsm.fsmStates.splice(index, 1);
     }
   }
 
   // public methods for transitions
   public getTransitions() {
-    return this._fsmTransitions;
+    return this._fsm.fsmTransitions;
   }
   public setTransitionChars(transition: FsmTransition, chars: string) {
     const oldchars = transition.charactersAccepted;
@@ -290,13 +272,13 @@ export class FsmDataService {
   public addTransition = (source: FsmState, dest: FsmState, transCharacter = 'a'): FsmTransition => {
     let trans = { sourceState: source, destState: dest, charactersAccepted: '', type: 'transition', rotation: 0 };
     this.setTransitionChars(trans, transCharacter);
-    const transList = this._fsmTransitions;
+    const transList = this._fsm.fsmTransitions;
     const problems = transList.filter((item) =>
       (source === dest && item.sourceState === item.destState && item.sourceState === source) ||
       (source !== dest && item.sourceState === source && item.destState === dest)
     );
     if (problems.length === 0) {
-        this._fsmTransitions.push(trans);
+        this._fsm.fsmTransitions.push(trans);
     } else {
       trans = problems[0];
     }
@@ -304,37 +286,37 @@ export class FsmDataService {
   }
 
   public removeTransition(transition: FsmTransition) {
-    const index = this._fsmTransitions.indexOf(transition);
+    const index = this._fsm.fsmTransitions.indexOf(transition);
     if (index > -1) {
-      this._fsmTransitions.splice(index, 1);
+      this._fsm.fsmTransitions.splice(index, 1);
     }
   }
 
   // public methods for FSM
   public clear = () => {
-    this._fsmStates = [];
-    this._fsmTransitions = [];
+    this._fsm.fsmStates = [];
+    this._fsm.fsmTransitions = [];
   }
 
   public toJson() {
-    return JSON.stringify(this._fsmTransitions);
+    return JSON.stringify(this._fsm.fsmTransitions);
   }
 
   public fromJson(data: string) {
-    this._fsmStates = [];
-    this._fsmTransitions = [];
-    this._fsmTransitions = JSON.parse(data);
-    for (const trans of this._fsmTransitions) {
+    this._fsm.fsmStates = [];
+    this._fsm.fsmTransitions = [];
+    this._fsm.fsmTransitions = JSON.parse(data);
+    for (const trans of this._fsm.fsmTransitions) {
       if (!trans.rotation) { trans.rotation = 0; }
-      let state = this._fsmStates.find(item => item.name === trans.sourceState.name);
+      let state = this._fsm.fsmStates.find(item => item.name === trans.sourceState.name);
       if (!state) {
-        this._fsmStates.push(trans.sourceState);
+        this._fsm.fsmStates.push(trans.sourceState);
       } else {
         trans.sourceState = state;
       }
-      state = this._fsmStates.find(item => item.name === trans.destState.name);
+      state = this._fsm.fsmStates.find(item => item.name === trans.destState.name);
       if (!state) {
-        this._fsmStates.push(trans.destState);
+        this._fsm.fsmStates.push(trans.destState);
       } else {
         trans.destState = state;
       }
