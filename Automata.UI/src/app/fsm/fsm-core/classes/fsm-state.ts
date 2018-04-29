@@ -1,3 +1,4 @@
+import { FsmDataService } from './../services/fsm-data.service';
 import { FsmTransition } from './fsm-transition';
 import { FsmObject } from './fsm-object';
 
@@ -66,6 +67,15 @@ export class FsmState extends FsmObject {
   }
 
   // public methods
+  public addOutboundTransition(transition: FsmTransition) {
+    this.outboundTransitions.push(transition);
+  }
+  public removeOutboundTransition(transition: FsmTransition) {
+    const index = this.outboundTransitions.indexOf(transition);
+    if (index > -1) {
+      this.outboundTransitions.splice(index, 1);
+    }
+  }
   public toggleState() {
     let curPos = stateProgression.indexOf(this.stateType) + 1;
     if (curPos >= stateProgression.length) {

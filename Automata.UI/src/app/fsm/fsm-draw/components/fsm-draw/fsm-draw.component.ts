@@ -42,6 +42,14 @@ export class FsmDrawComponent implements AfterViewInit {
   @ViewChild(FileIoComponent) fileIO: FileIoComponent;
 
   // properties
+  get isValid() { return this.fsmSvc.isMachineValid; }
+  get status() {
+    if (this.fsmSvc.isMachineEmpty) { return 'Empty FSM'; }
+    if (!this.fsmSvc.isMachineValid) { return 'Invalid FSM'; }
+    if (this.fsmSvc.isDeterministic) { return 'Deterministic FSM'; }
+    return 'Non-Deterministic FSM';
+  }
+
   get zoomPercent() { return this._zoomPercent; }
   set zoomPercent(val) {
     if (val >= 50 && val <= 200) {
@@ -152,7 +160,6 @@ export class FsmDrawComponent implements AfterViewInit {
   onCtrlbarLoad = () => this.popupFileDirty('loadFile');
   onCtrlbarSave = () => this.saveFile();
   onCtrlbarExport = () => this.exportImage();
-  onCtrlbarValidate = () => this.validate();
   onCtrlbarZoom = (direction) => {
     const deltaPercent = 10 * direction * -1;
     this.zoomPercent -= deltaPercent;
@@ -265,13 +272,5 @@ export class FsmDrawComponent implements AfterViewInit {
   clear() {
     this.fsmSvc.clearFsm();
     this.dirty = false;
-  }
-  validate() {
-    if (this.fsmSvc.isMachineValid) {
-      this.popup.open('The machine is valid', 'FSM Status');
-    } else {
-      this.popup.open('The machine is not valid', 'FSM Status');
-    }
-    return false;
   }
 }

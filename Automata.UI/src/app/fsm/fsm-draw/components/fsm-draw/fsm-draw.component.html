@@ -24,12 +24,19 @@
       <app-fsm-draw-props [object]='selected'></app-fsm-draw-props>
     </div>
   </div>
-  <div #cbar class='bg-light' style='position: absolute;bottom:0;left:0px;right:0px;width:100%'>
-    <div  [ngClass]='{"col-md-9":!readonly,"col-md-12": readonly}' style='padding:0;' >
-      <app-fsm-draw-controlbar [readonly]='readonly' (newfile)='onCtrlbarNew()' (loadfile)='onCtrlbarLoad()' (savefile)='onCtrlbarSave()'
-        (mode)='onCtrlbarMode($event)' (validate)='onCtrlbarValidate()' (zoom)='onCtrlbarZoom($event)' (saveimage)='onCtrlbarExport()'></app-fsm-draw-controlbar>
+  <div #cbar class='bg-light' style='position: absolute;bottom:0;left:0px;right:0px;width:100%;'>
+    <div class='container-fluid'>
+    <div class='row'>
+      <div class='col-md-9' style='padding:0;'>
+        <app-fsm-draw-controlbar [readonly]='readonly' [isValid]='isValid' (newfile)='onCtrlbarNew()' (loadfile)='onCtrlbarLoad()' (savefile)='onCtrlbarSave()'
+          (mode)='onCtrlbarMode($event)' (zoom)='onCtrlbarZoom($event)' (saveimage)='onCtrlbarExport()'></app-fsm-draw-controlbar>
+      </div>
+      <div class='col-md-3 border-top border-left' style='width:100%;font-size: 1.2rem;' [style.height.px]='cbar.height'>
+        FSM Type: <div class='font-weight-bold'  [ngClass]='{"text-danger":status==="Invalid FSM"}'>{{status}}</div>
+      </div>
     </div>
   </div>
+</div>
 </div>
 
 <!--State context menu -->

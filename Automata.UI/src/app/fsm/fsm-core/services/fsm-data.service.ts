@@ -15,6 +15,7 @@ export class FsmDataService {
   public get isMachineValid() {
     return this._fsm.valid;
   }
+  public get isMachineEmpty() { return this._fsm.fsmStates.length === 0; }
   public get isDeterministic(): boolean {
     return this._fsm.deterministic;
   }

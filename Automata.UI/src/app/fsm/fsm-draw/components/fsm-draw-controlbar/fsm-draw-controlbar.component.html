@@ -20,6 +20,32 @@
     </ul>
   </div>
   <div class='border'>
+    <div class='fas ctrlBarGroupHeader border-bottom'>File</div>
+    <ul class="nav nav-pills">
+
+      <li *ngIf='!readonly' class="nav-item" (click)='onNew()' ngbTooltip='New FSM' placement='top'>
+        <a href='' class="nav-link">
+          <span class="fas fa-file"></span>
+        </a>
+      </li>
+      <li class="nav-item" (click)='onLoad()' ngbTooltip='Open FSM' placement='top'>
+        <a href='' class="nav-link">
+          <span class="fas fa-folder-open"></span>
+        </a>
+      </li>
+      <li *ngIf='!readonly' class="nav-item" (click)='onSave()' ngbTooltip='Save FSM' placement='top'>
+        <a href='' class="nav-link" [ngClass]='{"disabled":!isValid}'>
+          <span class="fas fa-save"></span>
+        </a>
+      </li>
+      <li class="nav-item" (click)='onExport()' ngbTooltip='Export FSM as image (PNG)' placement='top'>
+        <a href='' class="nav-link">
+          <span class="fas fa-image"></span>
+        </a>
+      </li>
+    </ul>
+  </div>
+  <div class='border'>
     <div class='fas ctrlBarGroupHeader border-bottom'>Zoom </div>
 
     <ul class="nav nav-pills">
@@ -40,40 +66,6 @@
       </li>
     </ul>
   </div>
-  <div class='border'>
-    <div class='fas ctrlBarGroupHeader border-bottom'>File</div>
-    <ul class="nav nav-pills">
-
-      <li *ngIf='!readonly' class="nav-item" (click)='onNew()' ngbTooltip='New FSM' placement='top'>
-        <a href='' class="nav-link">
-          <span class="fas fa-file"></span>
-        </a>
-      </li>
-      <li class="nav-item" (click)='onLoad()' ngbTooltip='Open FSM' placement='top'>
-        <a href='' class="nav-link">
-          <span class="fas fa-folder-open"></span>
-        </a>
-      </li>
-      <li *ngIf='!readonly' class="nav-item" (click)='onSave()' ngbTooltip='Save FSM' placement='top'>
-        <a href='' class="nav-link">
-          <span class="fas fa-save"></span>
-        </a>
-      </li>
-      <li class="nav-item" (click)='onExport()' ngbTooltip='Export FSM as image (PNG)' placement='top'>
-        <a href='' class="nav-link">
-          <span class="fas fa-image"></span>
-        </a>
-      </li>
-    </ul>
-  </div>
-  <div class='border'>
-    <div class='fas ctrlBarGroupHeader border-bottom' >Check</div>
-    <ul class='nav nav-pills'>
-      <li class="nav-item" ngbTooltip='Validate Automata' placement='top' (click)='onValidate()'>
-        <a href='' class="nav-link">
-          <span class="fas fa-check" ></span>
-        </a>
-      </li>
-    </ul>
-  </div>
-</nav>
+  <div class='col-md-1'>
+    </div>
+  </nav>

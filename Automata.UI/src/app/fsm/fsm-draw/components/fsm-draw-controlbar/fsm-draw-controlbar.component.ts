@@ -18,13 +18,12 @@ export class FsmDrawControlbarComponent implements OnInit {
   @Output() loadfile: EventEmitter<boolean> = new EventEmitter<boolean>();
   @Output() savefile: EventEmitter<boolean> = new EventEmitter<boolean>();
   @Output() saveimage: EventEmitter<boolean> = new EventEmitter<boolean>();
-  @Output() validate: EventEmitter<boolean> = new EventEmitter<boolean>();
   @Output() help: EventEmitter<boolean> = new EventEmitter<boolean>();
 
   // input variables
   @Input() readonly = false;
+  @Input() isValid = false;
 
-  constructor() { }
 
   // Lifecycle hooks
   ngOnInit() {
@@ -45,5 +44,4 @@ export class FsmDrawControlbarComponent implements OnInit {
   onLoad = () => { this.loadfile.emit(true); return false; };
   onSave = () => { this.savefile.emit(true); return false; };
   onExport = () => { this.saveimage.emit(true); return false; };
-  onValidate = () => { this.validate.emit(true); return false; };
 }
