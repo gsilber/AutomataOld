@@ -48,6 +48,9 @@ export class FsmDrawTransitionComponent implements AfterViewInit {
   }
 
   // properties
+  get displayChars(): string {
+    return (this._transition.epsilon ? '\u03B5' : this.transition.charactersAccepted);
+  }
   get transition(): FsmTransition { return this._transition; }
 
   get length() {

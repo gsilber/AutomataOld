@@ -13,7 +13,6 @@ export enum FileTypes { TEXT = 'text', URL = 'url', BINARY = 'binary', ARRAY = '
   styleUrls: ['./file-io.component.css']
 })
 export class FileIoComponent implements OnInit {
-
   @Output() file: EventEmitter<File> = new EventEmitter<File>();
   @Output() fileprogress: EventEmitter<number> = new EventEmitter<number>();
   @Input() type: FileTypes = FileTypes.TEXT;
@@ -57,6 +56,7 @@ export class FileIoComponent implements OnInit {
     }
   }
   public upload() {
+    this.fileInput.nativeElement.value = null;
     this.fileInput.nativeElement.click();
   }
   public download(blob: Blob, fileName: string) {

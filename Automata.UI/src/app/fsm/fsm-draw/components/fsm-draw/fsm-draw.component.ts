@@ -47,11 +47,11 @@ export class FsmDrawComponent implements AfterViewInit {
   get isDirty() { return this.userFsm.dirty; }
   get isValid() { return this.userFsm.valid; }
   get isDeterministic() { return this.userFsm.deterministic; }
-    get status() {
-    if (this.userFsm.empty) { return 'Empty FSM'; }
-    if (!this.userFsm.valid) { return 'Invalid FSM'; }
-    if (this.userFsm.deterministic) { return 'Deterministic FSM'; }
-    return 'Non-Deterministic FSM';
+  get status() {
+    if (this.userFsm.empty) { return 'Empty'; }
+    if (!this.userFsm.valid) { return 'Invalid'; }
+    if (this.userFsm.deterministic) { return 'Deterministic'; }
+    return 'Non-Deterministic';
   }
 
   get zoomPercent() { return this._zoomPercent; }
@@ -74,7 +74,8 @@ export class FsmDrawComponent implements AfterViewInit {
       destState: dest,
       charactersAccepted: '',
       rotation: 0,
-      characterMap: []
+      characterMap: [],
+      epsilon: false
     });
   }
 
@@ -139,13 +140,13 @@ export class FsmDrawComponent implements AfterViewInit {
         const deltaY = s.sourceState.y - this.mouseY;
         const theta = Math.atan2(deltaY, deltaX);
         const thetad = theta * (180.0 / Math.PI);
-        s.setRotation(thetad + 180);
+        s.rotation = thetad + 180;
       } else {
         const d = ((s.destState.y - s.sourceState.y) * this.mouseX - (s.destState.x - s.sourceState.x) * this.mouseY +
           s.destState.x * s.sourceState.y - s.destState.y * s.sourceState.x) / Math.sqrt(Math.pow(s.destState.y - s.sourceState.y, 2) +
             Math.pow(s.destState.x - s.sourceState.x, 2));
         // this is a hack, since we are using control point, we need to scale back so the mouse is actually near the line.
-        s.setRotation(d * -1 - d * .8);
+        s.rotation = d * -1 - d * .8;
       }
     }
   }

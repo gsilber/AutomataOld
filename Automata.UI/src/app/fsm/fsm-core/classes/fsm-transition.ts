@@ -9,6 +9,7 @@ export class FsmTransitionData {
   public charactersAccepted = '';
   public characterMap?: string[] = [];
   public rotation = 0;
+  public epsilon = false;
 }
 
 export class FsmTransition extends FsmObject {
@@ -27,8 +28,26 @@ export class FsmTransition extends FsmObject {
   }
   public get characterMap(): string[] { return this.transitionData.characterMap; }
   public get rotation(): number { return this.transitionData.rotation; }
+  public set rotation(rotation: number) { this.transitionData.rotation = rotation; this.dirty = true; }
+
+
+  public get epsilon(): boolean { return this.transitionData.epsilon; }
+  public set epsilon(val: boolean) {
+    if (val !== this.epsilon) {
+      if (val) {
+        this.transitionData.charactersAccepted = '';
+        this.transitionData.characterMap = [];
+      } else {
+        this.transitionData.charactersAccepted = 'a';
+        this.transitionData.characterMap = ['a'];
+      }
+      this.transitionData.epsilon = val;
+      this.dirty = true;
+    }
+  }
 
   public get charactersError() {
+    if (this.epsilon) { return ''; }
     if (this.charactersAccepted.length === 0) { return 'Invalid accept set'; }
     const result = /^(([\s\S]|[\s\S]-[\s\S])(\,([\s\S]|[\s\S]-[\s\S]))*)$/g.test(this.charactersAccepted);
     if (!result) { return 'Invalid accept set'; }
@@ -60,24 +79,21 @@ export class FsmTransition extends FsmObject {
     this.transitionData.characterMap = map;
     return '';
   }
+
   constructor(data: FsmTransitionData) {
     super();
     this.transitionData = data;
     this.type = 'transition';
   }
 
-  setRotation(rotation: number) {
-    this.transitionData.rotation = rotation;
-    this.dirty = true;
-  }
-
-  asSerializableObject() {
+  asSerializableObject(): any {
     return {
       sourceState: this.sourceState.asSerializableObject(),
       destState: this.destState.asSerializableObject(),
       charactersAccepted: this.charactersAccepted,
       characterMap: this.characterMap,
-      rotation: this.rotation
+      rotation: this.rotation,
+      epsilon: this.epsilon
     };
   }
 }

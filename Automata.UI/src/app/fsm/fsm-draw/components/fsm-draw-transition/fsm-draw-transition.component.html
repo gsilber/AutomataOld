@@ -18,12 +18,12 @@
             <!--The text element-->
             <svg:text class='fsm-transition-label' [attr.x]='curveLength/2' stroke-width='1' fill='blue' text-anchor='middle' [attr.transform]='"translate(0,"+textvoffset+")"'>
                 <svg:textPath attr.xlink:href='#{{uniqueID}}' side='right'>
-                    {{transition.charactersAccepted}}
+                    {{displayChars}}
                 </svg:textPath>
             </svg:text>
             <svg:text class='fsm-transition-label' style='fill:none;stroke:none;' #TextSample x='60' y='220' stroke-width='1' fill='none'
-                text-anchor='middle'>
-                {{transition.charactersAccepted}}
+                text-anchor='middle' >
+                {{displayChars}}
             </svg:text>
         </ng-template>
 
@@ -33,7 +33,7 @@
                 stroke='blue' fill='none' stroke-width='2' marker-end='url(#arrowlong)'></svg:path>
             <svg:text [attr.x]='transition.sourceState.x+stateRadius*2' [attr.y]='transition.sourceState.y+stateRadius*2' class='fsm-transition-label' stroke-width='1' fill='blue' text-anchor='middle'
             [attr.transform]='(transition.rotation>90 && transition.rotation<270?"translate("+(2*(transition.sourceState.x+stateRadius*2)-5)+","+(2*(transition.sourceState.y+stateRadius*2)-5)+") scale(-1,-1)":"")'>
-                {{transition.charactersAccepted}}
+                {{displayChars}}
             </svg:text>
             </svg:g>
         </ng-template>

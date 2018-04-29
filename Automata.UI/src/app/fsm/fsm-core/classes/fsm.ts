@@ -28,8 +28,12 @@ export class Fsm {
         let deter = true;
         this.fsmStates.forEach((state) => {
             let map = [];
-            this.fsmTransitions.filter((item) => item.sourceState === state).forEach((transition) => {
-                map = map.concat(transition.characterMap);
+            state.outboundTransitions.forEach((transition) => {
+                if (transition.epsilon) {
+                    deter = false;
+                } else {
+                    map = map.concat(transition.characterMap);
+                }
             });
             if (!map.every((elem, i, array) => array.lastIndexOf(elem) === i)) { deter = false; }
         });
@@ -73,6 +77,7 @@ export class Fsm {
         this._dirty = true;
     }
 
+    // has to be at this level, since we need to see all the states to check for uniqueness
     public stateLabelError(state: FsmState): string {
         const err = state.labelError;
         if (err.length > 0) { return err; }
@@ -84,7 +89,7 @@ export class Fsm {
 
     // public methods for transitions
     public addTransition(source: FsmState, dest: FsmState, transCharacter: string = 'a'): FsmTransition {
-        let trans = new FsmTransition({ sourceState: source, destState: dest, charactersAccepted: '', rotation: 0 });
+        let trans = new FsmTransition({ sourceState: source, destState: dest, charactersAccepted: '', rotation: 0, epsilon: false });
         trans.charactersAccepted = transCharacter;
         const problems = this.fsmTransitions.filter((item) =>
             (source === dest && item.sourceState === item.destState && item.sourceState === source) ||
@@ -95,10 +100,12 @@ export class Fsm {
         } else {
             trans = problems[0];
         }
+        source.outboundTransitions.push(trans);
         return trans;
     }
 
     public removeTransition(transition: FsmTransition) {
+        transition.sourceState.outboundTransitions.push(transition);
         const index = this.fsmTransitions.indexOf(transition);
         if (index > -1) {
             this.fsmTransitions.splice(index, 1);
@@ -131,11 +138,23 @@ export class Fsm {
             let dst = this.fsmStates.find(item => item.name === transbase.destState.name);
             if (!src) { src = new FsmState(transbase.sourceState); this.fsmStates.push(src); }
             transbase.sourceState = src;
-            if (!dst) { dst = new FsmState(transbase.destState); this.fsmStates.push(dst); }
+            if (src.name === transbase.destState.name) {
+                dst = src;
+            } else {
+                if (!dst) { dst = new FsmState(transbase.destState); this.fsmStates.push(dst); }
+            }
             transbase.destState = dst;
             if (!transbase.rotation) { transbase.rotation = 0; }
             this.fsmTransitions.push(new FsmTransition(transbase));
         });
+        this.setClean();
+    }
+    constructor() {
+        // this.fromSerializableObject(JSON.parse(
+        //     '[{"sourceState":{"x":315.6953125,"y":282.04296875,"stateIndex":0,"name":"q0","stateType":"startfinal"},' +
+        //     '"destState":{"x":315.6953125,"y":282.04296875,"stateIndex":0,"name":"q0","stateType":"startfinal"}' +
+        //     ',"charactersAccepted":"a","characterMap":["a"],"rotation":0}]'
+        // ));
     }
 }
 
