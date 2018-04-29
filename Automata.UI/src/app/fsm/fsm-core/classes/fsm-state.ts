@@ -30,7 +30,7 @@ export class FsmState extends FsmObject {
   public get y(): number { return this.stateData.y; }
   public get stateIndex(): number { return this.stateData.stateIndex; }
   public get name(): string { return this.stateData.name; }
-  public set name(name: string) { this.stateData.name=name; }
+  public set name(name: string) { this.stateData.name = name; }
   public get stateType(): StateTypes { return this.stateData.stateType; }
 
   public get startState(): boolean {
