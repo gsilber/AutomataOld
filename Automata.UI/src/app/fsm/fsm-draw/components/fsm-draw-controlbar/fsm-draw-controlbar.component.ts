@@ -42,6 +42,6 @@ export class FsmDrawControlbarComponent implements OnInit {
   onZoom = (direction) => { this.zoom.emit(direction); return false; };
   onNew = () => { this.newfile.emit(true); return false; };
   onLoad = () => { this.loadfile.emit(true); return false; };
-  onSave = () => { this.savefile.emit(true); return false; };
+  onSave = () => { if (this.isValid) { this.savefile.emit(true); } return false; };
   onExport = () => { this.saveimage.emit(true); return false; };
 }
