@@ -6,16 +6,16 @@
     <div class='d-flex flex-row'>
       <ul class="nav nav-tabs nav-tabs--vertical nav-tabs--left" role="navigation" style='margin-right:0;'>
         <li class="nav-item">
-          <a href="#editFSM" class="nav-link active" data-toggle="tab" role="tab" aria-controls="editFSM">Edit Automata</a>
+          <a href="#editFSM" class="nav-link active" data-toggle="tab" role="tab" aria-controls="editFSM"><span class='fas fa-edit'></span>Edit Automata</a>
         </li>
         <li class="nav-item">
-          <a href="#infoFSM" class="nav-link" [ngClass]='{"disabled":!validFSM}' data-toggle="tab" role="tab" aria-controls="infoFSM">Automata Info</a>
+          <a href="#infoFSM" class="nav-link" [ngClass]='{"disabled":!validFSM}' data-toggle="tab" role="tab" aria-controls="infoFSM"><span class='fas fa-info-circle'></span> Automata Info </a>
         </li>
         <li class="nav-item">
-          <a href="#deterFSM" class="nav-link" [ngClass]='{"disabled":!validFSM || deterministic}' data-toggle="tab" role="tab" aria-controls="deterFSM">Determinism</a>
+          <a href="#deterFSM" class="nav-link" [ngClass]='{"disabled":!validFSM || deterministic}' data-toggle="tab" role="tab" aria-controls="deterFSM"><span class='fas fa-gavel'></span> Determinism</a>
         </li>
         <li class="nav-item">
-          <a href="#simFSM" class="nav-link" [ngClass]='{"disabled":!validFSM || true}' data-toggle="tab" role="tab" aria-controls="simFSM">Simulation</a>
+          <a href="#simFSM" class="nav-link" [ngClass]='{"disabled":!validFSM || true}' data-toggle="tab" role="tab" aria-controls="simFSM"><span class='fas fa-arrow-circle-up'></span> Simulation</a>
         </li>
       </ul>
       <div class="tab-content tab-content-container">

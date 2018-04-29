@@ -1,1 +1,1 @@
-ng build prod -bh /~silber/public_html/automata-sim
+ng build --prod --bh /~silber/automata-sim/
