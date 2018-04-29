@@ -40,13 +40,13 @@ export class Fsm {
         return deter;
     }
 
+    get complete(): boolean {
+        const sigma = this.alphabet;
+        return this.fsmStates.filter(state => state.charactersClosure.length !== sigma.length).length === 0;
+    }
     get alphabet(): any {
         const sigma = {};
-        this.fsmStates.forEach((state) => {
-            state.outboundTransitions.forEach((transition) => {
-                transition.characterMap.forEach(item => { if (!(item in sigma)) { sigma[item] = true; } });
-            });
-        });
+        this.fsmStates.forEach((state) => state.charactersClosure.forEach(item => sigma[item] = true));
         return Object.keys(sigma);
     }
 
@@ -105,11 +105,10 @@ export class Fsm {
     }
 
     public removeTransition(transition: FsmTransition) {
-        transition.sourceState.outboundTransitions.push(transition);
-        const index = this.fsmTransitions.indexOf(transition);
-        if (index > -1) {
-            this.fsmTransitions.splice(index, 1);
-        }
+        let index = transition.sourceState.outboundTransitions.indexOf(transition);
+        if (index > -1) { transition.sourceState.outboundTransitions.splice(index, 1); }
+        index = this.fsmTransitions.indexOf(transition);
+        if (index > -1) { this.fsmTransitions.splice(index, 1); }
         this._dirty = true;
     }
     // global methods

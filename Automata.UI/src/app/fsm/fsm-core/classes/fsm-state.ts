@@ -66,6 +66,11 @@ export class FsmState extends FsmObject {
     }
     return '';
   }
+  public get charactersClosure(): string[] {
+    const listObj = {};
+    this.outboundTransitions.forEach(trans => trans.characterMap.forEach(character => listObj[character] = 1));
+    return Object.keys(listObj);
+  }
 
   // public methods
   public addOutboundTransition(transition: FsmTransition) {

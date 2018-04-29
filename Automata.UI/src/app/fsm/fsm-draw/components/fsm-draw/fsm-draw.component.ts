@@ -44,13 +44,29 @@ export class FsmDrawComponent implements AfterViewInit {
   @ViewChild(FileIoComponent) fileIO: FileIoComponent;
 
   // properties
+  get statusTooltip() {
+    if (this.status === 'Invalid') {
+      return 'An FSM must have at least 1 start state, 1 final state, and 1 transition.';
+    }
+    if (this.status === 'Deterministic (Incomplete)') {
+      return 'You have states that do not have transitions for all elements in the alphabet.' +
+        '  A default hidden state will be created to catch all of these occurances';
+    }
+    return '';
+  }
   get isDirty() { return this.userFsm.dirty; }
   get isValid() { return this.userFsm.valid; }
   get isDeterministic() { return this.userFsm.deterministic; }
   get status() {
     if (this.userFsm.empty) { return 'Empty'; }
     if (!this.userFsm.valid) { return 'Invalid'; }
-    if (this.userFsm.deterministic) { return 'Deterministic'; }
+    if (this.userFsm.deterministic) {
+      if (this.userFsm.complete) {
+        return 'Deterministic';
+      } else {
+        return 'Deterministic (Incomplete)';
+      }
+    }
     return 'Non-Deterministic';
   }
 
@@ -59,7 +75,6 @@ export class FsmDrawComponent implements AfterViewInit {
     if (val >= 50 && val <= 200) {
       this.scrollsize = 2000 * val / 100.0;
       this._zoomPercent = val;
-
     }
   }
   get startTransition(): FsmTransition {
