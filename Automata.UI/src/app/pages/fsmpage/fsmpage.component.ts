@@ -11,7 +11,7 @@ export class FsmpageComponent implements OnInit {
   constructor(private fsmSvc: FsmDataService) { }
 
   get validFSM() {
-    return this.fsmSvc.machineValid;
+    return this.fsmSvc.isMachineValid;
   }
   get deterministic() {
     return this.fsmSvc.isDeterministic;

@@ -22,10 +22,10 @@ export class FsmDrawPropsComponent implements AfterViewInit {
   private _object: FsmObject = null;
 
   public get transitionCharacters(): string {
-    return this._fsmSvc.getTransitionChars(this.transition);
+    return this.transition.charactersAccepted;
   }
   public set transitionCharacters(val: string) {
-    this._fsmSvc.setTransitionChars(this.transition, val);
+    this.transition.charactersAccepted = val;
   }
   // Input properties
   @Input() set object(val) {
@@ -43,12 +43,12 @@ export class FsmDrawPropsComponent implements AfterViewInit {
   get object(): FsmObject { return this._object; }
   get validState(): boolean {
     if (!this.state) { return false; }
-    this.stateErrMsg = this._fsmSvc.validateLabel(this.state);
+    this.stateErrMsg = this._fsmSvc.getStateLabelError(this.state);
     return this.stateErrMsg === '';
   }
   get validTransition(): boolean {
     if (!this.transition) { return false; }
-    this.transitionErrMsg = this._fsmSvc.validateAcceptChars(this.transition);
+    this.transitionErrMsg = this.transition.charactersError;
     return this.transitionErrMsg === '';
   }
   get dirty(): boolean {
@@ -60,10 +60,10 @@ export class FsmDrawPropsComponent implements AfterViewInit {
     }
     return false;
   }
-  get start(): boolean { return this.state && (this.state.stateType === 'start' || this.state.stateType === 'startfinal'); }
-  set start(val: boolean) { FsmDataService.setStateValue(this.state, StateTypes.START, !val); }
-  get final() { return this.state && (this.state.stateType === 'final' || this.state.stateType === 'startfinal'); }
-  set final(val: boolean) { FsmDataService.setStateValue(this.state, StateTypes.FINAL, !val); }
+  get start(): boolean { return this.state && this.state.startState; }
+  set start(val: boolean) { this.state.startState = val; }
+  get final() { return this.state && this.state.finalState; }
+  set final(val: boolean) { this.state.finalState = val; }
 
   get state(): FsmState {
     if (this._object && this._object.type === 'state') {
@@ -77,7 +77,7 @@ export class FsmDrawPropsComponent implements AfterViewInit {
     }
   }
 
-  constructor(private _fsmSvc: FsmDataService, private _detect: ChangeDetectorRef) {}
+  constructor(private _fsmSvc: FsmDataService, private _detect: ChangeDetectorRef) { }
 
   ngAfterViewInit() {
     setTimeout(_ => this._detect.detectChanges(), 1);
@@ -89,8 +89,7 @@ export class FsmDrawPropsComponent implements AfterViewInit {
     this.itype = this.state.stateType;
   }
   cancelStateEdit = () => {
-    this.state.name = this.iname;
-    this.state.stateType = this.itype;
+    this.state.updateValues(this.iname, this.itype);
   }
   deleteState = () => {
     this._fsmSvc.removeState(this.state);

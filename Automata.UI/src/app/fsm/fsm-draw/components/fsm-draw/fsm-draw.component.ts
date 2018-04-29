@@ -20,7 +20,7 @@ export class FsmDrawComponent implements AfterViewInit {
   scrollsize = 2000;
   stateContextOpen = null;
   transContextOpen = null;
-  transitionSelectedState = null;
+  transitionSelectedState: FsmState = null;
   mouseX: number;
   mouseY: number;
   mouseHover: FsmObject;
@@ -51,20 +51,19 @@ export class FsmDrawComponent implements AfterViewInit {
     }
   }
   get startTransition(): FsmTransition {
-    let dest = {
-      x: this.mouseX, y: this.mouseY, stateIndex: 99, name: 'temp', stateType: StateTypes.NORMAL,
-      type: 'state'
-    };
+    let dest: FsmState = new FsmState({
+      x: this.mouseX, y: this.mouseY, stateIndex: 99, name: 'temp', stateType: StateTypes.NORMAL
+    });
     if (this.mouseHover && this.mouseHover.type === 'state' && this.mouseHover === this.transitionSelectedState) {
       dest = this.transitionSelectedState;
     }
-    return {
+    return new FsmTransition({
       sourceState: this.transitionSelectedState,
       destState: dest,
       charactersAccepted: '',
-      type: 'transition',
-      rotation: 0
-    };
+      rotation: 0,
+      characterMap: []
+    });
   }
 
   constructor(public fsmSvc: FsmDataService, private _detect: ChangeDetectorRef) { }
@@ -83,7 +82,7 @@ export class FsmDrawComponent implements AfterViewInit {
     } else {
       if (this.mode === Modes.TRANSITION && evt.type === 'state' && !this.transitionSelectedState) {
         // start a transition
-        this.transitionSelectedState = evt.child;
+        this.transitionSelectedState = evt.child as FsmState;
       } else {
         if (this.mode === Modes.TRANSITION && evt.type === 'state' && this.transitionSelectedState) {
           // end transition
@@ -115,8 +114,7 @@ export class FsmDrawComponent implements AfterViewInit {
       evt.srcEvent.buttons === 1 &&
       this.selected &&
       this.selected.type === 'state') {
-      (this.selected as FsmState).x = evt.surfaceX;
-      (this.selected as FsmState).y = evt.surfaceY;
+      (this.selected as FsmState).updatePosition(evt.surfaceX, evt.surfaceY);
       this.dirty = true;
     }
     if (this.mode === Modes.POINTER &&
@@ -129,13 +127,13 @@ export class FsmDrawComponent implements AfterViewInit {
         const deltaY = s.sourceState.y - this.mouseY;
         const theta = Math.atan2(deltaY, deltaX);
         const thetad = theta * (180.0 / Math.PI);
-        s.rotation = thetad + 180;
+        s.setRotation(thetad + 180);
       } else {
         const d = ((s.destState.y - s.sourceState.y) * this.mouseX - (s.destState.x - s.sourceState.x) * this.mouseY +
           s.destState.x * s.sourceState.y - s.destState.y * s.sourceState.x) / Math.sqrt(Math.pow(s.destState.y - s.sourceState.y, 2) +
             Math.pow(s.destState.x - s.sourceState.x, 2));
         // this is a hack, since we are using control point, we need to scale back so the mouse is actually near the line.
-        s.rotation = d * -1 - d * .8;
+        s.setRotation(d * -1 - d * .8);
       }
       this.dirty = true;
     }
@@ -144,7 +142,7 @@ export class FsmDrawComponent implements AfterViewInit {
   onSurfaceMouseDown = (evt: SurfaceMouseEvent) => {
     if (this.readonly || evt.srcEvent.which !== 1) { return false; }
     if (this.mode === Modes.POINTER) {
-      if (evt.type === 'surface') {     this.props.cancel(); this.selected = null; } else { this.selectObject(evt.child); }
+      if (evt.type === 'surface') { this.props.cancel(); this.selected = null; } else { this.selectObject(evt.child); }
     }
   }
 
@@ -174,13 +172,13 @@ export class FsmDrawComponent implements AfterViewInit {
     this.dirty = true;
   }
   onStateContextClickStart = (evt) => {
-    FsmDataService.toggleStateValue(this.stateContextOpen.obj, StateTypes.START);
+    this.stateContextOpen.obj.toggleStateValue(StateTypes.START);
     this.stateContextOpen = null;
     this.refreshProps();
     this.dirty = true;
   }
   onStateContextClickFinal = (evt) => {
-    FsmDataService.toggleStateValue(this.stateContextOpen.obj, StateTypes.FINAL);
+    this.stateContextOpen.obj.toggleStateValue(StateTypes.FINAL);
     this.stateContextOpen = null;
     this.refreshProps();
     this.dirty = true;
@@ -209,7 +207,7 @@ export class FsmDrawComponent implements AfterViewInit {
   onmodalclose(result: AlertModalResult) {
     if (result.result === 'Yes') {
       this.saveFile();
-      if (this.fsmSvc.machineValid) {
+      if (this.fsmSvc.isMachineValid) {
         if (result.callback) { this[result.callback](); }
       }
       return;
@@ -222,8 +220,8 @@ export class FsmDrawComponent implements AfterViewInit {
 
   // Helper Methods
 
-  getStates = (): FsmState[] => this.fsmSvc.getStates();
-  getTransitions = (): FsmTransition[] => this.fsmSvc.getTransitions();
+  getStates = (): FsmState[] => this.fsmSvc.states;
+  getTransitions = (): FsmTransition[] => this.fsmSvc.transitions;
 
   closeAllContextMenus() {
     this.stateContextOpen = null;
@@ -237,12 +235,12 @@ export class FsmDrawComponent implements AfterViewInit {
   }
 
   exportImage() {
-    if (this.fsmSvc.getStates().length > 0) {
+    if (this.fsmSvc.states.length > 0) {
       this.surface.exportAsPng(this.fsmSvc.maxPos());
     }
   }
   saveFile() {
-    if (this.fsmSvc.machineValid) {
+    if (this.fsmSvc.isMachineValid) {
       const blob = new Blob([this.fsmSvc.toJson() + '\n'], { type: 'application/json' });
       this.fileIO.download(blob, 'save.fsm');
       this.dirty = false;
@@ -259,17 +257,17 @@ export class FsmDrawComponent implements AfterViewInit {
   }
 
   onIoFileUpload(file: File) {
-    this.fsmSvc.clear();
+    this.fsmSvc.clearFsm();
     this.dirty = false;
     this.fsmSvc.fromJson(file.contents);
   }
 
   clear() {
-    this.fsmSvc.clear();
+    this.fsmSvc.clearFsm();
     this.dirty = false;
   }
   validate() {
-    if (this.fsmSvc.machineValid) {
+    if (this.fsmSvc.isMachineValid) {
       this.popup.open('The machine is valid', 'FSM Status');
     } else {
       this.popup.open('The machine is not valid', 'FSM Status');
