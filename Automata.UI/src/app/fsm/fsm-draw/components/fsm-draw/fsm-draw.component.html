@@ -5,7 +5,7 @@
       <div class='scroll-container' style='height:inherit' oncontextmenu='return false'>
 
         <div class='draw-container bg-drawing' [style.height.px]='scrollsize' [style.width.px]='scrollsize'>
-          <app-fsm-draw-surface [zoomPercent]='zoomPercent' (surfaceclick)='onSurfaceClick($event)' (surfacemousedown)='onSurfaceMouseDown($event)'
+          <app-fsm-draw-surface [ngClass]='cursor' [zoomPercent]='zoomPercent' (surfaceclick)='onSurfaceClick($event)' (surfacemousedown)='onSurfaceMouseDown($event)'
             (surfacemousemove)='onSurfaceMouseMove($event)' (surfacecontextmenu)='onSurfaceContextMenu($event)'>
             <ng-template ngFor let-item [ngForOf]='getTransitions()'>
               <svg:g app-fsm-draw-transition [transition]='item' [selected]='selected && selected===item' />

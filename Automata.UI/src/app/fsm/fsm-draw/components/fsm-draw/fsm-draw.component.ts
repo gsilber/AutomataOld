@@ -54,6 +54,21 @@ export class FsmDrawComponent implements AfterViewInit {
     }
     return '';
   }
+  get cursor() {
+    switch (this.mode){
+      case Modes.POINTER:
+        if (this.mouseHover instanceof FsmObject) { return 'draw-move'; }
+        break;
+      case Modes.STATE:
+        if (!(this.mouseHover instanceof FsmState)) { return 'draw-add-cursor'; }
+        break;
+      case Modes.TRANSITION:
+        if (this.mouseHover instanceof FsmState) { return 'draw-add-cursor'; }
+      break;
+    }
+    return '';
+  }
+
   get isDirty() { return this.userFsm.dirty; }
   get isValid() { return this.userFsm.valid; }
   get isDeterministic() { return this.userFsm.deterministic; }

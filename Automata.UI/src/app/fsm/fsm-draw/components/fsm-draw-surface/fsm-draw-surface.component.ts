@@ -41,7 +41,6 @@ export class FsmDrawSurfaceComponent implements AfterViewInit {
   private get svgElement() {
     return this._elementRef.nativeElement.children[0];
   }
-
   // input variables
   @Input() set zoomPercent(val) {
     this.scrollvalue = 4000 / (val / 100.0);
