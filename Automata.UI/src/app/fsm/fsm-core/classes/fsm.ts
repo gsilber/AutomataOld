@@ -97,10 +97,10 @@ export class Fsm {
         );
         if (problems.length === 0) {
             this.fsmTransitions.push(trans);
+            source.outboundTransitions.push(trans);
         } else {
             trans = problems[0];
         }
-        source.outboundTransitions.push(trans);
         return trans;
     }
 
