@@ -44,6 +44,7 @@ export class FsmDrawComponent implements AfterViewInit {
   @ViewChild(FileIoComponent) fileIO: FileIoComponent;
 
   // properties
+  get emptyFSM() { return this.userFsm.empty; }
   get statusTooltip() {
     if (this.status === 'Invalid') {
       return 'An FSM must have at least 1 start state, 1 final state, and 1 transition.';

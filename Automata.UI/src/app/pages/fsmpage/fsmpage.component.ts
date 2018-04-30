@@ -12,6 +12,7 @@ export class FsmpageComponent implements OnInit {
 
   constructor() { }
 
+  get empty() { return this._fsmDraw.emptyFSM; }
   get validFSM() {
     return this._fsmDraw.isValid;
   }

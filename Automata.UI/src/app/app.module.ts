@@ -1,3 +1,4 @@
+import { FsmSupportModule } from './fsm/fsm-support/fsm-support.module';
 import { FsmCoreModule } from './fsm/fsm-core/fsm-core.module';
 import { FsmDrawModule } from './fsm/fsm-draw/fsm-draw.module';
 import { BrowserModule } from '@angular/platform-browser';
@@ -23,7 +24,7 @@ import { TuringpageComponent } from './pages/turingpage/turingpage.component';
   imports: [
     BrowserModule,
     AppRoutingModule,
-    FsmCoreModule,
+    FsmSupportModule,
     FsmDrawModule,
     NgbModule.forRoot(),
     NgbModalModule.forRoot()

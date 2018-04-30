@@ -1,0 +1,31 @@
+row>div{
+    display: inline-block;
+}
+.hvcenter{
+    float:none;
+    display:inline-block;
+    vertical-align: middle;
+    text-align: center;
+    margin:auto;
+}
+.divtable{
+    padding:2em;
+    overflow:hidden;
+    height:100%;
+}
+.datarow{
+    padding-bottom:3rem;
+    padding-top:3rem;
+    margin:0;
+}
+.dataheader{
+    font-weight:bold;
+}
+.scrollcontents{
+    overflow-y: auto;
+    overflow-x:hidden;
+    padding:0;
+    margin-left:-15px;
+    margin-right:-15px;
+    height:100%;
+}

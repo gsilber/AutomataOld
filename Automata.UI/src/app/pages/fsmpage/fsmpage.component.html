@@ -6,16 +6,24 @@
     <div class='d-flex flex-row'>
       <ul class="nav nav-tabs nav-tabs--vertical nav-tabs--left" role="navigation" style='margin-right:0;'>
         <li class="nav-item">
-          <a href="#editFSM" class="nav-link active" data-toggle="tab" role="tab" aria-controls="editFSM"><span class='fas fa-edit'></span>Edit Automata</a>
+          <a href="#editFSM" class="nav-link active" data-toggle="tab" role="tab" aria-controls="editFSM">
+            <span class='fas fa-edit'></span>Edit Automata</a>
         </li>
         <li class="nav-item">
-          <a href="#infoFSM" class="nav-link" [ngClass]='{"disabled":!validFSM}' data-toggle="tab" role="tab" aria-controls="infoFSM"><span class='fas fa-info-circle'></span> Automata Info </a>
+          <a href="#infoFSM" class="nav-link" [ngClass]='{"disabled":!validFSM}' data-toggle="tab" role="tab" aria-controls="infoFSM">
+            <span class='fas fa-info-circle'></span> Automata Info </a>
         </li>
         <li class="nav-item">
-          <a href="#deterFSM" class="nav-link" [ngClass]='{"disabled":!validFSM || deterministic}' data-toggle="tab" role="tab" aria-controls="deterFSM"><span class='fas fa-gavel'></span> Determinism</a>
+          <a href="#deterFSM" class="nav-link" [ngClass]='{"disabled":!validFSM || deterministic}' data-toggle="tab" role="tab" aria-controls="deterFSM">
+            <span class='fas fa-gavel'></span> Determinism</a>
         </li>
         <li class="nav-item">
-          <a href="#simFSM" class="nav-link" [ngClass]='{"disabled":!validFSM || true}' data-toggle="tab" role="tab" aria-controls="simFSM"><span class='fas fa-arrow-circle-up'></span> Simulation</a>
+          <a href="#simFSM" class="nav-link" [ngClass]='{"disabled":!validFSM || true}' data-toggle="tab" role="tab" aria-controls="simFSM">
+            <span class='fas fa-arrow-circle-up'></span> Simulation</a>
+        </li>
+        <li class="nav-item">
+          <a href="#exampleFSM" class="nav-link" data-toggle="tab" role="tab" aria-controls="simFSM">
+            <span class='fas fa-file-code'></span> Sample FSM's</a>
         </li>
       </ul>
       <div class="tab-content tab-content-container">
@@ -26,18 +34,23 @@
         </div>
         <div class="tab-pane fade" id="infoFSM" role="tabpanel">
           <div class='draw-box-holder'>
-            <h1>Information</h1>
+            <app-fsm-info></app-fsm-info>
           </div>
         </div>
         <div class="tab-pane fade" id="deterFSM" role="tabpanel">
-            <div class='draw-box-holder'>
-                <h1>Determinism</h1>
-              </div>
+          <div class='draw-box-holder'>
+            <app-fsm-nondeterm-info></app-fsm-nondeterm-info>
+          </div>
         </div>
         <div class="tab-pane fade" id="simFSM" role="tabpanel">
-            <div class='draw-box-holder'>
-                <h1>Simulation</h1>
-              </div>
+          <div class='draw-box-holder'>
+            <app-fsm-simulation></app-fsm-simulation>
+          </div>
+        </div>
+        <div class="tab-pane fade" id="exampleFSM" role="tabpanel">
+          <div class='draw-box-holder'>
+            <app-fsm-examples></app-fsm-examples>
+          </div>
         </div>
       </div>
     </div>

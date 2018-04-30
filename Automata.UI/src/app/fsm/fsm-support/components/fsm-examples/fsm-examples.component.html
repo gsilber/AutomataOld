@@ -1,0 +1,17 @@
+<div class='text-center font-weight-bold'>
+Here are some simple FSM's for you to try out.
+</div>
+<div class='container divtable'>
+  <div class='row dataheader border-bottom bg-light'>
+      <div class='col-md-1'></div>
+      <div class='col-md-8'>Description</div>
+      <div class='col-md-3 hvcenter'>Link</div>      
+  </div>
+  <div class='scrollcontents' >
+  <div class='row datarow border-bottom' *ngFor='let example of examples;let i = index' [ngClass]='(i+1)%2===0?"bg-light":""'>
+    <div class='col-md-1'>{{i+1}}.</div>
+    <div class='col-md-8'>{{example.description}}<br/>&Sigma;: {{example.sigma}}</div>
+    <div class='col-md-3 hvcenter'><button class='btn btn-primary' (click)='loadMachine(example)'>Try It!</button></div>
+  </div>
+</div>
+</div>

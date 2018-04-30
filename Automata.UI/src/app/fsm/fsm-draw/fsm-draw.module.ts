@@ -1,3 +1,4 @@
+import { FsmCoreModule } from './../fsm-core/fsm-core.module';
 import { FileIoModule } from './../../reusable/file-io/file-io.module';
 import { AlertModalModule } from './../../reusable/alert-modal/alert-modal.module';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
@@ -19,7 +20,8 @@ import { FormsModule } from '@angular/forms';
     ContextMenuModule,
     AlertModalModule,
     FormsModule,
-    FileIoModule
+    FileIoModule,
+    FsmCoreModule
   ],
   exports: [FsmDrawComponent],
   declarations: [FsmDrawComponent, FsmDrawControlbarComponent, FsmDrawStateComponent,
