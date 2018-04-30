@@ -32,7 +32,7 @@
           (mode)='onCtrlbarMode($event)' (zoom)='onCtrlbarZoom($event)' (saveimage)='onCtrlbarExport()'></app-fsm-draw-controlbar>
       </div>
       <div class='col-md-3 border-top border-left' style='width:100%;font-size: 1.1rem;' [style.height.px]='cbar.height' [ngbTooltip]='statusTooltip' >
-        FSM Type: <small [hidden]='statusTooltip===""'>(Hover for more)</small>
+        FSM Type: <span [hidden]='statusTooltip===""' style='font-size:.6em;'>(Hover for more)</span>
         <div class='font-weight-bold'  [ngClass]='{"text-danger":status==="Invalid"}' style='font-size: .8rem;'>{{status}}</div>
       </div>
     </div>

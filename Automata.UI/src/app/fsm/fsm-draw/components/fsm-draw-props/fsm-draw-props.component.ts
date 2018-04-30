@@ -23,12 +23,13 @@ export class FsmDrawPropsComponent implements AfterViewInit {
   // Private variables
   private _object: FsmObject = null;
 
-  public get transitionCharacters(): string {
-    return this.transition.charactersAccepted;
-  }
-  public set transitionCharacters(val: string) {
-    this.transition.charactersAccepted = val;
-  }
+  public get transitionCharacters(): string { return this.transition ? this.transition.charactersAccepted : ''; }
+  public set transitionCharacters(val: string) { if (this.transition) { this.transition.charactersAccepted = val; } }
+  public get transitionepsilon(): boolean { return this.transition ? this.transition.epsilon : false; }
+  public set transitionepsilon(val: boolean) { if (this.transition) { this.transition.epsilon = val; } }
+  public get statename(): string { return this.state ? this.state.name : ''; }
+  public set statename(val: string) { if (this.state) { this.state.name = val; } }
+
   // Input properties
   @Input() set object(val) {
     this._object = val;

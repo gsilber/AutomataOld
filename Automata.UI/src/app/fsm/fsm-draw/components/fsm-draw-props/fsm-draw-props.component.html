@@ -1,15 +1,15 @@
 <div #parent class='prop-page'>
     <div #head style="overflow:hidden;padding: 1rem 0">
-        <div *ngIf='object===null' class='h5 text-center'>Select an object</div>
-        <div *ngIf='object!==null' class='h5 text-center'>Object Properties</div>
+        <div [hidden]='object!==null' class='h5 text-center'>Select an object</div>
+        <div [hidden]='object===null' class='h5 text-center'>Object Properties</div>
     </div>
     <div class='prop-item' [style.height.px]='parent.offsetHeight-head.offsetHeight'>
 
         <div class='bg-light' style='overflow:auto;height:100%;position:relative;width:100%;'>
-            <div *ngIf='state' class='prop-card rounded border'>
+            <div [hidden]='!state' class='prop-card rounded border'>
                 <div class='form-group'>
                     <label for="stateName">State Name:</label>
-                    <input type='text' class='form-control' [(ngModel)]="state.name" ngbTooltip='Enter a state name' id='stateName' />
+                    <input type='text' class='form-control' [(ngModel)]="statename" ngbTooltip='Enter a state name' id='stateName' />
                 </div>
                 <div class='border' style='padding:1rem;'>
                     State Modes:<br/>
@@ -39,23 +39,23 @@
                     </div>
                 </div>
             </div>
-            <div *ngIf='transition' class='prop-card rounded border'>
+            <div [hidden]='!transition' class='prop-card rounded border'>
                 Source State:
                 <br/>
-                <div class='border'>{{transition.sourceState.name}}</div>
+                <div class='border' [innerHTML]='transition?transition.sourceState.name:""'></div>
                 <br/> Destination State:
                 <br/>
-                <div class='border'>{{transition.destState.name}}</div>
+                <div class='border' [innerHTML]='transition?transition.destState.name:""'></div>
                 <br />
                 <div class='border' style='padding:1rem;'>
-                    Accepted characters
                     <div class='form-group'>
-                        <input id='acceptChars' type='text' class='form-control' [(ngModel)]='transitionCharacters' 
+                        <label for='acceptChars'>Accepted characters</label>
+                        <input id='acceptChars' type='text' class='form-control' [(ngModel)]="transitionCharacters"
                         ngbTooltip='Enter a comma seperated list of single characters or ranges (i.e. A-Z,a-z,0-9,x)'
-                        [disabled]='transition.epsilon'  />
+                        [disabled]='transitionepsilon'>
                     </div>
                     <div class='form-check form-check-inline'>
-                        <input style='margin-left:0;' type="checkbox" class="form-check-input" id="checkEpsilon" [(ngModel)]='transition.epsilon'>
+                        <input style='margin-left:0;' type="checkbox" class="form-check-input" id="checkEpsilon" [(ngModel)]='transitionepsilon'>
                         <label class="form-check-label" for="checkEpsilon">Epsilon Transition</label>
                     </div>
                 </div>
@@ -68,8 +68,11 @@
                     <button class=' btn btn-danger' (click)='deleteTransition()'>Delete</button>
                 </div>
                 <br/>
-                <div class='alert-danger text-center font-weight-bold'>
+                <div [hidden]='transitionErrMsg===""' class='alert-danger text-center font-weight-bold'>
                     {{transitionErrMsg}}
+                </div>
+                <div [hidden]='transitionErrMsg!==""' class='font-weight-bold'>
+                    &nbsp;
                 </div>
 
             </div>

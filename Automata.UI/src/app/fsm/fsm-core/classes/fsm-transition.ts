@@ -15,16 +15,18 @@ export class FsmTransitionData {
 export class FsmTransition extends FsmObject {
   private transitionData: FsmTransitionData;
   public dirty = true;
+  private attemptChars: string;
   public get sourceState(): FsmState { return this.transitionData.sourceState; }
   public get destState(): FsmState { return this.transitionData.destState; }
   public get charactersAccepted(): string { return this.transitionData.charactersAccepted; }
+
   public set charactersAccepted(chars: string) {
+    this.attemptChars = chars;
     const oldchars = this.charactersAccepted;
     this.transitionData.charactersAccepted = chars;
     if (this.charactersError.length > 0) {
       this.transitionData.charactersAccepted = oldchars;
-      this.dirty = true;
-    }
+    } else { this.dirty = true; }
   }
   public get characterMap(): string[] { return this.transitionData.characterMap; }
   public get rotation(): number { return this.transitionData.rotation; }
@@ -40,6 +42,7 @@ export class FsmTransition extends FsmObject {
       } else {
         this.transitionData.charactersAccepted = 'a';
         this.transitionData.characterMap = ['a'];
+        this.attemptChars = 'a';
       }
       this.transitionData.epsilon = val;
       this.dirty = true;
@@ -48,11 +51,11 @@ export class FsmTransition extends FsmObject {
 
   public get charactersError() {
     if (this.epsilon) { return ''; }
-    if (this.charactersAccepted.length === 0) { return 'Invalid accept set'; }
-    const result = /^(([\s\S]|[\s\S]-[\s\S])(\,([\s\S]|[\s\S]-[\s\S]))*)$/g.test(this.charactersAccepted);
+    if (this.attemptChars.length === 0) { return 'Invalid accept set'; }
+    const result = /^(([\s\S]|[\s\S]-[\s\S])(\,([\s\S]|[\s\S]-[\s\S]))*)$/g.test(this.attemptChars);
     if (!result) { return 'Invalid accept set'; }
     // Here we need to check for duplicate values in the accept string and build character map.
-    const sChars = this.charactersAccepted;
+    const sChars = this.attemptChars;
     const aChars = sChars.split(',');
     const map = [];
     let flag = false;
@@ -83,6 +86,7 @@ export class FsmTransition extends FsmObject {
   constructor(data: FsmTransitionData) {
     super();
     this.transitionData = data;
+    this.attemptChars = this.charactersAccepted;
     this.type = 'transition';
   }
 
