@@ -1,20 +1,20 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { FsmNondetermInfoComponent } from './fsm-nondeterm-info.component';
+import { FsmNonDetermInfoComponent } from './fsm-non-determ-info.component';
 
-describe('FsmNondetermInfoComponent', () => {
-  let component: FsmNondetermInfoComponent;
-  let fixture: ComponentFixture<FsmNondetermInfoComponent>;
+describe('FsmNonDetermInfoComponent', () => {
+  let component: FsmNonDetermInfoComponent;
+  let fixture: ComponentFixture<FsmNonDetermInfoComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ FsmNondetermInfoComponent ]
+      declarations: [ FsmNonDetermInfoComponent ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(FsmNondetermInfoComponent);
+    fixture = TestBed.createComponent(FsmNonDetermInfoComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

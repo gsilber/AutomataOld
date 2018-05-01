@@ -1,20 +1,20 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { FsmSimulationComponent } from './fsm-simulation.component';
+import { FsmSimComponent } from './fsm-sim.component';
 
-describe('FsmSimulationComponent', () => {
-  let component: FsmSimulationComponent;
-  let fixture: ComponentFixture<FsmSimulationComponent>;
+describe('FsmSimComponent', () => {
+  let component: FsmSimComponent;
+  let fixture: ComponentFixture<FsmSimComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ FsmSimulationComponent ]
+      declarations: [ FsmSimComponent ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(FsmSimulationComponent);
+    fixture = TestBed.createComponent(FsmSimComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

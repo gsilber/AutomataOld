@@ -1,4 +1,4 @@
-import { FsmDataService } from './../../../fsm-core/services/fsm-data.service';
+import { FsmDataService } from '../../../../fsm/fsm-core/services/fsm-data.service';
 import { Component, OnInit } from '@angular/core';
 
 @Component({
