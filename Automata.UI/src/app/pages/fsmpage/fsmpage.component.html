@@ -1,12 +1,12 @@
-<p>&nbsp;</p>
+<div class='jumbotron'>
 <h2 class='text-center'> Finite State Automata</h2>
-<br />
+</div>
 <div>
   <div class='offset-2 col-md-8' style='overflow:hidden;position:relative'>
     <div class='d-flex flex-row'>
       <ul class="nav nav-tabs nav-tabs--vertical nav-tabs--left" role="navigation" style='margin-right:0;'>
         <li class="nav-item">
-          <a href="#editFSM" class="nav-link active" data-toggle="tab" role="tab" aria-controls="editFSM">
+          <a #fsmTab href="#editFSM" class="nav-link active" data-toggle="tab" role="tab" aria-controls="editFSM" (click)='updateFsm()'>
             <span class='fas fa-edit'></span>Edit Automata</a>
         </li>
         <li class="nav-item">
@@ -28,7 +28,7 @@
       </ul>
       <div class="tab-content tab-content-container">
         <div class="tab-pane show active" id="editFSM" role="tabpanel">
-          <div class='draw-box-holder bg-fsm'>
+          <div class='draw-box-holder bg-fsm' >
             <app-fsm-draw></app-fsm-draw>
           </div>
         </div>
@@ -49,7 +49,7 @@
         </div>
         <div class="tab-pane fade" id="exampleFSM" role="tabpanel">
           <div class='draw-box-holder'>
-            <app-fsm-examples></app-fsm-examples>
+            <app-fsm-examples (exampleload)='onExampleLoad($event)'></app-fsm-examples>
           </div>
         </div>
       </div>

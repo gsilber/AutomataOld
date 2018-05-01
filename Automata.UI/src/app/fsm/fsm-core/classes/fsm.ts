@@ -144,7 +144,9 @@ export class Fsm {
             }
             transbase.destState = dst;
             if (!transbase.rotation) { transbase.rotation = 0; }
-            this.fsmTransitions.push(new FsmTransition(transbase));
+            const t = new FsmTransition(transbase);
+            src.outboundTransitions.push(t);
+            this.fsmTransitions.push(t);
         });
         this.setClean();
     }

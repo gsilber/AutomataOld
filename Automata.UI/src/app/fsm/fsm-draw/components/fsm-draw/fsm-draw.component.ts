@@ -302,4 +302,7 @@ export class FsmDrawComponent implements AfterViewInit {
   clear() {
     this.fsmSvc.clearFsms();
   }
+  cancelProps(){
+    this.props.cancel();
+  }
 }
