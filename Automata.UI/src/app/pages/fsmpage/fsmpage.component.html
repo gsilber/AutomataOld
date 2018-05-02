@@ -1,12 +1,12 @@
 <div class='jumbotron'>
-<h2 class='text-center'> Finite State Automata</h2>
+  <h2 class='text-center'> Finite State Automata</h2>
 </div>
-<div>
-  <div class='offset-2 col-md-8' style='overflow:hidden;position:relative'>
-    <div class='d-flex flex-row'>
-      <ul class="nav nav-tabs nav-tabs--vertical nav-tabs--left" role="navigation" style='margin-right:0;'>
+<div class='container-fluid'>
+  <div class='row bsb flex-height-container' style='height:650px;'>
+    <div class='col-md-2 tab-holder' >
+      <ul class="nav nav-tabs flex-column" role="navigation" >
         <li class="nav-item">
-          <a #fsmTab href="#editFSM" class="nav-link active" data-toggle="tab" role="tab" aria-controls="editFSM" (click)='updateFsm()'>
+          <a #fsmTab href="#editFSM" class="nav-link active" data-toggle="tab" role="tab" aria-controls="editFSM">
             <span class='fas fa-edit'></span>Edit Automata</a>
         </li>
         <li class="nav-item">
@@ -26,10 +26,14 @@
             <span class='fas fa-file-code'></span> Sample FSM's</a>
         </li>
       </ul>
-      <div class="tab-content tab-content-container">
-        <div class="tab-pane show active" id="editFSM" role="tabpanel">
-          <div class='draw-box-holder bg-fsm' >
+    </div>
+    <div class='col-md-10 pad0 full-height'>
+      <div class='tab-content full-height'>
+        <div class="tab-pane show active full-height" id="editFSM" role="tabpanel" >
+          <div class='full-full pad1'>
+            <div class='bg-fsm full-full'>
             <app-fsm-draw></app-fsm-draw>
+          </div>
           </div>
         </div>
         <div class="tab-pane fade" id="infoFSM" role="tabpanel">
@@ -53,7 +57,7 @@
           </div>
         </div>
       </div>
-    </div>
 
+    </div>
   </div>
 </div>

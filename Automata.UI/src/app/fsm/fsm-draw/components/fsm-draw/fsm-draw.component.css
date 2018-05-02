@@ -1,13 +1,33 @@
+.flex-height-container{
+    display:flex;
+    flex-direction:column;
+    height:100%;   
 
-.scroll-container{
-    width:100%;
-    overflow:scroll; 
-    position: relative;
 }
 
-.draw-container{
-    overflow:hidden;
+.flex-height-child{
+    flex-grow:1;
+}
+.pad0{
+    padding:0;
+}
+.margin-0{
+    margin:0;
+}
+.bigfont{
+    font-size: 1.1rem;
+}
+.midfont{
+    font-size:.8rem;
+}
+.littlefont{
+    font-size: .6rem;
+}
+.scroll-container{
+    width:100%;
+    overflow: scroll; 
     
+    height:100%;
 }
 
 .draw-add-cursor  {

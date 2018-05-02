@@ -56,7 +56,7 @@ export class FsmDrawComponent implements AfterViewInit {
     return '';
   }
   get cursor() {
-    switch (this.mode){
+    switch (this.mode) {
       case Modes.POINTER:
         if (this.mouseHover instanceof FsmObject) { return 'draw-move'; }
         break;
@@ -65,7 +65,7 @@ export class FsmDrawComponent implements AfterViewInit {
         break;
       case Modes.TRANSITION:
         if (this.mouseHover instanceof FsmState) { return 'draw-add-cursor'; }
-      break;
+        break;
     }
     return '';
   }
@@ -185,16 +185,16 @@ export class FsmDrawComponent implements AfterViewInit {
   onSurfaceMouseDown = (evt: SurfaceMouseEvent) => {
     if (this.readonly || evt.srcEvent.which !== 1) { return false; }
     if (this.mode === Modes.POINTER) {
-      if (evt.type === 'surface') { this.props.cancel(); this.selected = null; } else { this.selectObject(evt.child); }
+      if (evt.type === 'surface' || evt.type === '') { this.props.cancel(); this.selected = null; } else { this.selectObject(evt.child); }
     }
   }
 
   // FsmDrawControlbar event handlers
-  onCtrlbarMode = (mode: Modes) => { this.mode = mode; if (mode !== Modes.POINTER) { this.selected = null; } };
-  onCtrlbarNew = () => this.popupFileDirty('clear');
-  onCtrlbarLoad = () => this.popupFileDirty('loadFile');
-  onCtrlbarSave = () => this.saveFile();
-  onCtrlbarExport = () => this.exportImage();
+  onCtrlbarMode = (mode: Modes) => { this.mode = mode; this.props.cancel(); if (mode !== Modes.POINTER) { this.selected = null; } };
+  onCtrlbarNew = () => { this.props.cancel(); this.selected = null; this.popupFileDirty('clear'); };
+  onCtrlbarLoad = () => { this.props.cancel(); this.selected = null; this.popupFileDirty('loadFile'); };
+  onCtrlbarSave = () => { this.props.cancel(); this.selected = null; this.saveFile(); };
+  onCtrlbarExport = () => { this.props.cancel(); this.selected = null; this.exportImage(); };
   onCtrlbarZoom = (direction) => {
     const deltaPercent = 10 * direction * -1;
     this.zoomPercent -= deltaPercent;
@@ -302,7 +302,7 @@ export class FsmDrawComponent implements AfterViewInit {
   clear() {
     this.fsmSvc.clearFsms();
   }
-  cancelProps(){
+  cancelProps() {
     this.props.cancel();
   }
 }

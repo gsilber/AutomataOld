@@ -1,22 +1,49 @@
-.prop-page,.prop-item{
+.prop-page,.prop-container,.prop-area,.prop-card{
     width:100%;
 }
-.prop-page{
+
+.prop-page,.prop-card,.prop-area{
     height:100%;
 }
-.prop-item{
-
+.prop-header{
+    padding:1rem 0;
 }
 
-.prop-item input[type='text']{
-    width:100%;
+.prop-area, .prop-card{
+    padding: 1rem;
+}
+
+.prop-card input[type='text']{
+    height:inherit;
 }
 .prop-item input[type='checkbox']{
     margin-left:1rem;
 }
+.form-check input{
+    margin-left:1rem;
+}
+.flex-height-container{
+    display:flex;
+    flex-direction:column;
+    height:100%;   
+}
 
-.prop-card{
-    margin:.5rem;
-    padding:.5rem;
-    overflow:none;
+.flex-height-child{
+    flex:1;
+}
+.pad0{
+    padding:0;
+}
+.pad1{
+    padding:1rem;
+}
+.button-holder{
+    margin-top:1rem;
+}
+.fake-input{
+    margin-bottom:.5rem;
+    padding:.3rem;
+}
+.alert-danger{
+    margin-top:.8em;
 }

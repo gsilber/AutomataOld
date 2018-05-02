@@ -22,10 +22,6 @@ export class FsmpageComponent implements OnInit {
   ngOnInit() {
   }
 
-  updateFsm() {
-    setTimeout(_ => this._detect.detectChanges(), 500);
-    return false;
-  }
   onExampleLoad(example) {
     this._fsmDraw.cancelProps();
     this._fsmSvc.clearFsms();

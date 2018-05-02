@@ -2,7 +2,7 @@
   <div class='border'>
     <div class='ctrlBarGroupHeader border-bottom fas'>Mode<span *ngIf='readonly' class='text-danger'> (Read Only)</span></div>
     <ul class="nav nav-pills">
-      <li class="nav-item" ngbTooltip='Mouse Pointer' placement='right' (click)='onModeChange("pointer")'>
+      <li class="nav-item" ngbTooltip='Mouse Pointer' placement='top' (click)='onModeChange("pointer")'>
         <a href='' class="nav-link" [ngClass]='{"active": imode==="pointer"}'>
           <span class="fas fa-mouse-pointer" placement='top'></span>
         </a>
