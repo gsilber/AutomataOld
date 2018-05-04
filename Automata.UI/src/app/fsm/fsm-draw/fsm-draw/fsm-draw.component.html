@@ -1,0 +1,12 @@
+    <div class='fsm' [style.background]='background'>
+    <div style='flex:1; margin:0;padding:1rem' class='row'>
+        <div class='col-md-9 h-100' style='border: 1px solid black;'>
+            draw surface
+        </div>
+        <div class='col-md-3 h-100' style='border: 1px solid black;'>
+            properties panel
+        </div>
+    </div>
+    <app-fsm-draw-controlbar [(mode)]='mode'></app-fsm-draw-controlbar>
+</div>
+{{mode}}

@@ -1,0 +1,71 @@
+<nav class="navbar bg-light _fsm-ctrlbar fsm-ctrlbar">
+    <div class='border'>
+      <div class='ctrlBarGroupHeader border-bottom fas'>Mode</div>
+      <ul class="nav nav-pills">
+        <li class="nav-item" ngbTooltip='Mouse Pointer' placement='top' (click)='onModeChange("pointer")'>
+          <a href='' class="nav-link" [ngClass]='{"active": mode==="pointer"}'>
+            <span class="fas fa-mouse-pointer" placement='top'></span>
+          </a>
+        </li>
+        <li class="nav-item" ngbTooltip='Add States' placement='top' (click)='onModeChange("state")'>
+          <a href='' class="nav-link" [ngClass]='{"active": mode==="state"}'>
+            <span class="fas fa-cogs"></span>
+          </a>
+        </li>
+        <li  class="nav-item" (click)='onModeChange("transition")' ngbTooltip='Add Transitions' placement='top'>
+          <a href='' class="nav-link" [ngClass]='{"active": mode==="transition"}'>
+            <span class="fas fa-recycle"></span>
+          </a>
+        </li>
+      </ul>
+    </div>
+    <div class='border'>
+      <div class='fas ctrlBarGroupHeader border-bottom'>File</div>
+      <ul class="nav nav-pills">
+  
+        <li  class="nav-item" (click)='onNew()' ngbTooltip='New FSM' placement='top'>
+          <a href='' class="nav-link">
+            <span class="fas fa-file"></span>
+          </a>
+        </li>
+        <li class="nav-item" (click)='onLoad()' ngbTooltip='Open FSM' placement='top'>
+          <a href='' class="nav-link">
+            <span class="fas fa-folder-open"></span>
+          </a>
+        </li>
+        <li class="nav-item" (click)='onSave()' [ngbTooltip]='isValid?"Save FSM":""' placement='top'>
+          <a href='' class="nav-link" [ngClass]='{"disabled":!isValid}'>
+            <span class="fas fa-save"></span>
+          </a>
+        </li>
+        <li class="nav-item" (click)='onExport()' ngbTooltip='Export FSM as image (PNG)' placement='top'>
+          <a href='' class="nav-link">
+            <span class="fas fa-image"></span>
+          </a>
+        </li>
+      </ul>
+    </div>
+    <div class='border'>
+      <div class='fas ctrlBarGroupHeader border-bottom'>Zoom </div>
+  
+      <ul class="nav nav-pills">
+        <li class="nav-item" (click)='onZoom(1)' ngbTooltip='Zoom In' placement='top'>
+          <a href='' class="nav-link">
+            <span class="fas fa-search-plus"></span>
+          </a>
+        </li>
+        <li class="nav-item" (click)='onZoom(-1)' ngbTooltip='Zoom Out' placement='top'>
+          <a href='' class="nav-link">
+            <span class="fas fa-search-minus"></span>
+          </a>
+        </li>
+        <li class="nav-item" (click)='onZoom(0)' ngbTooltip='Reset Zoom' placement='top'>
+          <a href='' class="nav-link">
+            <span class="fas fa-search"></span>
+          </a>
+        </li>
+      </ul>
+    </div>
+    <div class='col-md-1'>
+      </div>
+    </nav>
