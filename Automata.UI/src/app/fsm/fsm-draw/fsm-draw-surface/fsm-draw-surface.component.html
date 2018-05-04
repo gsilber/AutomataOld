@@ -1,0 +1,6 @@
+<div [style.width.px]='scrollsize' [style.height.px]='scrollsize' style='overflow: hidden;'>
+    <svg:svg #surfaceSVG [attr.width]='dimension*2' [attr.height]='dimension*2' [attr.viewBox]='"0 0 "+scrollvalue+" "+scrollvalue'
+        (click)='onClick($event)'>
+        <svg:circle cx='2000' cy='2000' r='50' fill='red'></svg:circle>
+    </svg:svg>
+</div>

@@ -11,6 +11,7 @@ export class FsmDrawControlbarComponent {
   @Input() get mode() { return this._mode; }
   set mode(val) { this._mode = val; this.modeChange.emit(this._mode); }
   @Output() modeChange: EventEmitter<string> = new EventEmitter<string>();
+  @Output() zoom: EventEmitter<number> = new EventEmitter<number>();
 
   private _mode = 'pointer';
   constructor() { }
@@ -36,7 +37,5 @@ export class FsmDrawControlbarComponent {
   onExport() {
     return false;
   }
-  onZoom() {
-    return false;
-  }
+  onZoom(direction) { this.zoom.emit(direction); return false; }
 }

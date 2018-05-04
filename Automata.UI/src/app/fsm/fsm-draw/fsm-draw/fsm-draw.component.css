@@ -5,5 +5,16 @@
     flex-direction: column;
     border-width: 1px;
     border-style: solid;
-    
+    padding:0;
+}
+.fsm .row{
+    margin:0;
+    padding:0;
+}
+
+.pad0{
+    padding:0;
+}
+.pad1{
+    padding: 1rem;
 }

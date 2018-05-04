@@ -1,5 +1,7 @@
-._fsm-ctrlbar{
+.fsm-ctrlbar{
     margin:0;
+    padding-right:1rem;
+    padding-left:1rem;
 }
 .navbar{
     padding:0px;
