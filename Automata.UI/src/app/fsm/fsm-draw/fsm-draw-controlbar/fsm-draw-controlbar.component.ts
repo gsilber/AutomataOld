@@ -25,18 +25,18 @@ export class FsmDrawControlbarComponent {
     return false;
   }
   onNew() {
-
+    return false;
   }
   onLoad() {
-
+    return false;
   }
   onSave() {
-
+    return false;
   }
   onExport() {
-
+    return false;
   }
   onZoom() {
-
+    return false;
   }
 }
