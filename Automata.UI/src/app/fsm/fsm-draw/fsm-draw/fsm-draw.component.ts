@@ -27,6 +27,7 @@ export class FsmDrawComponent {
 
   constructor() { }
 
+  // ctrlbar event handlers
   onCtrlbarZoom = (direction) => {
     const deltaPercent = 10 * direction * -1;
     this.zoomPercent -= deltaPercent;
