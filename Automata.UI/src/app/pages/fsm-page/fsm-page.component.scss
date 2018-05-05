@@ -11,8 +11,7 @@ $border-radius: .25rem;
 .tab-content{
     margin:0;   
     width:100%;
-    height:100%;
-    
+    height:100%;  
 }
 .zoom-90{
     font-size:.9rem;
@@ -29,7 +28,6 @@ $border-radius: .25rem;
     border-right: 1px solid $color-border;
     padding:0;
 }
-
 .nav-tabs {
     border-bottom: none;
     margin: 0 $padding-base;
@@ -62,3 +60,37 @@ $border-radius: .25rem;
         }
     }
 }
+
+// $grid-breakpoints: (
+//   xs: 0,
+//   sm: 576px,
+//   md: 768px,
+//   lg: 992px,
+//   xl: 1200px
+// ) !default;
+
+.desktop-only{
+    display:none;
+}
+.small-screen-only{
+    display:none;
+}
+@media (min-width:992px) {
+    .desktop-only{
+        display:block !important;
+    }
+}
+
+@media (max-width:992px) {
+    .small-screen-only{
+        display: block !important;
+    }
+    
+}
+
+@media (min-width:576px) {
+    .tab-holder{
+        height: 100%;
+    }    
+}
+

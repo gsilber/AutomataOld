@@ -1,9 +1,9 @@
 <div [style.width.px]='scrollsize' [style.height.px]='scrollsize' style='overflow: hidden;'>
     <svg:svg #surfaceSVG [attr.width]='dimension*2' [attr.height]='dimension*2' [attr.viewBox]='"0 0 "+scrollvalue+" "+scrollvalue'
         (click)='onClick($event)'>
-        <ng-template ngFor let-item [ngForOf]='fsm.states'>
+        <!-- <ng-template ngFor let-item [ngForOf]='fsm.states'>
             <svg:g app-fsm-draw-state [state]='item'  />
-        </ng-template>
+        </ng-template> -->
 
     </svg:svg>
 </div>
