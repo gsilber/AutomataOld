@@ -1,20 +1,20 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { FsmTransitionComponent } from './fsm-transition.component';
+import { FsmDrawTransitionComponent } from './fsm-draw-transition.component';
 
-describe('FsmTransitionComponent', () => {
-  let component: FsmTransitionComponent;
-  let fixture: ComponentFixture<FsmTransitionComponent>;
+describe('FsmDrawTransitionComponent', () => {
+  let component: FsmDrawTransitionComponent;
+  let fixture: ComponentFixture<FsmDrawTransitionComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ FsmTransitionComponent ]
+      declarations: [ FsmDrawTransitionComponent ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(FsmTransitionComponent);
+    fixture = TestBed.createComponent(FsmDrawTransitionComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

@@ -1,20 +1,20 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { FsmStateComponent } from './fsm-state.component';
+import { FsmDrawStateComponent } from './fsm-draw-state.component';
 
-describe('FsmStateComponent', () => {
-  let component: FsmStateComponent;
-  let fixture: ComponentFixture<FsmStateComponent>;
+describe('FsmDrawStateComponent', () => {
+  let component: FsmDrawStateComponent;
+  let fixture: ComponentFixture<FsmDrawStateComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ FsmStateComponent ]
+      declarations: [ FsmDrawStateComponent ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(FsmStateComponent);
+    fixture = TestBed.createComponent(FsmDrawStateComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

@@ -5,15 +5,21 @@ import { FsmDrawComponent } from './fsm-draw/fsm-draw.component';
 import { FsmDrawControlbarComponent } from './fsm-draw-controlbar/fsm-draw-controlbar.component';
 import { FsmDrawSurfaceComponent } from './fsm-draw-surface/fsm-draw-surface.component';
 import { FsmDrawPropertiesComponent } from './fsm-draw-properties/fsm-draw-properties.component';
-import { FsmStateComponent } from './fsm-state/fsm-state.component';
-import { FsmTransitionComponent } from './fsm-transition/fsm-transition.component';
+import { FsmDrawStateComponent } from './fsm-draw-state/fsm-draw-state.component';
+import { FsmDrawTransitionComponent } from './fsm-draw-transition/fsm-draw-transition.component';
 
 @NgModule({
   imports: [
     CommonModule,
     NgbModule
   ],
-  declarations: [FsmDrawComponent, FsmDrawControlbarComponent, FsmDrawSurfaceComponent, FsmDrawPropertiesComponent, FsmStateComponent, FsmTransitionComponent],
+  declarations: [
+    FsmDrawComponent,
+    FsmDrawControlbarComponent,
+    FsmDrawSurfaceComponent,
+    FsmDrawPropertiesComponent,
+    FsmDrawStateComponent,
+    FsmDrawTransitionComponent],
   exports: [FsmDrawComponent]
 })
 export class FsmDrawModule { }
