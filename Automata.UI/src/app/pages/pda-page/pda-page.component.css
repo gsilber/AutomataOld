@@ -1,4 +1,10 @@
 .jumbotron{
-    padding:1rem;
+    padding:1rem 0 .5rem 0;
     margin:1rem;
 }
+.jumbotron-mini{
+    padding:.25rem 0 0 0;
+    margin:.1rem;
+    margin-bottom: .25rem;
+}
+
