@@ -1,10 +1,9 @@
 <div [style.width.px]='scrollsize' [style.height.px]='scrollsize'>
     <svg:svg #surfaceSVG [attr.width]='dimension*2' [attr.height]='dimension*2' [attr.viewBox]='"0 0 "+scrollvalue+" "+scrollvalue'
-        (click)='onClick($event)'>
-        <svg:circle cx='0' cy='0' r='12' fill='red'></svg:circle>
-        <!-- <ng-template ngFor let-item [ngForOf]='fsm.states'>
-            <svg:g app-fsm-draw-state [state]='item'  />
-        </ng-template> -->
+        (click)='onClick($event)' (mousemove)='onMouseMove($event)'>
+        <ng-template ngFor let-item [ngForOf]='fsm.states'>
+            <svg:g app-fsm-draw-state [state]='item' [radius]='stateRadius' [selected]='selectedChild===item' (click)='onStateClick($event)' (mousedown)='onStateMouseDown($event)' (mouseup)='onStateMouseUp($event)'   />
+        </ng-template>
 
     </svg:svg>
 </div>

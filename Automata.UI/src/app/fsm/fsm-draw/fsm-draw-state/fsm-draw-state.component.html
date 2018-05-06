@@ -1,3 +1,11 @@
-<p>
-  fsm-draw-state works!
-</p>
+<svg:rect *ngIf='selected' class='fsm-state-select' stroke='black' stroke-width='1' [attr.width]='radius*2+2' [attr.height]='radius*2+2' [attr.x]='state.position.x-radius-1' [attr.y]='state.position.y-radius-1'  fill='none' stroke-dasharray="5 2"/>
+<svg:circle *ngIf='!state.start' class='fsm-state-normal' [attr.cx]='state.position.x' [attr.cy]='state.position.y' [attr.r]='radius' fill='white' stroke='black' stroke-width='1px'></svg:circle>
+<svg:circle *ngIf='state.start' class='fsm-state-start' [attr.cx]='state.position.x' [attr.cy]='state.position.y' [attr.r]='radius' fill='yellow' stroke='black' stroke-width='1px'></svg:circle>
+<svg:circle *ngIf='state.final' class='fsm-state-final'  [attr.cx]='state.position.x' [attr.cy]='state.position.y' [attr.r]='radius-2' fill='transparent' stroke='black' stroke-width='1px'></svg:circle>
+<svg:text class='svg-text fsm-state-label' [attr.x]='state.position.x' [attr.y]='state.position.y' fill='blue' font-weight='bold'  text-anchor='middle' dy='.3em' font-size='7'>
+  {{state.label}}
+</svg:text>
+
+<svg:circle [attr.cx]='state.position.x' [attr.cy]='state.position.y' [attr.r]='radius' fill='transparent' stroke='none'
+(click)='onCLick($event)' (mousedown)='onMouseDown($event)' (mouseup)='onMouseUp($event)'>
+</svg:circle>
