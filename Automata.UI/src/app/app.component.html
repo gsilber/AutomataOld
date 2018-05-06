@@ -1,4 +1,9 @@
-<div style='height:650px'>
-  <app-header-menu title='Automata Simulator' [menuData]='menuData'></app-header-menu>
-  <router-outlet></router-outlet>
+<div class='full-screen-app'>
+  <div>
+    <app-header-menu title='Automata Simulator' [menuData]='menuData'></app-header-menu>
+  </div>
+  <div class='flex-1'>
+    <router-outlet></router-outlet>
+  </div>
 </div>
+

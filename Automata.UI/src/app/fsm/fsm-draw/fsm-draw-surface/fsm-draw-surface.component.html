@@ -1,4 +1,4 @@
-<div [style.width.px]='scrollsize' [style.height.px]='scrollsize' style='overflow: hidden;'>
+<div [style.width.px]='scrollsize' [style.height.px]='scrollsize' class='bg-warning'>
     <svg:svg #surfaceSVG [attr.width]='dimension*2' [attr.height]='dimension*2' [attr.viewBox]='"0 0 "+scrollvalue+" "+scrollvalue'
         (click)='onClick($event)'>
         <!-- <ng-template ngFor let-item [ngForOf]='fsm.states'>

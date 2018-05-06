@@ -1,48 +1,70 @@
-<div class='jumbotron'>
-  <h3 class='text-center'> Finite State Automata</h3>
-</div>
-<div class='container-fluid h-100 zoom-90' style='padding-right:2rem;'>
-  <div class='row h-100'>
-    <div class='col-sm-2 tab-holder'>
-      <ul class="nav nav-tabs flex-column" role="navigation">
-        <li class="nav-item">
-          <a #fsmTab href="#editFSM" class="nav-link active" data-toggle="tab" role="tab" aria-controls="editFSM">
-            <span class='desktop-only'><span class='fas fa-edit'></span>Edit Automata</span><span class='small-screen-only'>Edit</span></a>
-        </li>
-        <li class="nav-item">
-          <a href="#infoFSM" class="nav-link" [ngClass]='{"disabled":false}' data-toggle="tab" role="tab" aria-controls="infoFSM">
-            <span class='desktop-only'><span class='fas fa-info-circle'></span> Automata Info</span><span class='small-screen-only'>Info</span> </a>
-        </li>
-        <li class="nav-item">
-          <a href="#deterFSM" class="nav-link" [ngClass]='{"disabled":false}' data-toggle="tab" role="tab" aria-controls="deterFSM">
-            <span class='desktop-only'><span class='fas fa-gavel'></span> Determinism</span><span class='small-screen-only'>Deter.</span> </a>
-        </li>
-        <li class="nav-item">
-          <a href="#simFSM" class="nav-link" [ngClass]='{"disabled":!false}' data-toggle="tab" role="tab" aria-controls="simFSM">
-            <span class='desktop-only'><span class='fas fa-arrow-circle-up'></span> Simulation</span><span class='small-screen-only'>Sim</span> </a>
-        </li>
-        <li class="nav-item">
-          <a href="#exampleFSM" class="nav-link" data-toggle="tab" role="tab" aria-controls="simFSM">
-            <span class='desktop-only'><span class='fas fa-file-code'></span> Sample Fsm's</span><span class='small-screen-only'>Sample</span> </a>        </li>
-      </ul>
+<div class='h-100 w-100 flex-vertical' >
+  <div class='jumbotron d-none d-sm-block'>
+    <h3 class='text-center'> Finite State Automata</h3>
+  </div>
+  <div class='jumbotron jumbotron-mini d-block d-sm-none'>
+      <h6 class='text-center'> Finite State Automata</h6>
     </div>
-    <div class='col-sm-10 tab-content-holder'>
-      <div class='tab-content h-100'>
-        <div class="tab-pane show active h-100 w-100" id="editFSM" role="tabpanel">
-          <app-fsm-draw background='lightblue'></app-fsm-draw>
-        </div>
-        <div class="tab-pane fade" id="infoFSM" role="tabpanel">
-          info
-        </div>
-        <div class="tab-pane fade" id="deterFSM" role="tabpanel">
-          determ
-        </div>
-        <div class="tab-pane fade" id="simFSM" role="tabpanel">
-          sim
-        </div>
-        <div class="tab-pane fade" id="exampleFSM" role="tabpanel">
-          examp
-        </div>
+    <div class='container-fluid zoom-90 pad-right-big flex-1'>
+    <div class='row h-100 tab-menu'>
+      <div class='col-sm-2 tab-holder'>
+        <ul class="nav nav-tabs flex-if-big" role="navigation">
+          <li class="nav-item">
+            <a #fsmTab href="#editFSM" class="nav-link active" data-toggle="tab" role="tab" aria-controls="editFSM">
+              <span class='d-none d-lg-block'>
+                <span class='fas fa-edit'></span>Edit Automata</span>
+              <span class='d-block d-lg-none'>Edit</span>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a href="#infoFSM" class="nav-link" [ngClass]='{"disabled":false}' data-toggle="tab" role="tab" aria-controls="infoFSM">
+              <span class='d-none d-lg-block'>
+                <span class='fas fa-info-circle'></span> Automata Info</span>
+              <span class='d-block d-lg-none'>Info</span>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a href="#deterFSM" class="nav-link" [ngClass]='{"disabled":false}' data-toggle="tab" role="tab" aria-controls="deterFSM">
+              <span class='d-none d-lg-block'>
+                <span class='fas fa-gavel'></span> Determinism</span>
+              <span class='d-block d-lg-none'>Deter.</span>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a href="#simFSM" class="nav-link" [ngClass]='{"disabled":!false}' data-toggle="tab" role="tab" aria-controls="simFSM">
+              <span class='d-none d-lg-block'>
+                <span class='fas fa-arrow-circle-up'></span> Simulation</span>
+              <span class='d-block d-lg-none'>Sim</span>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a href="#exampleFSM" class="nav-link" data-toggle="tab" role="tab" aria-controls="simFSM">
+              <span class='d-none d-lg-block'>
+                <span class='fas fa-file-code'></span> Sample Fsm's</span>
+              <span class='d-block d-lg-none'>Sample</span>
+            </a>
+          </li>
+        </ul>
+      </div>
+      <div class='col-sm-10 tab-content-holder'>
+        <div class='tab-content h-100'>
+            <div class="tab-pane show active h-100 w-100" id="editFSM" role="tabpanel">
+                <app-fsm-draw background='lightblue'></app-fsm-draw>
+              </div>
+              <div class="tab-pane fade" id="infoFSM" role="tabpanel">
+                info
+              </div>
+              <div class="tab-pane fade" id="deterFSM" role="tabpanel">
+                determ
+              </div>
+              <div class="tab-pane fade" id="simFSM" role="tabpanel">
+                sim
+              </div>
+              <div class="tab-pane fade" id="exampleFSM" role="tabpanel">
+                examp
+              </div>
+            </div>
+
       </div>
     </div>
   </div>

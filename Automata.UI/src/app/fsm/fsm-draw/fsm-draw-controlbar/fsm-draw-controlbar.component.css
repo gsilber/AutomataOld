@@ -1,5 +1,8 @@
-
-
+@media (min-width: 576px){
+    .ctrlbar-div{
+    padding:0 1rem 0 0; font-size:1rem;
+    }
+}
 .fsm-ctrlbar{
     margin:0;
     padding-right:1rem;
