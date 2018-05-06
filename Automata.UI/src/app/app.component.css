@@ -5,3 +5,8 @@
     flex:1;
     min-height: 0;
 }
+footer{
+    text-align:center;
+    color: silver;
+    margin-top:1rem;
+}

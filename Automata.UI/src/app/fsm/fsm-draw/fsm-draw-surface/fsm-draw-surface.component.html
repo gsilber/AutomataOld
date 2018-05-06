@@ -1,6 +1,7 @@
-<div [style.width.px]='scrollsize' [style.height.px]='scrollsize' class='bg-warning'>
+<div [style.width.px]='scrollsize' [style.height.px]='scrollsize'>
     <svg:svg #surfaceSVG [attr.width]='dimension*2' [attr.height]='dimension*2' [attr.viewBox]='"0 0 "+scrollvalue+" "+scrollvalue'
         (click)='onClick($event)'>
+        <svg:circle cx='0' cy='0' r='12' fill='red'></svg:circle>
         <!-- <ng-template ngFor let-item [ngForOf]='fsm.states'>
             <svg:g app-fsm-draw-state [state]='item'  />
         </ng-template> -->
