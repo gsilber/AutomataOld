@@ -1,3 +1,98 @@
-.pad1{
-    padding:1rem;
+.prop-container{
+    display: flex; flex-direction:column;
+    height:100%;
+    width:100%;
+}
+
+.prop-window{
+    flex:1; 
+}
+.prop-page .prop-grouping-padded{
+    padding: .3rem 1rem 1rem 1rem;
+}
+
+@media (max-width:576px) {
+    .prop-container{
+        height:8rem;
+    }
+    .prop-header{
+        font-size: 1.8rem;
+        font-weight:bold;        
+        background: #f8f9fa;
+        border:none;
+        
+    }
+    .prop-header div{
+        padding-top:2rem;
+    }
+    .prop-header-hide{
+        display:none;
+    }
+    .prop-page{
+        padding:.25rem .25rem 0 .25rem;
+        height: 100%;
+    }
+    .form-group label{
+        margin:0;
+    }
+    .prop-page .prop-grouping{
+        width:47%;
+        float:left;
+        margin:0 0 .2rem 0;
+    }
+    .prop-page .prop-grouping-padded{
+        width:47%;
+        float:left;
+    }
+    .prop-page .prop-grouping:first-child{
+        margin-right:6%;
+    }
+    .form-control{
+        padding:.1rem;
+    }
+    .prop-page .button-holder button{
+        font-size:.8rem;
+        margin-top: .2rem;
+    }
+    .divider{
+        display: none;
+    }
+    .checkholder{
+        display: flex;
+        flex-direction:row;
+    }  
+    .error-msg{
+        margin-top:.3rem;
+        height:1rem;
+        margin:.3rem -.25rem 0 -.25rem;
+    }
+}
+@media (min-width:577px) {
+    .prop-header{
+        padding:.5rem 0;
+        font-weight:bold;
+        font-size:1.2rem;
+    }
+    .prop-window{
+        padding: .5rem;
+    }
+    .prop-page{
+        padding:.5rem;
+        height: 100%;
+    }
+    .prop-page .prop-grouping{
+        padding:0;
+    }
+   .prop-page .button-holder button{
+        margin-top:1rem;
+        font-size:.7rem;
+        padding-left:.35rem;
+        padding-right:.35rem;
+    } 
+    .headertext{
+        font-weight:bold;
+    }
+    .error-msg{
+        margin-top:1rem;
+    }
 }

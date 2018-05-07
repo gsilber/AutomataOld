@@ -7,11 +7,13 @@ import { FsmDrawSurfaceComponent } from './fsm-draw-surface/fsm-draw-surface.com
 import { FsmDrawPropertiesComponent } from './fsm-draw-properties/fsm-draw-properties.component';
 import { FsmDrawStateComponent } from './fsm-draw-state/fsm-draw-state.component';
 import { FsmDrawTransitionComponent } from './fsm-draw-transition/fsm-draw-transition.component';
+import { FormsModule } from '@angular/forms';
 
 @NgModule({
   imports: [
     CommonModule,
-    NgbModule
+    NgbModule,
+    FormsModule
   ],
   declarations: [
     FsmDrawComponent,
