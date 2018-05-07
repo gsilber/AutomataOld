@@ -4,17 +4,17 @@
     <div class='ctrlBarGroupHeader border-bottom fas'>Mode</div>
     <ul class="nav nav-pills">
       <li class="nav-item" ngbTooltip='Mouse Pointer' placement='top' (click)='onModeChange("pointer")'>
-        <a href='' class="nav-link" [ngClass]='{"active": mode==="pointer"}'>
+        <a href='' class="nav-link" [ngClass]='{"active": currentMode==="pointer"}'>
           <span class="fas fa-mouse-pointer" placement='top'></span>
         </a>
       </li>
       <li class="nav-item" ngbTooltip='Add States' placement='top' (click)='onModeChange("state")'>
-        <a href='' class="nav-link" [ngClass]='{"active": mode==="state"}'>
+        <a href='' class="nav-link" [ngClass]='{"active": currentMode==="state"}'>
           <span class="fas fa-cogs"></span>
         </a>
       </li>
       <li class="nav-item" (click)='onModeChange("transition")' ngbTooltip='Add Transitions' placement='top'>
-        <a href='' class="nav-link" [ngClass]='{"active": mode==="transition"}'>
+        <a href='' class="nav-link" [ngClass]='{"active": currentMode==="transition"}'>
           <span class="fas fa-recycle"></span>
         </a>
       </li>

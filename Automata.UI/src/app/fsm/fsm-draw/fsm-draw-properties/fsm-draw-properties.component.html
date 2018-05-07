@@ -1,5 +1,11 @@
-<div class='h-100 w-100 pad1'>
-    <div class='h-100' style='border: 1px solid black;'>
-        properties panel
+<div class='h-100 w-100' style='display: flex; flex-direction:column;'>
+    <div class='h100 h5 text-center' style='padding:.5rem 0'>
+        <span [hidden]='activeobject'>Select an Object</span>
+        <span [hidden]='!activeobject'>Object Properties</span>
+    </div>
+    <div class='bg-light' style='flex:1; padding: .5rem;'>
+        <div [hidden]='!activeobject || activeobject.type==="!=state"' class='h-100 border rounded' style='padding:.5rem;'>
+            state properties panel
+        </div>
     </div>
 </div>

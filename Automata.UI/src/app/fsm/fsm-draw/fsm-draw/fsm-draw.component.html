@@ -1,16 +1,16 @@
-<div class='fsm' [style.background]='background'>
+<div class='fsm' [style.background]='background' >
     <div class='row flex-1'>
         <div class='col-lg-9 col-md-8 col-sm-7 col-12 h-100 pad0'>
             <div class='d-block d-sm-none'>
-                <app-fsm-draw-properties></app-fsm-draw-properties>
+                <app-fsm-draw-properties [activeobject]='selection' [mode]='mode'></app-fsm-draw-properties>
             </div>
 
             <div class='scroll-container'>
-                <app-fsm-draw-surface [fsm]='fsm' [(mode)]='mode' dimension='4000' [zoompercent]='zoomPercent'></app-fsm-draw-surface>
+                <app-fsm-draw-surface [fsm]='fsm' [(selected)]='selection' [(mode)]='mode' dimension='4000' [zoompercent]='zoomPercent'></app-fsm-draw-surface>
             </div>
         </div>
         <div class='col-lg-3 col-md-4 col-sm-5 d-none d-sm-block h-100 pad0'>
-            <app-fsm-draw-properties></app-fsm-draw-properties>
+            <app-fsm-draw-properties [activeobject]='selection' [mode]='mode'></app-fsm-draw-properties>
         </div>
     </div>
     <div class='row bg-light'>
@@ -18,7 +18,7 @@
             <app-fsm-draw-controlbar [(mode)]='mode' (zoom)='onCtrlbarZoom($event)'></app-fsm-draw-controlbar>
         </div>
         <div class='col-lg-3 col-md-4 d-none d-md-block bg-light pad0'>
-            <div class='h-100 border-left status-box'>
+            <div class='h-100 border-left border-top status-box'>
                 Status box
             </div>
         </div>

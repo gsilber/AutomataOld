@@ -15,8 +15,12 @@ export class FsmDrawSurfaceComponent {
     this._dimension = val;
     this.scrollvalue = val;
   }
-  @Input() set mode(val: string) { if (val !== 'pointer') { this.selectedChild = null; } this._mode = val; }
+
+  @Input() set mode(val: string) { if (val !== 'pointer') { this.selectedChild = null; } this._currentMode = val; }
   @Output() modeChange: EventEmitter<string> = new EventEmitter<string>();
+
+  @Input() set selected(val: FsmObject) { this.selectedChild = val; }
+  @Output() selectedChange: EventEmitter<FsmObject> = new EventEmitter<FsmObject>();
 
   @Input() set zoompercent(val) {
     this.scrollvalue = this.dimension / (val / 100.0);
@@ -32,9 +36,14 @@ export class FsmDrawSurfaceComponent {
   }
 
   scrollvalue: number;
-  selectedChild: FsmObject = null;
   private _dimension = 2000;
-  private _mode: string;
+
+  private _selectedChild: FsmObject = null;
+  get selectedChild() { return this._selectedChild; }
+  set selectedChild(val: FsmObject) { this._selectedChild = val; this.selectedChange.emit(val); }
+  private _currentMode: string;
+  get currentMode() { return this._currentMode; }
+  set currentMode(val) { this._currentMode = val; this.modeChange.emit(val); }
   // state maintenence properties
 
   private movingState: FsmState = null;
@@ -44,16 +53,17 @@ export class FsmDrawSurfaceComponent {
   // surface event handlers
   onClick(evt) {
     this.selectedChild = null;
-    if (this._mode === 'state') {
+    if (this.currentMode === 'state') {
       const surfacePt = this.clientToSurface(evt.x, evt.y);
       this.selectedChild = this.fsm.addNewState(surfacePt.x, surfacePt.y);
+      this.selectedChange.emit(this.selectedChild);
       this.modeChange.emit('pointer');
     }
     evt.stopPropagation();
     return false;
   }
   onMouseMove(evt) {
-    if (this._mode === 'pointer') {
+    if (this.currentMode === 'pointer') {
       if (this.movingState !== null) {
         this.movingState.position = this.clientToSurface(evt.x, evt.y);
       }
@@ -62,18 +72,22 @@ export class FsmDrawSurfaceComponent {
 
   // state event handlers
   onStateClick(evt) {
-    if (this._mode === 'pointer') {
+    if (this.currentMode === 'pointer') {
       this.selectedChild = evt.srcElement;
+      this.selectedChange.emit(evt.srcElement);
+    }
+    if (this.currentMode === 'transition') {
+      // begin or end transition creation
     }
   }
 
   onStateMouseDown(evt: FsmEvent) {
-    if (this._mode === 'pointer') {
+    if (this.currentMode === 'pointer') {
       this.movingState = evt.srcElement as FsmState;
     }
   }
   onStateMouseUp(evt) {
-    if (this._mode === 'pointer') {
+    if (this.currentMode === 'pointer') {
       this.movingState = null;
     }
   }

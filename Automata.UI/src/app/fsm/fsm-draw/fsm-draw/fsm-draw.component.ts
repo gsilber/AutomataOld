@@ -1,3 +1,4 @@
+import { MyInput } from './test';
 import { Component, Input } from '@angular/core';
 import { Fsm, FsmObject } from '../classes/Fsm';
 
@@ -7,7 +8,6 @@ import { Fsm, FsmObject } from '../classes/Fsm';
   styleUrls: ['./fsm-draw.component.css']
 })
 export class FsmDrawComponent {
-
 
   @Input() background = 'none';
 

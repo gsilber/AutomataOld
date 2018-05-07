@@ -8,12 +8,13 @@ import { Component, Input, Output, EventEmitter } from '@angular/core';
 export class FsmDrawControlbarComponent {
 
   @Input() isValid = false;
-  @Input() get mode() { return this._mode; }
-  set mode(val) { this._mode = val; this.modeChange.emit(this._mode); }
+  @Input() set mode(val) { this._currentMode = val; }
   @Output() modeChange: EventEmitter<string> = new EventEmitter<string>();
   @Output() zoom: EventEmitter<number> = new EventEmitter<number>();
 
-  private _mode = 'pointer';
+  private _currentMode = 'pointer';
+  get currentMode() { return this._currentMode; }
+  set currentMode(val: string) { this._currentMode = val; this.modeChange.emit(val); }
   constructor() { }
 
   // property click event handlers
@@ -22,7 +23,7 @@ export class FsmDrawControlbarComponent {
 
   // controlbar click event handlers
   onModeChange(mode) {
-    this.mode = mode;
+    this.currentMode = mode;
     return false;
   }
   onNew() {
