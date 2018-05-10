@@ -10,7 +10,7 @@ import { Fsm, FsmObject } from '../classes/Fsm';
 export class FsmDrawComponent {
 
   @Input() background = 'none';
-
+  @Input() canvassize = 4000;
   mode = 'pointer';
   fsm: Fsm = new Fsm();
   selection: FsmObject = null;

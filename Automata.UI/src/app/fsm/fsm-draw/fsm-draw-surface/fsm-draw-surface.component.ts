@@ -16,6 +16,7 @@ export class FsmDrawSurfaceComponent {
     this.scrollvalue = val;
   }
 
+  @Input() readonly = false;
   @Input() set mode(val: string) { if (val !== 'pointer') { this.selectedChild = null; } this._currentMode = val; }
   @Output() modeChange: EventEmitter<string> = new EventEmitter<string>();
 
@@ -53,6 +54,7 @@ export class FsmDrawSurfaceComponent {
   // surface event handlers
   onClick(evt) {
     this.selectedChild = null;
+    if (this.readonly) { return; }
     if (this.currentMode === 'state') {
       const surfacePt = this.clientToSurface(evt.x, evt.y);
       this.selectedChild = this.fsm.addNewState(surfacePt.x, surfacePt.y);
@@ -63,6 +65,7 @@ export class FsmDrawSurfaceComponent {
     return false;
   }
   onMouseMove(evt) {
+    if (this.readonly) { return; }
     if (this.currentMode === 'pointer') {
       if (this.movingState !== null) {
         this.movingState.position = this.clientToSurface(evt.x, evt.y);
@@ -72,6 +75,7 @@ export class FsmDrawSurfaceComponent {
 
   // state event handlers
   onStateClick(evt) {
+    if (this.readonly) { return; }
     if (this.currentMode === 'pointer') {
       this.selectedChild = evt.srcElement;
       this.selectedChange.emit(evt.srcElement);
@@ -82,11 +86,13 @@ export class FsmDrawSurfaceComponent {
   }
 
   onStateMouseDown(evt: FsmEvent) {
+    if (this.readonly) { return; }
     if (this.currentMode === 'pointer') {
       this.movingState = evt.srcElement as FsmState;
     }
   }
   onStateMouseUp(evt) {
+    if (this.readonly) { return; }
     if (this.currentMode === 'pointer') {
       this.movingState = null;
     }
