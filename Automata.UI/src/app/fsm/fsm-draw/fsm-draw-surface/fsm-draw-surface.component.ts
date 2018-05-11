@@ -17,7 +17,7 @@ export class FsmDrawSurfaceComponent {
   }
 
   @Input() readonly = false;
-  @Input() set mode(val: string) { if (val !== 'pointer') { this.selectedChild = null; } this._currentMode = val; }
+  @Input() set mode(val: string) { this._currentMode = val; }
   @Output() modeChange: EventEmitter<string> = new EventEmitter<string>();
 
   @Input() set selected(val: FsmObject) { this.selectedChild = val; }

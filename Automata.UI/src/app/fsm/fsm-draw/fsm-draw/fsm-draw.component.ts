@@ -11,7 +11,8 @@ export class FsmDrawComponent {
 
   @Input() background = 'none';
   @Input() canvassize = 4000;
-  mode = 'pointer';
+  get mode() { return this._mode; }
+  set mode(val) { this._mode = val; if (val !== 'pointer') { this.selection = null; } }
   fsm: Fsm = new Fsm();
   selection: FsmObject = null;
 
@@ -24,7 +25,7 @@ export class FsmDrawComponent {
 
 
   private _zoomPercent = 100;
-
+  private _mode = 'pointer';
   constructor() { }
 
   // ctrlbar event handlers
