@@ -1,7 +1,7 @@
 <div class='h-100'>
   <div class='form-group prop-grouping '>
     <Label for='statename '>State Name:</Label>
-    <input type='text ' id='statename ' class='form-control ' />
+    <input type='text ' id='statename ' class='form-control ' [ngModel]='name' />
   </div>
   <div class='border prop-grouping-padded '>
     <span class='headertext '>State Modes:</span>
@@ -9,12 +9,12 @@
     <hr class='divider ' />
     <div class='checkholder '>
       <div class='form-check form-check-inline '>
-        <input type="checkbox" class="form-check-input" id="checkStart">
+        <input type="checkbox" class="form-check-input" id="checkStart" [ngModel]='start'>
         <label class="form-check-label" for="checkFinal">Start</label>
       </div>
       <br/>
       <div class='form-check form-check-inline '>
-        <input type="checkbox" class="form-check-input" id="checkFinal">
+        <input type="checkbox" class="form-check-input" id="checkFinal" [ngModel]='final'>
         <label class="form-check-label" for="checkFinal">Final</label>
       </div>
     </div>

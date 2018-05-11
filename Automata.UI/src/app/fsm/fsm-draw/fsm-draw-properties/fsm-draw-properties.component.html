@@ -8,10 +8,8 @@
             <div [hidden]='!activeobject || activeobject.type!=="state"'>
                 <app-fsm-draw-prop-state [state]='activeobject'></app-fsm-draw-prop-state>
             </div>
-            <div [hidden]='!activeobject '>
-            </div>
-            <div>
-
+            <div [hidden]='!activeobject || activeobject.type!=="transition"'>
+                <app-fsm-draw-prop-transition></app-fsm-draw-prop-transition>
             </div>
         </div>
     </div>
