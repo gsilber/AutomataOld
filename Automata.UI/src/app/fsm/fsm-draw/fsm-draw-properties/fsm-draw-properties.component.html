@@ -1,52 +1,49 @@
 <div class='prop-container'>
     <div class='text-center prop-header'>
-        <div [hidden]='activeobject'>
-            <span>Select an Object</span>
-        </div>
-    </div>
-    <div class='text-center prop-header prop-header-hide'>
-            <span [hidden]='!activeobject'>Object Properties</span>
+        <span [hidden]='activeobject'>Select an Object</span>
+        <span [hidden]='!activeobject'>Object Properties</span>
     </div>
     <div class='bg-light prop-window'>
         <!-- <div [hidden]='activeobject' class='prop-page border rounded'> -->
-        <div [hidden]='!activeobject || activeobject.type!=="state"' class=' prop-page border rounded '>
-            <div class='form-group prop-grouping '>
-                <Label for='statename '>State Name:</Label>
-                <input type='text ' id='statename ' class='form-control ' />
-            </div>
-            <div class='border prop-grouping-padded '>
-                <span class='headertext '>State Modes:</span>
-                <br/>
-                <hr class='divider ' />
-                <div class='checkholder '>
-                    <div class='form-check form-check-inline '>
-                        <input type="checkbox" class="form-check-input" id="checkStart">
-                        <label class="form-check-label" for="checkFinal">Start</label>
-                    </div>
+        <div class=' prop-page'  [ngClass]='{"border": activeobject}'>
+            <div [hidden]='!activeobject || activeobject.type!=="state"' >
+                <div class='form-group prop-grouping '>
+                    <Label for='statename '>State Name:</Label>
+                    <input type='text ' id='statename ' class='form-control ' />
+                </div>
+                <div class='border prop-grouping-padded '>
+                    <span class='headertext '>State Modes:</span>
                     <br/>
-                    <div class='form-check form-check-inline '>
-                        <input type="checkbox" class="form-check-input" id="checkFinal">
-                        <label class="form-check-label" for="checkFinal">Final</label>
+                    <hr class='divider ' />
+                    <div class='checkholder '>
+                        <div class='form-check form-check-inline '>
+                            <input type="checkbox" class="form-check-input" id="checkStart">
+                            <label class="form-check-label" for="checkFinal">Start</label>
+                        </div>
+                        <br/>
+                        <div class='form-check form-check-inline '>
+                            <input type="checkbox" class="form-check-input" id="checkFinal">
+                            <label class="form-check-label" for="checkFinal">Final</label>
+                        </div>
                     </div>
                 </div>
-            </div>
-            <div style='clear: both; '></div>
-            <div>
-                <div class='text-center align-bottom button-holder '>
-                    <button class=' btn btn-primary '>Update</button>
-                    <button class='btn btn-secondary '>Cancel</button>
-                    <button class=' btn btn-danger '>Delete</button>
-                </div>
-                <div class='error-msg '>
-                    <div class='alert-danger text-center font-weight-bold '>
-                        Error Msg.
+                <div style='clear: both; '></div>
+                <div>
+                    <div class='text-center align-bottom button-holder '>
+                        <button class=' btn btn-primary '>Update</button>
+                        <button class='btn btn-secondary '>Cancel</button>
+                        <button class=' btn btn-danger '>Delete</button>
                     </div>
-                </div>
+                    <div class='error-msg '>
+                        <div class='alert-danger text-center font-weight-bold '>
+                            
+                        </div>
+                    </div>
 
+                </div>
+            </div>
+            <div [hidden]='!activeobject '>
+            </div>
+            <div>
             </div>
         </div>
-        <div [hidden]='!activeobject ' class='prop-page border rounded '>
-            <!-- <div [hidden]='!activeobject || activeobject.type!=="transition" ' prop-page border rounded'> -->
-        </div>
-    </div>
-</div>

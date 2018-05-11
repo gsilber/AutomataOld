@@ -8,6 +8,8 @@ import { FsmDrawPropertiesComponent } from './fsm-draw-properties/fsm-draw-prope
 import { FsmDrawStateComponent } from './fsm-draw-state/fsm-draw-state.component';
 import { FsmDrawTransitionComponent } from './fsm-draw-transition/fsm-draw-transition.component';
 import { FormsModule } from '@angular/forms';
+import { FsmDrawPropStateComponent } from './fsm-draw-properties/fsm-draw-prop-state/fsm-draw-prop-state.component';
+import { FsmDrawPropTransitionComponent } from './fsm-draw-properties/fsm-draw-prop-transition/fsm-draw-prop-transition.component';
 
 @NgModule({
   imports: [
@@ -21,7 +23,9 @@ import { FormsModule } from '@angular/forms';
     FsmDrawSurfaceComponent,
     FsmDrawPropertiesComponent,
     FsmDrawStateComponent,
-    FsmDrawTransitionComponent],
+    FsmDrawTransitionComponent,
+    FsmDrawPropStateComponent,
+    FsmDrawPropTransitionComponent],
   exports: [FsmDrawComponent]
 })
 export class FsmDrawModule { }
