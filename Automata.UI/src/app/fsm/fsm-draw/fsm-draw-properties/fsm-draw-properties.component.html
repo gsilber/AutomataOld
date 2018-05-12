@@ -6,7 +6,7 @@
     <div class='bg-light prop-window'>
         <div class=' prop-page' [ngClass]='{"border": activeobject}'>
             <div [hidden]='!activeobject || activeobject.type!=="state"'>
-                <app-fsm-draw-prop-state [state]='activeobject'></app-fsm-draw-prop-state>
+                <app-fsm-draw-prop-state [fsm]='fsm' [state]='activeobject' (statedeleted)='onObjectDeleted($event)'></app-fsm-draw-prop-state>
             </div>
             <div [hidden]='!activeobject || activeobject.type!=="transition"'>
                 <app-fsm-draw-prop-transition></app-fsm-draw-prop-transition>

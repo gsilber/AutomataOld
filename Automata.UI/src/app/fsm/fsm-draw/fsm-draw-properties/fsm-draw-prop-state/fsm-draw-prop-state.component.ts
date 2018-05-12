@@ -1,5 +1,5 @@
-import { FsmState } from './../../classes/Fsm';
-import { Component, Input } from '@angular/core';
+import { Fsm, FsmState } from './../../classes/Fsm';
+import { Component, Input, EventEmitter, Output } from '@angular/core';
 
 @Component({
   selector: 'app-fsm-draw-prop-state',
@@ -8,6 +8,8 @@ import { Component, Input } from '@angular/core';
 })
 export class FsmDrawPropStateComponent {
 
+  @Output() statedeleted: EventEmitter<FsmState> = new EventEmitter<FsmState>();
+  @Input() fsm: Fsm;
   @Input() set state(val: FsmState) {
     this._state = val;
     if (this._state) {
@@ -20,10 +22,22 @@ export class FsmDrawPropStateComponent {
   }
 
   get isValid() {
+    if (!this.fsm) {
+      return false;
+    }
+    if (this.fsm.states.filter(state => this._state && state !== this._state && state.label === this.name).length > 0) {
+      this.errMsg = 'Duplicate state label';
+      return false;
+    }
+    if (this.name.length > 4 || this.name.length < 2) {
+      this.errMsg = 'Invalid state name';
+      return false;
+    }
+    this.errMsg = '';
     return true;
   }
   get isDirty() {
-    return (this.name !== this.state.label || this.start !== this.state.start || this.final !== this.state.final);
+    return (this._state && (this.name !== this._state.label || this.start !== this._state.start || this.final !== this._state.final));
   }
   private _state: FsmState = null;
 
@@ -46,6 +60,9 @@ export class FsmDrawPropStateComponent {
       this._state.start = this.start;
       this._state.final = this.final;
     }
+  }
+  onDelete() {
+    this.statedeleted.emit(this.fsm.deleteState(this._state));
   }
 
 }

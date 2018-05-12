@@ -1,7 +1,7 @@
 <div class='h-100'>
   <div class='form-group prop-grouping '>
     <Label for='statename '>State Name:</Label>
-    <input type='text ' id='statename ' class='form-control ' [ngModel]='name' />
+    <input type='text ' id='statename ' class='form-control ' [(ngModel)]='name' />
   </div>
   <div class='border prop-grouping-padded '>
     <span class='headertext '>State Modes:</span>
@@ -9,25 +9,25 @@
     <hr class='divider ' />
     <div class='checkholder '>
       <div class='form-check form-check-inline '>
-        <input type="checkbox" class="form-check-input" id="checkStart" [ngModel]='start'>
+        <input type="checkbox" class="form-check-input" id="checkStart" [(ngModel)]='start'>
         <label class="form-check-label" for="checkFinal">Start</label>
       </div>
       <br/>
       <div class='form-check form-check-inline '>
-        <input type="checkbox" class="form-check-input" id="checkFinal" [ngModel]='final'>
+        <input type="checkbox" class="form-check-input" id="checkFinal" [(ngModel)]='final'>
         <label class="form-check-label" for="checkFinal">Final</label>
       </div>
     </div>
   </div>
   <div style='clear: both; '></div>
   <div class='text-center align-bottom button-holder '>
-    <button class=' btn btn-primary '>Update</button>
-    <button class='btn btn-secondary '>Cancel</button>
-    <button class=' btn btn-danger '>Delete</button>
+    <button class=' btn btn-primary ' [disabled]='!(isValid && isDirty)' (click)='onSubmit()'>Update</button>
+    <button class='btn btn-secondary ' (click)='onCancel()'>Cancel</button>
+    <button class=' btn btn-danger ' (click)='onDelete()'>Delete</button>
   </div>
   <div class='error-msg'>
     <div class='alert-danger text-center font-weight-bold '>
-      Testing 1 2 3
+      {{errMsg}}
     </div>
   </div>
 </div>
