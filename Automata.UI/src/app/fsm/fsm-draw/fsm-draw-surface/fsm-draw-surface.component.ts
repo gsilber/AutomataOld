@@ -54,7 +54,6 @@ export class FsmDrawSurfaceComponent {
 
   // surface event handlers
   onClick(evt) {
-    this.selectedChild = null;
     if (this.readonly) { return; }
     if (this.currentMode === 'state') {
       const surfacePt = this.clientToSurface(evt.x, evt.y);
@@ -65,6 +64,9 @@ export class FsmDrawSurfaceComponent {
     this.partialTransition = null;
     evt.stopPropagation();
     return false;
+  }
+  onMouseDown(evt) {
+    this.selectedChild = null;
   }
   onMouseMove(evt) {
     if (this.readonly) { return; }
@@ -97,7 +99,7 @@ export class FsmDrawSurfaceComponent {
       case 'transition':
         if (this.partialTransition) {
           const position = this.clientToSurface(evt.x, evt.y);
-          this.partialTransition.endState = new FsmState({ x: position.x, y: position.y, label: '', start: false, final: false })
+          this.partialTransition.endState = new FsmState({ x: position.x, y: position.y, label: '', start: false, final: false });
         }
         break;
     }
@@ -142,6 +144,7 @@ export class FsmDrawSurfaceComponent {
     if (this.readonly) { return; }
     if (this.currentMode === 'pointer') {
       this.movingState = evt.srcElement as FsmState;
+      this.selectedChild = evt.srcElement;
     }
   }
   onStateMouseUp(evt) {
