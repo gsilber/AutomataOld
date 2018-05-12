@@ -11,9 +11,7 @@ export class FsmDrawPropStateComponent {
   @Output() statedeleted: EventEmitter<FsmState> = new EventEmitter<FsmState>();
   @Input() fsm: Fsm;
   @Input() set state(val: FsmState) {
-    if (val && val.type === 'state') {
-      this._state = val;
-    } else { this._state = null; }
+    this._state = val;
     if (this._state) {
       this.name = this._state.label;
       this.start = this._state.start;

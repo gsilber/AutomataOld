@@ -1,4 +1,4 @@
-import { Fsm, FsmObject } from './../classes/Fsm';
+import { Fsm, FsmObject, FsmState, FsmTransition } from './../classes/Fsm';
 import { Component, Input, Output, EventEmitter } from '@angular/core';
 
 @Component({
@@ -13,6 +13,13 @@ export class FsmDrawPropertiesComponent {
   @Input() activeobject: FsmObject;
   @Output() clearselection: EventEmitter<boolean> = new EventEmitter<boolean>();
   private _mode = 'pointer';
+
+  get state() {
+    return (this.activeobject && this.activeobject.type === 'state' ? this.activeobject as FsmState : null);
+  }
+  get transition() {
+    return (this.activeobject && this.activeobject.type === 'transition' ? this.activeobject as FsmTransition : null);
+  }
 
   constructor() { }
 
