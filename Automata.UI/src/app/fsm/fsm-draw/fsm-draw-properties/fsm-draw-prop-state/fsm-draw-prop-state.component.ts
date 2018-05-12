@@ -22,7 +22,7 @@ export class FsmDrawPropStateComponent {
   }
 
   get isValid() {
-    if (!this.fsm) {
+    if (!this.fsm || !this.state) {
       return false;
     }
     if (this.fsm.states.filter(state => this._state && state !== this._state && state.label === this.name).length > 0) {

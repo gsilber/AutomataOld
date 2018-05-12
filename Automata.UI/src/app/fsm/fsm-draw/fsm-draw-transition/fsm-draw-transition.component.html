@@ -1,3 +1,18 @@
-<p>
-  fsm-draw-transition works!
-</p>
+<svg:defs>
+  <svg:marker id="arrow" markerWidth="9" markerHeight="9" refX="9" refY="3" orient="auto" markerUnits="strokeWidth" viewBox="0 0 9 9">
+    <svg:path class='fsm-transition-arrow' d="M0,0 L0,6 L9,3 z" fill="#f00" />
+  </svg:marker>
+  <svg:marker id="arrowlong" markerWidth="9" markerHeight="9" refX="0" refY="3" orient="auto" markerUnits="strokeWidth" viewBox="0 0 9 9">
+    <svg:path class='fsm-transition-arrow fsm-transition-arrow-creating' d="M0,0 L0,6 L9,3 z" fill="#f00" />
+  </svg:marker>
+</svg:defs>
+
+<svg:g *ngIf='transition' [attr.transform]='"rotate("+transitionangle+","+transition.startState.position.x+","+transition.startState.position.y+")"'>
+  <svg:g [attr.transform]='rotationTransform'>
+    <svg:path class='fsm-transition' stroke='blue' stroke-width='1' fill='none' [attr.d]='transitionPath' [attr.stroke-dasharray]='(selected?"5 2":"")'
+      [attr.marker-end]='(transition.startState===transition.endState?"url(#arrowlong)":"url(#arrow)")'></svg:path>
+    <!--event target-->
+    <svg:path stroke='transparent' stroke-width='10' fill='none' [attr.d]='transitionPath' [attr.stroke-dasharray]='(selected?"5 2":"")'
+      (click)='onCLick($event)' (mousemove)='onMouseMove($event)' (mousedown)='onMouseDown($event)' />
+  </svg:g>
+</svg:g>

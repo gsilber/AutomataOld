@@ -6,6 +6,6 @@
   {{state.label}}
 </svg:text>
 
-<svg:circle [attr.cx]='state.position.x' [attr.cy]='state.position.y' [attr.r]='radius' fill='transparent' stroke='none'
-(click)='onCLick($event)' (mousedown)='onMouseDown($event)' (mouseup)='onMouseUp($event)'>
+<svg:circle [attr.cx]='state.position.x' [attr.cy]='state.position.y' [attr.r]='radius+1' fill='transparent' stroke='none'
+(click)='onCLick($event)' (mousedown)='onMouseDown($event)' (mouseup)='onMouseUp($event)' (mousemove)='onMouseMove($event)'>
 </svg:circle>

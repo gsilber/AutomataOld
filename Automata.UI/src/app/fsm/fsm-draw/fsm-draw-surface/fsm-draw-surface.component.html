@@ -2,8 +2,14 @@
     <svg:svg #surfaceSVG [attr.width]='dimension*2' [attr.height]='dimension*2' [attr.viewBox]='"0 0 "+scrollvalue+" "+scrollvalue'
         (click)='onClick($event)' (mousemove)='onMouseMove($event)'>
         <ng-template ngFor let-item [ngForOf]='fsm.states'>
-            <svg:g app-fsm-draw-state [state]='item' [radius]='stateRadius' [selected]='selectedChild===item' (click)='onStateClick($event)' (mousedown)='onStateMouseDown($event)' (mouseup)='onStateMouseUp($event)'   />
+            <svg:g app-fsm-draw-state [state]='item' [radius]='stateRadius' [selected]='selectedChild===item' (click)='onStateClick($event)'
+                (mousedown)='onStateMouseDown($event)' (mouseup)='onStateMouseUp($event)' (mousemove)='onStateMouseMove($event)' />
         </ng-template>
 
+        <svg:g app-fsm-draw-transition [transition]='partialTransition' [radius]='stateRadius'></svg:g>
+        <ng-template ngFor let-item [ngForOf]='fsm.transitions'>
+            <svg:g app-fsm-draw-transition [transition]='item' [radius]='stateRadius' [selected]='selectedChild===item' 
+            (mousedown)='onTransitionMouseDown($event)' (mousemove)='onTransitionMouseMove($event)'></svg:g>
+        </ng-template>
     </svg:svg>
 </div>
