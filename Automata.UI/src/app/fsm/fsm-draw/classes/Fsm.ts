@@ -145,6 +145,10 @@ export class Fsm {
         return newState;
     }
     addNewTransition(startState: FsmState, endState: FsmState, characters = 'a') {
+        // make sure it is unique between states
+        if (this.transitions.filter(trans => trans.startState === startState && trans.endState === endState).length > 0) {
+            return null;
+        }
         const newTrans = new FsmTransition(
             { charactersAccepted: characters, rotation: 0.0, startState: startState.label, endState: endState.label },
             startState, endState);
