@@ -40,22 +40,64 @@ export class FsmState extends FsmObject {
 
     constructor(stateData: FsmStateData) {
         super();
-        this._data = stateData;
-        this.type = 'state';
+        this.fromSerializableObject(stateData);
     }
 
     toSerializableObject(): FsmStateData {
         return this._data;
     }
-
+    fromSerializableObject(obj: FsmStateData) {
+        this._data = obj;
+        this.type = 'state';
+    }
 }
 
 // Transitions
 export class FsmTransitionData {
-
+    charactersAccepted = 'a';
+    rotation = 0.0;
+    startState = '';
+    endState = '';
 }
 export class FsmTransition extends FsmObject {
     private _data: FsmTransitionData;
+    private _startState: FsmState = null;
+    private _endState: FsmState = null;
+    get startState(): FsmState { return this._startState; }
+    get endState(): FsmState { return this._endState; }
+    get charactersAccepted(): string { return this._data.charactersAccepted; }
+    get rotation(): number { return this._data.rotation; }
+    set startState(val: FsmState) {
+        this._startState = val;
+        this._data.startState = (val ? val.label : '');
+    }
+    set endState(val: FsmState) {
+        this._endState = val;
+        this._data.endState = (val ? val.label : '');
+    }
+    set charactersAccepted(val) {
+        if (this._data.charactersAccepted !== val) { this.dirty = true; }
+        this._data.charactersAccepted = val;
+    }
+    set rotation(val) {
+        if (this._data.rotation !== val) { this.dirty = true; }
+        this._data.rotation = val;
+    }
+
+    constructor(transData: FsmTransitionData, startState: FsmState, endState: FsmState) {
+        super();
+        this.fromSerializableObject(transData, startState, endState);
+    }
+
+    toSerializableObject(): FsmTransitionData {
+        return this._data;
+    }
+    fromSerializableObject(obj: FsmTransitionData, startState: FsmState, endState: FsmState) {
+        this._data = obj;
+        this.type = 'transition';
+        this.startState = startState;
+        this.endState = endState;
+    }
 }
 
 @Injectable()
@@ -78,11 +120,18 @@ export class Fsm {
 
     serialize(): string {
         const states = this.states.map(item => item.toSerializableObject());
-        return JSON.stringify({ states: states, transitions: [] });
+        const transitions = this.transitions.map(item => item.toSerializableObject());
+        return JSON.stringify({ states: states, transitions: transitions });
     }
     deserialize(data: string) {
-        const states = JSON.parse(data);
-        this.states = states.map(item => new FsmState(item));
+        const object = JSON.parse(data);
+        this.states = object.states.map(item => new FsmState(item));
+        this.transitions = object.transitions.map(trans => {
+            const start = this.states.find(state => state.label === trans.startState);
+            const end = this.states.find(state => state.label === trans.endState);
+            return new FsmTransition(trans, start, end);
+        });
+
     }
     addNewState(x: number, y: number) {
         // find first available state name starting with a q
@@ -95,11 +144,33 @@ export class Fsm {
         this._dirty = true;
         return newState;
     }
+    addNewTransition(startState: FsmState, endState: FsmState, characters = 'a') {
+        const newTrans = new FsmTransition(
+            { charactersAccepted: characters, rotation: 0.0, startState: startState.label, endState: endState.label },
+            startState, endState);
+        this.transitions.push(newTrans);
+        this._dirty = true;
+        return newTrans;
+    }
     deleteState(state: FsmState): FsmState {
         const position = this.states.indexOf(state);
         if (position > -1) {
             this.states.splice(position, 1);
+            this.deleteTransitionsForState(state);
+            this._dirty = true;
         }
         return state;
+    }
+    private deleteTransitionsForState(state: FsmState) {
+        this.transitions = this.transitions.filter(trans => trans.startState !== state && trans.endState !== state);
+    }
+
+    deleteTransition(transition: FsmTransition) {
+        const position = this.transitions.indexOf(transition);
+        if (position > -1) {
+            this.transitions.splice(position, 1);
+            this._dirty = true;
+        }
+        return transition;
     }
 }
