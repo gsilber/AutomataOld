@@ -1,0 +1,8 @@
+.flex-1{
+    flex:1;
+    min-height: 0;
+}
+.flex-vertical{
+    display: flex;
+    flex-direction: column;
+}

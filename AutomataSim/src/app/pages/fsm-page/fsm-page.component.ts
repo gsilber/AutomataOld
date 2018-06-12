@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { FsmFactoryService } from '../../modules/fsm-factory.service';
+import { Fsm } from '../../modules/fsm/FsmPublic';
 
 @Component({
   selector: 'app-fsm-page',
@@ -7,7 +9,11 @@ import { Component, OnInit } from '@angular/core';
 })
 export class FsmPageComponent implements OnInit {
 
-  constructor() { }
+  fsm: Fsm;
+
+  constructor(private _fsmSvc: FsmFactoryService) {
+    this.fsm = _fsmSvc.getFsm('fsmPage');
+  }
 
   ngOnInit() {
   }

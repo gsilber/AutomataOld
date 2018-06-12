@@ -6,11 +6,11 @@ import { FsmStateComponent } from './fsm-draw/fsm-view/fsm-state/fsm-state.compo
 import { FsmTransitionComponent } from './fsm-draw/fsm-view/fsm-transition/fsm-transition.component';
 import { FsmPropsComponent } from './fsm-draw/fsm-props/fsm-props.component';
 import { FsmCtrlComponent } from './fsm-draw/fsm-ctrl/fsm-ctrl.component';
-
 @NgModule({
   imports: [
     CommonModule
   ],
-  declarations: [FsmDrawComponent, FsmViewComponent, FsmStateComponent, FsmTransitionComponent, FsmPropsComponent, FsmCtrlComponent]
+  declarations: [FsmDrawComponent, FsmViewComponent, FsmStateComponent, FsmTransitionComponent, FsmPropsComponent, FsmCtrlComponent],
+  exports: [FsmDrawComponent, FsmViewComponent]
 })
 export class FsmModule { }

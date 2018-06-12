@@ -1,0 +1,70 @@
+
+
+@media only screen and (max-width: 576px) {
+    .fsm-container{
+        height:100%;flex-direction: column; display:flex;
+    }
+    .fsm-top{
+        flex:1;display:flex;flex-direction: column;
+    } 
+    .fsm-bottom{
+        height:100px;display: flex;flex-direction: column;
+    }
+    .fsm-view-container{
+        flex:1;width:100%;
+    }
+    
+    .fsm-props-container{
+        height:100px;
+    }
+    
+    .fsm-ctrl-container{
+        flex:1;
+    }
+    
+    .fsm-status-container{
+        height:50px;
+    }
+}
+@media only screen and (min-width: 577px) {
+    .fsm-container,.fsm-top,.fsm-bottom{
+        width:100%;
+        display: flex;    
+        overflow:hidden;
+    }
+    .fsm-container{
+        height:100%;flex-direction: column;
+    }
+    .fsm-top,.fsm-bottom{
+        flex-direction: row;
+    }
+    .fsm-top{
+        flex:1;
+    } 
+    .fsm-bottom{
+        height:100px;
+    }
+    
+    .fsm-view-container,.fsm-props-container,.fsm-ctrl-container,.fsm-status-container{
+        height:100%;overflow:hidden;
+    }
+    
+    .fsm-view-container{
+        flex:1;
+    }
+    
+    .fsm-props-container{
+        width:200px;
+        background:purple;
+    }
+    
+    .fsm-ctrl-container{
+        flex:1;
+        background:grey;
+    }
+    
+    .fsm-status-container{
+        width:200px;
+        background:yellow;
+    }
+}
