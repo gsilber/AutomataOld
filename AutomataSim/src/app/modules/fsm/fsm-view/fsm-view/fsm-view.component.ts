@@ -1,14 +1,18 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, Input, AfterViewInit } from '@angular/core';
+import { FsmService, Fsm } from '../../fsm-common/fsm-common.module';
 
 @Component({
   selector: 'app-fsm-view',
   templateUrl: './fsm-view.component.html',
   styleUrls: ['./fsm-view.component.css']
 })
-export class FsmViewComponent implements OnInit {
+export class FsmViewComponent implements AfterViewInit {
 
   @Input() drawSize = 2000;
   @Input() zoomPercent = 100;
+  @Input() fsmId = '_viewDefault';
+
+  private _fsm: Fsm;
 
   // viewbox value for svg scaling
   public get zoomValue(): number {
@@ -19,9 +23,10 @@ export class FsmViewComponent implements OnInit {
     return this.drawSize * (this.zoomPercent / 100);
   }
 
-  constructor() { }
+  constructor(private _fsmSvc: FsmService) { }
 
-  ngOnInit() {
+  ngAfterViewInit() {
+    this._fsm = this._fsmSvc.getFsm(this.fsmId);
   }
 
 }

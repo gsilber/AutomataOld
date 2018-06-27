@@ -1,7 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
-
 @NgModule({
   imports: [
     CommonModule
@@ -9,5 +8,6 @@ import { CommonModule } from '@angular/common';
   declarations: []
 })
 export class FsmCommonModule { }
+export { FsmService } from './fsm.service';
 export { FsmState } from './classes/FsmState';
 export { Fsm } from './classes/fsm';
