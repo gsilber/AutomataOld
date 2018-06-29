@@ -31,4 +31,10 @@ export class FsmService {
     jsonObj.stateData.forEach(element => fsm.addState(element));
     return fsm;
   }
+  toJSON(fsmId: string): string {
+    const fsm = this.getFsm(fsmId);
+    const jsonObj = { id: fsmId, stateData: [] };
+    fsm.getStates().forEach(element => jsonObj.stateData.push(element));
+    return JSON.stringify(jsonObj);
+  }
 }

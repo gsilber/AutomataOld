@@ -34,10 +34,10 @@ export class FsmViewComponent implements AfterViewInit {
 
   ngAfterViewInit() {
     const json = '{"id": "' + this.fsmId + '", "stateData": [' +
-      '{ "label": "q1", "uiData": { "x": "50", "y": "50" }, "startState": true, "finalState": false },' +
-      '{ "label": "q2", "uiData": { "x": "100", "y": "100" }, "startState": false, "finalState": false },' +
-      '{ "label": "q3", "uiData": { "x": "150", "y": "150" }, "startState": false, "finalState": true },' +
-      '{ "label": "q4", "uiData": { "x": "200", "y": "200" }, "startState": true, "finalState": true }' +
+      '{ "label": "q1", "uiData": { "x": "50", "y": "50", "transitions":[] }, "startState": true, "finalState": false },' +
+      '{ "label": "q2", "uiData": { "x": "100", "y": "100", "transitions":[] }, "startState": false, "finalState": false },' +
+      '{ "label": "q3", "uiData": { "x": "150", "y": "150", "transitions":[] }, "startState": false, "finalState": true },' +
+      '{ "label": "q4", "uiData": { "x": "200", "y": "200", "transitions":[] }, "startState": true, "finalState": true }' +
       ']}';
     this.fsm = this._fsmSvc.fromJSON(
       json
