@@ -1,0 +1,8 @@
+    <svg:rect *ngIf='selected' class='fsm-view-state-select' stroke='black' stroke-width='1' [attr.width]='stateRadius*2+2' [attr.height]='stateRadius*2+2' [attr.x]='x-stateRadius-1' [attr.y]='y-stateRadius-1' fill='none'
+      stroke-dasharray="5 2" />
+
+    <svg:circle class='fsm-view-state-normal' [attr.cx]='x' [attr.cy]='y' [attr.r]='stateRadius' fill='white' stroke='blue' stroke-width='2'></svg:circle>
+    <svg:circle *ngIf='startState' class='fsm-view-state-start' [attr.cx]='x' [attr.cy]='y' [attr.r]='stateRadius' fill='yellow' stroke='blue' stroke-width='2'></svg:circle>
+    <svg:circle *ngIf='finalState' class='fsm-view-state-final' [attr.cx]='x' [attr.cy]='y' [attr.r]='stateRadius-3' fill='none' stroke='blue' stroke-width='2'></svg:circle>
+    <svg:text class='fsm-view-state-text' [attr.x]='x' [attr.y]='y' fill='blue' alignment-baseline='central' text-anchor='middle' font-weight='bold'>{{label}}</svg:text>
+

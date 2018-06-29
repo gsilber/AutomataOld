@@ -24,4 +24,11 @@ export class FsmService {
     }
     return fsm;
   }
+  fromJSON(json: string): Fsm {
+    const jsonObj = JSON.parse(json);
+    const fsm = this.getFsm(jsonObj.id);
+    fsm.clear();
+    jsonObj.stateData.forEach(element => fsm.addState(element));
+    return fsm;
+  }
 }

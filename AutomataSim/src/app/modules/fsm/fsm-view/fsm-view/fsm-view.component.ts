@@ -1,5 +1,5 @@
-import { Component, Input, AfterViewInit } from '@angular/core';
-import { FsmService, Fsm } from '../../fsm-common/fsm-common.module';
+import { Component, Input, AfterViewInit, ChangeDetectorRef } from '@angular/core';
+import { FsmService, Fsm, FsmState } from '../../fsm-common/fsm-common.module';
 
 @Component({
   selector: 'app-fsm-view',
@@ -12,8 +12,11 @@ export class FsmViewComponent implements AfterViewInit {
   @Input() zoomPercent = 100;
   @Input() fsmId = '_viewDefault';
 
-  private _fsm: Fsm;
+  fsm: Fsm;
 
+  get states(): FsmState[] {
+    return (this.fsm ? this.fsm.getStates() : []);
+  }
   // viewbox value for svg scaling
   public get zoomValue(): number {
     return this.drawSize * 2 / (this.zoomPercent / 100);
@@ -23,10 +26,23 @@ export class FsmViewComponent implements AfterViewInit {
     return this.drawSize * (this.zoomPercent / 100);
   }
 
-  constructor(private _fsmSvc: FsmService) { }
+  public get selectedState(): FsmState {
+    // return this.fsm.getStates()[0];
+    return null;
+  }
+  constructor(private _fsmSvc: FsmService, private _chgSvc: ChangeDetectorRef) { }
 
   ngAfterViewInit() {
-    this._fsm = this._fsmSvc.getFsm(this.fsmId);
+    const json = '{"id": "' + this.fsmId + '", "stateData": [' +
+      '{ "label": "q1", "uiData": { "x": "50", "y": "50" }, "startState": true, "finalState": false },' +
+      '{ "label": "q2", "uiData": { "x": "100", "y": "100" }, "startState": false, "finalState": false },' +
+      '{ "label": "q3", "uiData": { "x": "150", "y": "150" }, "startState": false, "finalState": true },' +
+      '{ "label": "q4", "uiData": { "x": "200", "y": "200" }, "startState": true, "finalState": true }' +
+      ']}';
+    this.fsm = this._fsmSvc.fromJSON(
+      json
+    );
+    this._chgSvc.detectChanges();
   }
 
 }
